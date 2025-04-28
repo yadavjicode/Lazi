@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "762974786823",
+    "firebase_url": "https://ludoapp-c92b0-default-rtdb.firebaseio.com",
+    "project_id": "ludoapp-c92b0",
+    "storage_bucket": "ludoapp-c92b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762974786823:android:3d9da010be60a8a1d4e1a2",
+        "android_client_info": {
+          "package_name": "com.lazi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5U7wfKtSvavPQBdR7rbOTeLGLiq9mTfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
