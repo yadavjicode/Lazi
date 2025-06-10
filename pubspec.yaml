@@ -24,6 +24,9 @@ dependencies:
   cloud_firestore: ^5.6.6
   firebase_database: ^11.3.5
   shared_preferences: ^2.5.3
+  flutter_rating_bar: ^4.0.1
+  url_launcher: ^6.3.1
+  flutter_inappwebview: ^6.1.5
 
 dev_dependencies:
   flutter_lints: 
@@ -31,7 +34,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  image_path: "assets/images/logo.png" 
+  image_path: "assets/images/appicon.png" 
   android: true
   ios: true  
   remove_alpha_ios: true
@@ -46,8 +49,22 @@ flutter:
     - assets/images/dice/
     - assets/images/crown/
     - assets/sounds/
-    - assets/audio/move.mp3
-    - assets/audio/dice.mp3
+    - assets/assets/Audio/
+    - assets/assets/SplashScreen/
+    - assets/fonts/
+    - assets/info/
+    - assets/src/libs/
+    - assets/info/file.html
+    - assets/src/main.js
+    - assets/src/sdk_pluto.js
+    - assets/src/ads.js
+    - assets/src/game.js
+    - assets/assets/bodybg.png
+    - assets/info/
+    - assets/src/
+    - assets/assets/
+    - assets/fonts/fonts/NotoSans-Bold.woff2
+    - assets/fonts/fonts/NotoSans-Bold.woff
     
   fonts:
     - family: Poppins

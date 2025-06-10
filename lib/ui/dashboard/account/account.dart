@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/icons_path.dart';
@@ -16,6 +17,8 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  final ProfileController profileController = Get.put(ProfileController());
+
   @override
   void initState() {
     super.initState();
@@ -25,148 +28,166 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.white,
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.myProfile);
-                },
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.grey.shade300)),
-                      child: Icon(
-                        Icons.person,
-                        color: AppColors.secondaryColor,
-                        size: 40,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "+9198XXXXXX89",
-                            style: FontConstant.styleMedium(
-                                fontSize: 16, color: AppColors.black),
-                          ),
-                          Text(
-                            "SEE PROFILE >",
-                            style: FontConstant.styleRegular(
-                                fontSize: 14, color: AppColors.secondaryColor),
-                          ),
-                          // Text(
-                          //   "Member since Nov 2024",
-                          //   style: FontConstant.styleRegular(
-                          //       fontSize: 14, color: AppColor.whiteColor),
-                          // )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Divider(
-                color: Colors.grey.shade300,
-              ),
-              // ——— LANGUAGE TOGGLE ——————————
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Choose Language",
-                        style: FontConstant.styleMedium(
-                            fontSize: 15, color: AppColors.black),
-                      ),
-                      SizedBox(height: 10),
-                      LanguageToggleRow(
-                        initial: 'English',
-                        onChanged: (lang) {
-                          // TODO: actually switch your locale or save it
-                          print('Language switched to $lang');
-                        },
-                      ),
-                    ],
+        body: Obx(() {
+          return Stack(children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.myProfile);
+                    },
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey.shade300)),
+                          child: Icon(
+                            Icons.person,
+                            color: AppColors.secondaryColor,
+                            size: 40,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${profileController.member?.mobileNo ?? ""}",
+                                style: FontConstant.styleMedium(
+                                    fontSize: 16, color: AppColors.black),
+                              ),
+
+                              Text(
+                                "SEE PROFILE >",
+                                style: FontConstant.styleRegular(
+                                    fontSize: 14,
+                                    color: AppColors.secondaryColor),
+                              ),
+                              // Text(
+                              //   "Member since Nov 2024",
+                              //   style: FontConstant.styleRegular(
+                              //       fontSize: 14, color: AppColor.whiteColor),
+                              // )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Divider(
+                    color: Colors.grey.shade300,
+                  ),
+                  // ——— LANGUAGE TOGGLE ——————————
+                  // Align(
+                  //   alignment: Alignment.centerLeft,
+                  //   child: Padding(
+                  //     padding:
+                  //         const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           "Choose Language",
+                  //           style: FontConstant.styleMedium(
+                  //               fontSize: 15, color: AppColors.black),
+                  //         ),
+                  //         SizedBox(height: 10),
+                  //         LanguageToggleRow(
+                  //           initial: 'English',
+                  //           onChanged: (lang) {
+                  //             // TODO: actually switch your locale or save it
+                  //             print('Language switched to $lang');
+                  //           },
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  Divider(
+                    color: Colors.grey.shade300,
+                  ),
+                  Expanded(
+                    child: ListView(
+                      // physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.myBalance);
+                          },
+                          child: buildoption(
+                              icons: IconsPath.walletB,
+                              tittle: "Wallet Balance",
+                              subtile:
+                                  "₹ ${profileController.member?.wallet ?? 0}",
+                              forward: true),
+                        ),
+
+                        GestureDetector(
+                          // onTap: () => {Get.to(RatingDemo())},
+                          child: buildoption(
+                              icons: IconsPath.help,
+                              tittle: "Help",
+                              subtile: "Customer Support",
+                              forward: true),
+                        ),
+                        GestureDetector(
+                          onTap: () => {},
+                          child: buildoption(
+                              icons: IconsPath.about,
+                              tittle: "About",
+                              forward: true),
+                        ),
+
+                        // ),
+                        GestureDetector(
+                          onTap: () => {},
+                          child: buildoption(
+                              icons: IconsPath.faq,
+                              tittle: "FAQs",
+                              forward: false),
+                        ),
+
+                        GestureDetector(
+                          onTap: () => {showLogoutConfirmationDialog(context)},
+                          child: buildoption(
+                              icons: IconsPath.logout,
+                              tittle: "Logout",
+                              forward: false),
+                        ),
+
+                        const SizedBox(
+                          height: 50,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (profileController.isLoading.value)
+              Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
                 ),
-              ),
-              Divider(
-                color: Colors.grey.shade300,
-              ),
-              Expanded(
-                child: ListView(
-                  // physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => {Get.toNamed(Routes.myBalance)},
-                      child: buildoption(
-                          icons: IconsPath.walletB,
-                          tittle: "Wallet Balance",
-                          subtile: "₹0.00",
-                          forward: true),
-                    ),
-                    GestureDetector(
-                      onTap: () => {},
-                      child: buildoption(
-                          icons: IconsPath.help,
-                          tittle: "Help",
-                          subtile: "Customer Support",
-                          forward: true),
-                    ),
-                    GestureDetector(
-                      onTap: () => {},
-                      child: buildoption(
-                          icons: IconsPath.about,
-                          tittle: "About",
-                          forward: true),
-                    ),
-
-                    // ),
-                    GestureDetector(
-                      onTap: () => {},
-                      child: buildoption(
-                          icons: IconsPath.faq, tittle: "FAQs", forward: false),
-                    ),
-
-                    GestureDetector(
-                      onTap: () => {showLogoutConfirmationDialog(context)},
-                      child: buildoption(
-                          icons: IconsPath.logout,
-                          tittle: "Logout",
-                          forward: false),
-                    ),
-
-                    const SizedBox(
-                      height: 50,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
+              )
+          ]);
+        }));
   }
 }
 

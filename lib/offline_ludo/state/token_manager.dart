@@ -77,6 +77,7 @@ class TokenManager {
   }
 
   List<Token> getAllTokens(String player) {
+    print('Hit::::::::');
     // loadTokensFromFirebase("Prahant");
     return _playerTokensCache[player] ?? [];
   }

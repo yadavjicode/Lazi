@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/effects.dart';
@@ -86,12 +88,39 @@ class UpperController extends RectangleComponent with HasGameReference<Ludo> {
                     position: Vector2(innerWidth * 0.20, innerHeight * 0.5)),
               ])
         ]);
+    final List<String> girlNames = [
+      'Aanya',
+      'Isha',
+      'Diya',
+      'Meera',
+      'Riya',
+      'Simran',
+      'Pooja',
+      'Kavya',
+      'Nisha',
+      'Tanya'
+    ];
 
+// Get a random name
+    final String randomGirlName = girlNames[Random().nextInt(girlNames.length)];
     final rightToken = RectangleComponent(
         size: Vector2(innerWidth * 0.4, innerHeight * 0.8),
         position: Vector2(width - innerWidth * 0.4 - 2.5, innerWidth * 0.05),
         paint: Paint()..color = GameState().green,
         children: [
+          TextComponent(
+            text: randomGirlName,
+            position:
+                Vector2(10, (height * 0.8) / 2), // shifted right by 10 units
+            anchor: Anchor.centerLeft,
+            textRenderer: TextPaint(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           ControllerBlock(
               transparentLeft: true,
               size: Vector2(innerWidth * 0.4, innerHeight * 0.8),

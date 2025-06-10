@@ -74,6 +74,7 @@ class _Withdraw extends State<Withdraw> {
                     ),
                     TextField(
                         textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,

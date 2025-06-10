@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/effects.dart';
+import 'package:get/get.dart';
+import 'package:ludonew/controller/profile_controller.dart';
 import '../../ludo.dart';
 import '../../state/game_state.dart';
 import '../../component/ui_components/dice_pointer.dart';
@@ -38,6 +40,19 @@ class LowerController extends RectangleComponent with HasGameReference<Ludo> {
       position: Vector2(2.2, innerWidth * 0.05),
       paint: Paint()..color = GameState().blue,
       children: [
+        TextComponent(
+          text: '',
+          position:
+              Vector2(10, (height * 0.8) / 2), // shifted right by 10 units
+          anchor: Anchor.centerLeft,
+          textRenderer: TextPaint(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         ControllerBlock(
           transparentRight: true,
           transparentLeft: false,

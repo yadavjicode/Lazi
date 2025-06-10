@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ludonew/ludo/main_screen.dart';
 import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
 import 'package:ludonew/routes/conssiste.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/images_path.dart';
 import 'package:ludonew/widgets/font.dart';
 
+// ignore: must_be_immutable
 class LoadingScreen extends StatefulWidget {
+  String? entryfree;
+  LoadingScreen({Key? key, this.entryfree}) : super(key: key);
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
 }
@@ -33,7 +35,10 @@ class _LoadingScreenState extends State<LoadingScreen>
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         //  Get.to(MainScreen());
-        Get.to(FirstScreen(),
+        Get.to(
+            FirstScreen(
+                // entryfree: widget.entryfree,
+                ),
             duration: Duration(milliseconds: ApiConstants.screenTransitionTime),
             transition: Transition.rightToLeft);
       }

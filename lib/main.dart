@@ -60,7 +60,7 @@ class _RootState extends State<Root> {
         initialRoute: Routes.splashA,
         debugShowCheckedModeBanner: false,
         getPages: Routes.routes,
-        title: "Lazio",
+        title: "LAZIO",
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
             backgroundColor:

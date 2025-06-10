@@ -38,14 +38,18 @@ class LudoBoard extends PositionComponent {
             size: longDimension,
             paint: Paint()..color = GameState().red,
             homeSpotColor: Paint()..color = GameState().red,
-          )
+          ),
         ]);
 
     final secondComponent = RectangleComponent(
         size: Vector2(shortDimension, longDimension),
         position:
             Vector2(longDimension + horizontalSpacing, rowOne * longDimension),
-        children: [GreenGridComponent(size: shortDimension * 0.3333)]);
+        children: [
+          GreenGridComponent(
+            size: shortDimension * 0.3333,
+          ),
+        ]);
 
     final thirdComponent = RectangleComponent(
         size: Vector2(longDimension, longDimension),
@@ -70,7 +74,7 @@ class LudoBoard extends PositionComponent {
         position:
             Vector2(longDimension + horizontalSpacing, rowTwo * longDimension),
         children: [
-          DiagonalRectangleComponent(size: Vector2.all(shortDimension))
+          DiagonalRectangleComponent(size: Vector2.all(shortDimension)),
         ]);
 
     final sixthComponent = RectangleComponent(
@@ -88,7 +92,7 @@ class LudoBoard extends PositionComponent {
             size: longDimension,
             paint: Paint()..color = GameState().blue,
             homeSpotColor: Paint()..color = GameState().blue,
-          )
+          ),
         ]);
 
     final eigthComponent = RectangleComponent(
@@ -119,7 +123,7 @@ class LudoBoard extends PositionComponent {
       sixthComponent,
       seventhComponent,
       eigthComponent,
-      ninthComponent
+      ninthComponent,
     ]);
 
     // Set the position of the LudoBoard

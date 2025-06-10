@@ -66,13 +66,6 @@ class Ludo extends FlameGame
         width: width,
         height: width * 0.20));
 
-    /*
-    add(FpsTextComponent(
-      position: Vector2(10, 10), // Adjust position as needed
-      anchor: Anchor.topLeft, // Set anchor to align top-left
-    ));
-    */
-
     GameState().ludoBoard = world.children.whereType<LudoBoard>().first;
     final ludoBoard = GameState().ludoBoard as PositionComponent;
     GameState().ludoBoardAbsolutePosition = ludoBoard.absolutePosition;

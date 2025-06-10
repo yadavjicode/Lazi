@@ -39,6 +39,7 @@ class LudoDice extends PositionComponent with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) async {
+    print('Hit::::::::::::${event}');
     // tokenManager.debugPrintPlayerTokens();
     // tokenManager.saveTokensToFirebase("Prahant").then((_) {
     //   // tokenManager.loadTokensFromFirebase("Prahant");
@@ -58,6 +59,7 @@ class LudoDice extends PositionComponent with TapCallbacks {
     // Roll the dice and update the dice face
     GameState().diceNumber = Random().nextInt(6) + 1;
     diceFace.updateDiceValue(GameState().diceNumber);
+    print('Dice Number Print:::::${GameState().diceNumber}');
 
     playSound();
     // Apply dice rotation effect
@@ -109,7 +111,7 @@ class LudoDice extends PositionComponent with TapCallbacks {
         tokensOnBoard.where((token) => token.spaceToMove()).toList();
 
     final allMovableTokens = [...movableTokens, ...tokensInBase];
-
+    print('uuuuuuuuu${movableTokens}');
     // if only one token can move, move it
     if (allMovableTokens.length == 1) {
       if (allMovableTokens.first.state == TokenState.inBase) {

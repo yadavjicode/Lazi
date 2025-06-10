@@ -39,7 +39,7 @@ class CustomSanckbar {
       ),
     );
 
-    overlay?.insert(overlayEntry);
+    overlay.insert(overlayEntry);
     Future.delayed(Duration(seconds: 1), () {
       overlayEntry.remove();
     });

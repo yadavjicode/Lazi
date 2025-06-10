@@ -11,12 +11,7 @@ class SplashA extends StatefulWidget {
 class _SplashScreenState extends State<SplashA> {
   int currentFrame = 0;
   List<String> imagePaths = [
-    'assets/images/splashA.png',
-    'assets/images/splashB.png',
-    'assets/images/splashC.png',
-    'assets/images/splashD.png',
-    'assets/images/splashE.png',
-    'assets/images/splashF.png',
+    'assets/images/ludo.gif',
   ];
 
   @override
@@ -39,13 +34,15 @@ class _SplashScreenState extends State<SplashA> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Image.asset(
           imagePaths[currentFrame],
-          width: double.infinity,
-          height: double.infinity,
+          width: screenWidth * 0.5,
+          height: screenWidth * 0.5,
           fit: BoxFit.cover,
         ),
       ),

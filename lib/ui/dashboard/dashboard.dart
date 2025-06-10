@@ -42,6 +42,7 @@ class _DashboardState extends State<Dashboard> {
       //  _pages[_selectedIndex], // Display selected page
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.white,
+        elevation: 4,
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle:

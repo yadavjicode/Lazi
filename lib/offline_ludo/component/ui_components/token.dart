@@ -182,7 +182,7 @@ class Token extends PositionComponent with TapCallbacks {
     final tokenPath = GameState().getTokenPath(playerId);
     final index = tokenPath.indexOf(positionId);
     final newIndex = index + GameState().diceNumber;
-
+print('pppppppppp${newIndex}');
     return newIndex < tokenPath.length;
   }
 }

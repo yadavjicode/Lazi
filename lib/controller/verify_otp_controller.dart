@@ -21,7 +21,7 @@ class VerifyOtpController extends GetxController {
     _error = null;
 
     try {
-      _member = await apiService.verifyOtp("+91${phoneno}", otp);
+      _member = await apiService.verifyOtp("${phoneno}", otp);
       CustomSanckbar.showSnackbar(context, member?.message ?? "", true);
       if ((member?.message ?? "") == "Success") {
         final prefs = await SharedPreferences.getInstance();

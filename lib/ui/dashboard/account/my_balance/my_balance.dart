@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/routes/routes.dart';
+import 'package:ludonew/ui/dashboard/account/my_balance/add_cash.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/images_path.dart';
 import 'package:ludonew/widgets/font.dart';
@@ -88,9 +89,41 @@ class _MyBalnaceState extends State<MyBalance> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.arrow_downward_outlined),
+                              // Icon(Icons.arrow_downward_outlined),
                               Text(
                                 "Withdraw",
+                                style: FontConstant.styleMedium(
+                                    fontSize: 17, color: AppColors.white),
+                              ),
+                            ],
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Get.to(AddCashPage());
+                            //  Get.toNamed(Routes.withdraw);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green, // ← your color
+                            foregroundColor: Colors.white, // ← text/icon color
+                            elevation: 4, // ← optional
+                            padding: EdgeInsets.all(13),
+                            shape: RoundedRectangleBorder(
+                              // ← optional
+                              borderRadius: BorderRadius.circular(23),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Icon(Icons.arrow_downward_outlined),
+                              Text(
+                                "Add Cash",
                                 style: FontConstant.styleMedium(
                                     fontSize: 17, color: AppColors.white),
                               ),
@@ -110,23 +143,26 @@ class _MyBalnaceState extends State<MyBalance> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey.shade300)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                    Text("Transaction History",
-                        style: FontConstant.styleSemiBold(
-                            fontSize: 17, color: AppColors.black)),
-        
-                            Icon(Icons.arrow_forward_ios, size: 20,color: AppColors.grey,)
-                  ])),
-                   SizedBox(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Transaction History",
+                            style: FontConstant.styleSemiBold(
+                                fontSize: 17, color: AppColors.black)),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                          color: AppColors.grey,
+                        )
+                      ])),
+              SizedBox(
                 height: 20,
               ),
-               Image.asset(
+              Image.asset(
                 ImagePath.bonous,
                 width: double.infinity,
                 fit: BoxFit.contain,
-              ), 
-                SizedBox(
+              ),
+              SizedBox(
                 height: 20,
               ),
             ],

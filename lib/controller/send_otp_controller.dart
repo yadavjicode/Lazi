@@ -20,7 +20,7 @@ class SendOtpController extends GetxController {
     _error = null;
 
     try {
-      _member = await apiService.sendOtp("+91${phoneno}");
+      _member = await apiService.sendOtp("${phoneno}");
       CustomSanckbar.showSnackbar(context, member?.message ?? "", true);
 
       if (member?.message != null) {
