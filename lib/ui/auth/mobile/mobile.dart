@@ -5,6 +5,7 @@ import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/comman_code/validation.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/images_path.dart';
+import 'package:ludonew/widgets/CustomSnackbar.dart';
 import 'package:ludonew/widgets/CustomTextFeild.dart';
 import 'package:ludonew/widgets/font.dart';
 
@@ -108,14 +109,22 @@ class _MobileState extends State<Mobile> {
                         child: ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                sendOtpController.sendOtp(
-                                    context, phoneno.text.toString().trim());
+                                if (check) {
+                                  sendOtpController.sendOtp(
+                                      context, phoneno.text.toString().trim());
+                                } else {
+                                  CustomSanckbar.showSnackbar(
+                                      context,
+                                      "Please agree to terms before continuing",
+                                      false);
+                                }
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   AppColors.primaryColor, // ← your color
-                              foregroundColor: Colors.white, // ← text/icon color
+                              foregroundColor:
+                                  Colors.white, // ← text/icon color
                               elevation: 4, // ← optional
                               padding: EdgeInsets.all(13),
                               shape: RoundedRectangleBorder(
@@ -143,6 +152,7 @@ class _MobileState extends State<Mobile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Checkbox(
+                            activeColor: AppColors.primaryColor,
                             value: check,
                             onChanged: (value) {
                               setState(() {
@@ -169,7 +179,8 @@ class _MobileState extends State<Mobile> {
                                   Text(
                                     " and ",
                                     style: FontConstant.styleRegular(
-                                        fontSize: 13, color: AppColors.darkgrey),
+                                        fontSize: 13,
+                                        color: AppColors.darkgrey),
                                   ),
                                   Text(
                                     "Privacy Policy.",

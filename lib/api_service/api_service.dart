@@ -54,6 +54,7 @@ class ApiService {
   Future<ProfileModel> profile() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    print("token ${token}");
     final response = await http.post(
       Uri.parse('${ApiConstants.baseUrl}${ApiConstants.userprofile}'),
       headers: {

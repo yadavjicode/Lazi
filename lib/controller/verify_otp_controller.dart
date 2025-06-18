@@ -11,7 +11,6 @@ class VerifyOtpController extends GetxController {
   var isLoading = false.obs;
   VerifyOtpModel? _member;
   String? _error;
-
   VerifyOtpModel? get member => _member;
   String? get error => _error;
 

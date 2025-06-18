@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/subscription_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
+import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
 import 'package:ludonew/routes/conssiste.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -81,8 +82,7 @@ class _twoPlayer extends State<twoPlayer> {
                               Text(
                                 "${item.timerShow} Sec",
                                 style: FontConstant.styleRegular(
-                                    fontSize: 12,
-                                    color: AppColors.black),
+                                    fontSize: 12, color: AppColors.black),
                               ),
                             ],
                           ),
@@ -147,14 +147,15 @@ class _twoPlayer extends State<twoPlayer> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.to(
-                                  LoadingScreen(
-                                    entryfree: "63",
-                                  ),
-                                  duration: Duration(
-                                      milliseconds:
-                                          ApiConstants.screenTransitionTime),
-                                  transition: Transition.rightToLeft);
+                              Get.to(FirstScreen());
+                              // Get.to(
+                              //     LoadingScreen(
+                              //       entryfree: "63",
+                              //     ),
+                              //     duration: Duration(
+                              //         milliseconds:
+                              //             ApiConstants.screenTransitionTime),
+                              //     transition: Transition.rightToLeft);
                               // Get.toNamed(Routes.loadingScreen);
                             },
                             child: Container(

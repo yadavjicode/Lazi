@@ -136,6 +136,7 @@ class _Otp extends State<Otp> {
                                 "Please enter a valid 6-digit OTP", false);
                           }
                         },
+                        
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               AppColors.primaryColor, // ← your color

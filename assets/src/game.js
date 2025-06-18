@@ -12,6 +12,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var diceStatus = true;
 var scoreTexts = [];
 var currentDiceValue = 0;
+var userDataPlayer = []
+var userToken = getCookie("userToken");
 
 var players = {
     0: { homeTokens: 0, kills: 0, totalScore: 0, flag: 0, tidScores: { 0: 0, 1: 0, 2: 0, 3: 0 } },
@@ -23,13 +25,18 @@ var players = {
 
 
 function initialPlayerScore(player) {
+
+
     players[player].homeTokens = 0;
     players[player].kills = 0;
     players[player].totalScore = 0;
     players[player].flag = 0;
     for (let i = 0; i < 4; i++) {
         players[player].tidScores[i] = 0;
+        //alert(players[player].tidScores[i]);
     }
+
+
 
 }
 
@@ -81,6 +88,7 @@ function updateScoreWithTid(player, tid, totalScore = 0) {
     //alert(totalScore)
     //players[player].homeTokens += tokensHome;
     //players[player].kills += kills;
+    //alert(totalScore);
     players[player].tidScores[tid] += totalScore;
     //alert(players[player].tidScores[tid]);
     // Example scoring logic:
@@ -355,13 +363,11 @@ var Ludo_Wild;
                 });
         });
     };
-
     const connectionCallback = function () {
         if (Ludo_Wild.Main.SCENE === gameScenes.GAMEPLAY_SCREEN) {
             radio('networkStatusChange').broadcast(NetworkStatus.ONLINE_WEAK);
         }
     };
-
     let tintType;
     (function (tintType) {
         tintType[tintType["UPPER"] = 0] = "UPPER";
@@ -791,6 +797,7 @@ var Ludo_Wild;
                 x_t2: Ludo_Wild.Main.GAME.world.centerX - 253, y_t2: this.boardOffsetY + 253,
                 x_t3: Ludo_Wild.Main.GAME.world.centerX - 253, y_t3: this.boardOffsetY + 161
             };
+
             this.emojiOffset = {
                 x_p0: 10, y_p0: Ludo_Wild.Main.GAME.world.height - 300,
                 x_p1: 10, y_p1: 150,
@@ -803,12 +810,12 @@ var Ludo_Wild;
         }
 
         removeBuffer() {
-
             if (this.waitingBuffer) {
                 this.waitingBuffer.destroy();
                 this.waitingBuffer = undefined;
             }
         }
+
         initVars() {
             this._playerID = 0;
             this.playerList = [];
@@ -828,7 +835,12 @@ var Ludo_Wild;
             this.notificationTimerRef = undefined;
         }
         ;
-        renderBoard() {
+        async renderBoard() {
+            //alert('okkkkkkk')
+
+
+
+
             let sheet = Ludo_Wild.arenaSheet;
             if (Ludo_Wild.Config.rule === Ludo_Wild.Rules.BLITZ) {
                 sheet = Ludo_Wild.blitzSheet;
@@ -855,8 +867,41 @@ var Ludo_Wild;
             }
         }
         renderHome() {
+            //alert('ok')
+            //const game = Ludo_Wild.Main.GAME;
             const home = Ludo_Wild.Main.GAME.add.image(this.boardOffsetX, this.boardOffsetY, Ludo_Wild.blitzSheet, "home");
             home.anchor.setTo(0.5, 0.5);
+
+
+
+
+            /* this.timerText = game.add.text(50, 50, "Time: 0", {
+                    font: "32px Arial",
+                    fill: "#ffffff"
+                });
+
+                // Store the starting time
+                this.startTime = game.time.now;
+
+                update() {
+                    if (this.timerText && this.startTime) {
+                        const elapsed = Math.floor((Ludo_Wild.Main.GAME.time.now - this.startTime) / 1000);
+                        this.timerText.text = "Time: " + elapsed;
+                    }
+                }
+                */
+            /* this.seconds = 60;
+            this.timerText = Ludo_Wild.Main.GAME.game.add.text(50, 50, "Time: 60", { font: "32px Arial", fill: "#fff" });
+
+            game.time.events.loop(Phaser.Timer.SECOND, () => {
+                this.seconds--;
+                this.timerText.text = "Time: " + this.seconds;
+                if (this.seconds <= 0) {
+                    // Timer ended - add logic here
+                }
+            }, this);
+            */
+
         }
         renderWhitStars() {
             let sheet = Ludo_Wild.arenaSheet;
@@ -942,6 +987,51 @@ var Ludo_Wild;
         }
         ;
         renderPocket(quad, color) {
+            //alert(quad)
+            /* const response = await fetch('https://lazioludo.com/api/user', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 1429|q2Vj1mKb6SQHra3gsD6BberimMxrsmYWM7wttakL8a65521c'
+                },
+                body: JSON.stringify({ name: 'test' })
+            });
+
+
+
+            const data = await response.json();
+            //alert(data.name);
+            this.playerList[0].name = data.name;
+        */
+
+
+            /* fetch('https://lazioludo.com/api/user', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 1429|q2Vj1mKb6SQHra3gsD6BberimMxrsmYWM7wttakL8a65521c'
+                    },
+                    body: JSON.stringify({ name: 'test' })
+                })
+                .then((resp) => {
+                    return resp.json(); // parse JSON body
+                })
+                .then((data) => {
+                    //alert(data.name);
+                    //const result = JSON.stringify(data);
+                    //alert(data.name);
+                    this.playerList[0].name = data.name;
+                })
+                .catch((err) => {
+                    alert("Error: " + JSON.stringify(err));
+                    console.log(err);
+                });
+            */
+
+
+
             let sheet = Ludo_Wild.arenaSheet;
             if (Ludo_Wild.Config.rule === Ludo_Wild.Rules.BLITZ) {
                 sheet = Ludo_Wild.blitzSheet;
@@ -1014,10 +1104,10 @@ var Ludo_Wild;
             this.scoreTexts[3] = scoreText;
             */
 
-
+            var currentDiceValue = 0;
             for (let i = 0; i < 4; i++) {
-                //alert(JSON.parse(this.playerList[i]));
-                //alert(this.totalPlayers);
+
+                //alert(this.playerList[i].name);
                 if (this.playerList[i].Playing) {
                     if (this.totalPlayers === 2) {
                         if (i === 1) {
@@ -1046,12 +1136,203 @@ var Ludo_Wild;
 
                     scoreTexts[i] = scoreText;
                 }
+
             }
+
+
+            if (quad == 1) {
+                const game = Ludo_Wild.Main.GAME;
+
+                const x = this.pocketOffset["x_p" + 1];
+                const y = this.pocketOffset["y_p" + 1];
+
+                // Step 1: Create the text first (needed to measure width/height)
+                const timeText = game.add.text(0, 0, "Time: 300", {
+                    font: "32px Arial",
+                    fill: "#ffffff",
+                    stroke: "#ffffff",
+                    strokeThickness: 2,
+                    align: "center"
+                });
+                timeText.anchor.setTo(0.5);
+
+                // Step 2: Create a background box with padding
+                const padding = 50;
+                const bg = game.add.graphics(0, 0);
+                bg.beginFill(0xFFFFFF); // background color
+                //bg.drawRoundedRect(100, 100, timeText.width + padding * 2, timeText.height + padding * 2, 8);
+                bg.endFill();
+                bg.anchor = { x: 0.5, y: 0.5 }; // custom anchor for graphics (not built-in)
+
+                // Step 3: Create a group and center both
+                const group = game.add.group();
+                group.add(bg);
+                group.add(timeText);
+
+                // Step 4: Set group position to desired location
+                group.x = x;
+                group.y = y;
+
+                // Offset text inside background to simulate padding
+                timeText.x = (timeText.width / 2) + padding;
+                timeText.y = (timeText.height / 2) - 300;
+
+
+                let timeLeft = 300;
+
+                const timer = game.time.events.loop(Phaser.Timer.SECOND, () => {
+                    timeLeft--;
+                    timeText.setText("Time: " + timeLeft);
+
+                    if (timeLeft == 0) {
+                        //this.createExitPopUp();
+                        //this.onGameOver();
+                        game.time.events.remove(timer);
+                        this.createExitPopUpNew();
+                        // do something when time is up
+                    }
+                }, this);
+
+            }
+
+
+
+
+
+
+
+
 
 
 
         }
         ;
+
+        createExitPopUpNew() {
+            //alert('okkkk')
+
+            let topPlayerId = null;
+            let topScore = -Infinity;
+
+            for (let playerId in players) {
+                const score = players[playerId].totalScore;
+                if (score > topScore) {
+                    topScore = score;
+                    topPlayerId = playerId;
+                }
+            }
+
+            const playerName = this.playerList[topPlayerId].name;
+
+            const topScoreNew = `Winner \n\n  Name: ${playerName} \n\n Score: ${topScore}`;
+
+
+            const game = Ludo_Wild.Main.GAME;
+
+            // Dim background
+            const overlay = game.add.graphics(0, 0);
+            overlay.beginFill(0x000000, 0.5);
+            overlay.drawRect(0, 0, game.width, game.height);
+            overlay.endFill();
+
+            // Popup container
+            const popupGroup = game.add.group();
+
+            const popupWidth = 500;
+            const popupHeight = 500;
+
+            // Popup background
+            const popupBg = game.add.graphics(0, 0);
+            popupBg.beginFill(0xffffff);
+            popupBg.drawRoundedRect(0, 0, popupWidth, popupHeight, 10);
+            popupBg.endFill();
+            popupBg.x = (game.width - popupWidth) / 2;
+            popupBg.y = (game.height - popupHeight) / 2;
+            popupGroup.add(popupBg);
+
+            // Message text
+            const message = game.add.text(
+                popupBg.x + popupWidth / 2,
+                popupBg.y + 200,
+                topScoreNew,
+                {
+                    font: "28px Arial",
+                    fill: "#000000",
+                    align: "center",
+                    lineSpacing: 10
+                }
+            );
+            message.anchor.setTo(0.5);
+            popupGroup.add(message);
+
+            // Optional: OK button
+            const okText = game.add.text(
+                popupBg.x + popupWidth / 2,
+                popupBg.y + 400,
+                " OK ",
+                {
+                    font: "48px Arial",
+                    fill: "#ffffff",
+                    backgroundColor: "gray",
+
+                }
+            );
+            okText.anchor.setTo(0.5);
+            okText.inputEnabled = true;
+            okText.input.useHandCursor = true;
+            okText.events.onInputDown.add(() => {
+                //alert('okkkkk');
+                var currentDiceValue = 0;
+                initialPlayerScore(0);
+                initialPlayerScore(1);
+                initialPlayerScore(2);
+                initialPlayerScore(3);
+                this.onExitClickNew();
+                popupGroup.destroy(); // Close popup
+                overlay.destroy();    // Remove background
+
+
+                //this.renderHome();
+            }, this);
+            popupGroup.add(okText);
+        };
+
+        onExitClickNew() {
+            //alert('okkkk')
+            radio('exitGame').broadcast({});
+            segadroid.setState({
+                state: "over",
+                metadata: oMetaManager.meta
+            });
+            try {
+                this.destroyNew();
+            }
+            catch (e) {
+            }
+            Ludo_Wild.Main.GAME.state.start('Home');
+            window.parent.history.replaceState({ state: Ludo_Wild.gameScenes.BOOT }, "", "#Boot");
+        }
+        destroyNew() {
+            this.bgTintImage.destroy();
+            this.gameoverPanel.destroy();
+            this.leaderboardGroup.destroy();
+            if (this.isPlayerWinner()) {
+                this.crownAnimation.stop();
+                this.crown.destroy();
+                this.winnerTrumpetGroup.destroy();
+                this.crownGlow.destroy();
+            }
+            else {
+                this.sadEmoji.destroy();
+                this.sadEmojiAnimation.stop();
+                this.LoserTrumpetGroup.destroy();
+            }
+            this.continueBtn.destroy();
+        }
+
+
+
+
         renderPocketCircles(color, quad) {
             /* if (Ludo_Wild.Config.rule === Ludo_Wild.Rules.BLITZ) {
                 return;
@@ -1613,10 +1894,17 @@ var Ludo_Wild;
             }, 1500);
         }
         ;
-        onTokenReached(data) {
-            //alert('okkkk');
+        async onTokenReached(data) {
+            //alert(data._content.pid);
 
-            //alert(this.playerList[data._content.pid].dice);
+            //alert(players[data._content.pid].totalScore);
+            const player_id = userDataPlayer[0].players[data._content.pid].id;
+            const token_id = data._content.tid;
+            const dice_value = currentDiceValue;
+            const game_id = userDataPlayer[0].players[data._content.pid].offline_game_id
+            const userToken = getCookie("userToken");
+
+
             updateScoreWithTid(data._content.pid, data._content.tid, currentDiceValue);
             var i = data._content.pid;
             var totalP = 0;
@@ -1639,6 +1927,32 @@ var Ludo_Wild;
             }
 
             scoreTexts[i].setText("Score: " + players[data._content.pid].totalScore);
+
+            if (players[data._content.pid].totalScore) {
+                const objData = {
+                    player_id: player_id,
+                    offline_game_id: game_id,
+                    local_token_index: token_id,
+                    dice: dice_value,
+                    total_player_score: players[data._content.pid].totalScore
+
+                }
+                //alert(JSON.stringify(objData))
+                const responseStart = await fetch('https://lazioludo.com/api/offline-game/move', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + userToken
+                    },
+                    body: JSON.stringify(objData)
+                });
+
+
+
+                const dataStart = await responseStart.json();
+                //alert(JSON.stringify(dataStart));
+            }
 
             this.checkIfinPowerPosition(this.playerList[data._content.pid].tokens[data._content.tid].POSITION);
             this.checkIfEnteredColorZone(this.playerList[data._content.pid].tokens[data._content.tid].POSITION);
@@ -1952,6 +2266,7 @@ var Ludo_Wild;
                 });
         }
         createExitPopUp() {
+
             this.exitPopUpPanel = Ludo_Wild.Main.GAME.add.image(Ludo_Wild.Main.GAME.world.centerX, Ludo_Wild.Main.GAME.world.centerY - 120, Ludo_Wild.popupSheet, "exit_popup");
             const warningText = Ludo_Wild.Main.GAME.add.text(0, 0 + (Ludo_Wild.Home.textYgap * -20), this.langMgr.getText(Ludo_Wild.TEXTS.EXIT_GAME), {
                 font: (36 + Ludo_Wild.Main.FONTSIZE - (Ludo_Wild.Home.textYgap * 7)).toString() + "px", fill: "#401b0b"
@@ -2004,6 +2319,7 @@ var Ludo_Wild;
         }
         ;
         onExitYes(e) {
+            var currentDiceValue = 0;
             initialPlayerScore(0);
             initialPlayerScore(1);
             initialPlayerScore(2);
@@ -3673,12 +3989,64 @@ var Ludo_Wild;
             this.pileUpData = _data;
             this.isPileThere = true;
         }
-        onStartGameOffline(_data) {
+
+
+
+
+        async onStartGameOffline(_data) {
+            //alert('okkkkk')
             this.send({ eventType: Engine.EventType.GAME_EVENT, event: Ludo_Wild.GameEvents.HIDE_UI, data: {} });
             let c_Arr = _data.c_data;
             this._playerID = 0;
             this._Num_Of_Players = _data.totalPeers;
-            this.createPlayers(_data.names, _data.avatars, _data.playIds);
+
+            var userToken = getCookie("userToken");
+
+            //alert(this._Num_Of_Players);
+            const responseStart = await fetch('https://lazioludo.com/api/offline-game/start', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + userToken
+                },
+                body: JSON.stringify({ player_count: this._Num_Of_Players })
+            });
+
+
+
+            const dataStart = await responseStart.json();
+
+            const response = await fetch('https://lazioludo.com/api/offline-game/get-game-state/' + dataStart.offline_game_id, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + userToken
+                },
+                // body: JSON.stringify({ name: 'test' })
+            });
+
+
+
+            const data = await response.json();
+            userDataPlayer.push(data);
+            //alert(JSON.stringify(data))
+
+            // Call the function
+
+            //alert(JSON.stringify(data))
+            //dataResult=data;
+            //  console.log("Final Data:", data); // Use your data here
+
+            //const data = {}
+
+
+            this.createPlayers(_data.names, _data.avatars, _data.playIds, data);
+
+
+            //this.createPlayers(_data.names, _data.avatars, _data.playIds, data);
+
             this.matchStarted = true;
             this._arenaManagerInstance.startGame(this._OnlineMode, this._Players, c_Arr, 0);
         }
@@ -3762,12 +4130,79 @@ var Ludo_Wild;
             this.onStartGameOnline(_data.c_data, _data.pid, _data.table);
         }
         ;
-        createPlayers(names, avatars, playIds = [undefined, undefined, undefined, undefined]) {
+        createPlayers(names, avatars, playIds = [undefined, undefined, undefined, undefined], data) {
+            //alert(JSON.stringify(data))
             let Pid = this._playerID;
-            console.log(this._OnlineMode);
+            //alert(this._OnlineMode)
+            //console.log(this._OnlineMode);
+            //alert('okk')
+            //               let dataResult =null;
+            //                                                    fetch('https://lazioludo.com/api/user', {
+            //                                                      method: 'POST',
+            //                                                      mode: 'cors',
+            //                                                      headers: {
+            //                                                      'Content-Type': 'application/json',
+            //                                                      'Authorization': 'Bearer 1429|q2Vj1mKb6SQHra3gsD6BberimMxrsmYWM7wttakL8a65521c'
+            //                                                       },
+            //                                                       body: JSON.stringify({ name: 'test' })
+            //                                                       }).then((response)=>{
+            //                                                       if(!response.ok){
+            //                                                        throw new Error("internal error")
+            //                                                       }
+            //                                                       return response.json();
+            //                                                       }).then((resData)=>{
+            //                                                             dataResult=  resData
+            //                                                       }).catch((error)=>{
+            //                                                       alert(error.message)
+            //                                                       })
+
+            //                                                       const dataResult = await response.json();
+            //this._Players[0].setName(dataResult.name);
+            //                                                    alert(dataResult.name);
+            //this.playerList[0].name = data.name;
+
+            /* async function fetchUserData() {
+              let dataResult = null;
+              try {
+                const response = await fetch('https://lazioludo.com/api/user', {
+                  method: 'POST',
+                  mode: 'cors',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 1429|q2Vj1mKb6SQHra3gsD6BberimMxrsmYWM7wttakL8a65521c'
+                  },
+                  body: JSON.stringify({ name: 'test' })
+                });
+            
+                if (!response.ok) {
+                  throw new Error("Internal error");
+                }
+            
+                const resData = await response.json();
+                dataResult = resData;
+                console.log("Data Result:", dataResult); // you can use it here
+                return dataResult;
+            
+              } catch (error) {
+                alert(error.message);
+              }
+            }
+            
+            // Call the function
+            fetchUserData().then((data) => {
+            //alert(JSON.stringify(data))
+            dataResult=data;
+            //  console.log("Final Data:", data); // Use your data here
+            });
+            //  alert(JSON.stringify(dataResult))
+            
+            */
+
             for (let i = 0; i < 4; i++) {
+                //            alert(JSON.stringify(dataResult))
                 this._Players[i] = new Ludo_Wild.Player(this._Num_Of_Players, this);
                 if (this._OnlineMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
+                    //alert(names[i])
                     if (i > 0) {
                         this._Players[i].IS_AI = true;
                     }
@@ -3778,12 +4213,20 @@ var Ludo_Wild;
                             this._Players[Pid % this._Num_Of_Players].setplayId(playIds[Pid % this._Num_Of_Players]);
                             ++Pid;
                         }
-                        this._Players[i].setName(names[i]);
+                        if (i == 0) {
+                            //alert(dataResult.name);
+                            this._Players[i].setName(data.players[i].name);
+                        } else {
+                            this._Players[i].setName(data.players[i].name);
+                        }
+
+
                         this._Players[i].setProfilePic(avatars[i]);
                         this._Players[i].setplayId(playIds[i]);
                     }
                 }
                 else if (this.isAnyGeneralOnlineMode(this._OnlineMode)) {
+
                     this._Players[i].MODE = this._OnlineMode;
                     if (i < this._Num_Of_Players) {
                         this._Players[Pid % this._Num_Of_Players].setName(names[Pid % this._Num_Of_Players]);
@@ -3793,9 +4236,12 @@ var Ludo_Wild;
                     }
                 }
                 else {
+
                     this._Players[i].MODE = Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE;
                     if (i < this._Num_Of_Players) {
-                        this._Players[i].setName(names[i]);
+
+
+                        this._Players[i].setName(data.players[i].name);
                         this._Players[i].setProfilePic(avatars[i]);
                         this._Players[i].setplayId(playIds[i]);
                     }
@@ -6130,7 +6576,7 @@ var Ludo_Wild;
         ;
         onTokenReached(data) {
             //alert('reached');
-            //alert(this.gameObjects["playerData"][data._content.pid].dice);
+            //alert(this.gameObjects["playerData"][data._content.pid].points);
 
             //updateScoreWithTid(data._content.pid, data._content.tid, this.gameObjects["playerData"][pid].dice)
 
@@ -6319,6 +6765,9 @@ var Ludo_Wild;
 
                 this.gameObjects["playerData"][id].dice = 0;
                 this.gameObjects["playerData"][id].diceActive = true;
+            } else {
+                this.gameObjects["playerData"][id].dice = 0;
+                this.gameObjects["playerData"][id].diceActive = true;
             }
 
         }
@@ -6341,8 +6790,8 @@ var Ludo_Wild;
             if (!this.isOnline) {
                 //alert(steps);
                 //alert(JSON.stringify(ck));
-                //alert(this.gameObjects["playerData"][pid].dice);
-
+                //alert(this.gameObjects["playerData"][pid].diceActive);
+                //this.gameObjects["playerData"][pid].diceActive = true;
                 this.send({ eventType: Engine.EventType.GAME_EVENT, event: Ludo_Wild.GameEvents.TOKEN_MOVED, data: { id: pid, tid: tid, kpid: kpid, ktid: ktid, steps: this.gameObjects["playerData"][pid].dice } });
             }
             else {
@@ -8395,6 +8844,7 @@ var Ludo_Wild;
         }
         ;
         onExitClick(_context) {
+            //alert('okkkk')
             radio('exitGame').broadcast({});
             segadroid.setState({
                 state: "over",
