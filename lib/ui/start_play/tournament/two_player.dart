@@ -147,7 +147,11 @@ class _twoPlayer extends State<twoPlayer> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.to(FirstScreen());
+                              Get.to(FirstScreen(
+                                tournmentId: item.id.toString(),
+                                noOfPlayer: item.noOfPlayers.toString(),
+                                tournmentTime: item.timerShow.toString(),
+                              ));
                               // Get.to(
                               //     LoadingScreen(
                               //       entryfree: "63",

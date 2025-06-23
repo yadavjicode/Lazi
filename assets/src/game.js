@@ -13,7 +13,12 @@ var diceStatus = true;
 var scoreTexts = [];
 var currentDiceValue = 0;
 var userDataPlayer = []
-var userToken = getCookie("userToken");
+var userToken = getCookie('userToken');
+var userToken = getCookie('tournamentId');
+var noOfPlayers = getCookie('noOfPlayers');
+var tournamentTimeInSec = getCookie('tournamentTimeInSec');
+
+
 
 var players = {
     0: { homeTokens: 0, kills: 0, totalScore: 0, flag: 0, tidScores: { 0: 0, 1: 0, 2: 0, 3: 0 } },
@@ -1147,7 +1152,7 @@ var Ludo_Wild;
                 const y = this.pocketOffset["y_p" + 1];
 
                 // Step 1: Create the text first (needed to measure width/height)
-                const timeText = game.add.text(0, 0, "Time: 300", {
+                const timeText = game.add.text(0, 0, "Time: 60", {
                     font: "32px Arial",
                     fill: "#ffffff",
                     stroke: "#ffffff",
@@ -1223,6 +1228,8 @@ var Ludo_Wild;
             }
 
             const playerName = this.playerList[topPlayerId].name;
+            const playerIdWin = userDataPlayer[0].players[topPlayerId].id;
+            const game_id = userDataPlayer[0].players[topPlayerId].offline_game_id;
 
             const topScoreNew = `Winner \n\n  Name: ${playerName} \n\n Score: ${topScore}`;
 
@@ -1280,8 +1287,22 @@ var Ludo_Wild;
             okText.anchor.setTo(0.5);
             okText.inputEnabled = true;
             okText.input.useHandCursor = true;
-            okText.events.onInputDown.add(() => {
-                //alert('okkkkk');
+            okText.events.onInputDown.add(async () => {
+                //alert(playerIdWin);
+                //alert(game_id)
+
+                const responseStart = await fetch('https://lazioludo.com/api/offline-game/game-over', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + getCookie('userToken')
+                    },
+                    body: JSON.stringify({ player_id: playerIdWin, game_id: game_id })
+                });
+                const dataStart = await responseStart.json();
+                //alert(JSON.stringify(dataStart));
+
                 var currentDiceValue = 0;
                 initialPlayerScore(0);
                 initialPlayerScore(1);
@@ -1902,7 +1923,7 @@ var Ludo_Wild;
             const token_id = data._content.tid;
             const dice_value = currentDiceValue;
             const game_id = userDataPlayer[0].players[data._content.pid].offline_game_id
-            const userToken = getCookie("userToken");
+            const userToken = '1435|vEATEt8mscZ7ozuNzYjSHNxOt6oLo6uZb0yMmSMQ60d668ea';
 
 
             updateScoreWithTid(data._content.pid, data._content.tid, currentDiceValue);
@@ -1943,7 +1964,7 @@ var Ludo_Wild;
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + userToken
+                        'Authorization': 'Bearer ' + getCookie('userToken')
                     },
                     body: JSON.stringify(objData)
                 });
@@ -3994,15 +4015,14 @@ var Ludo_Wild;
 
 
         async onStartGameOffline(_data) {
-            //alert('okkkkk')
+            //alert(JSON.stringify(_data))
             this.send({ eventType: Engine.EventType.GAME_EVENT, event: Ludo_Wild.GameEvents.HIDE_UI, data: {} });
             let c_Arr = _data.c_data;
             this._playerID = 0;
             this._Num_Of_Players = _data.totalPeers;
+            //alert(c_Arr[0])
+            var userToken = getCookie('userToken');
 
-            var userToken = getCookie("userToken");
-
-            //alert(this._Num_Of_Players);
             const responseStart = await fetch('https://lazioludo.com/api/offline-game/start', {
                 method: 'POST',
                 mode: 'cors',
@@ -4010,7 +4030,7 @@ var Ludo_Wild;
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + userToken
                 },
-                body: JSON.stringify({ player_count: this._Num_Of_Players })
+                body: JSON.stringify({ player_count: getCookie('noOfPlayers'), color: c_Arr[0], timer_count: getCookie('tournamentTimeInSec'), tournamentId: getCookie('tournamentId') })
             });
 
 
@@ -4173,21 +4193,21 @@ var Ludo_Wild;
                   },
                   body: JSON.stringify({ name: 'test' })
                 });
-            
+
                 if (!response.ok) {
                   throw new Error("Internal error");
                 }
-            
+
                 const resData = await response.json();
                 dataResult = resData;
                 console.log("Data Result:", dataResult); // you can use it here
                 return dataResult;
-            
+
               } catch (error) {
                 alert(error.message);
               }
             }
-            
+
             // Call the function
             fetchUserData().then((data) => {
             //alert(JSON.stringify(data))
@@ -4195,7 +4215,7 @@ var Ludo_Wild;
             //  console.log("Final Data:", data); // Use your data here
             });
             //  alert(JSON.stringify(dataResult))
-            
+
             */
 
             for (let i = 0; i < 4; i++) {
@@ -4219,8 +4239,6 @@ var Ludo_Wild;
                         } else {
                             this._Players[i].setName(data.players[i].name);
                         }
-
-
                         this._Players[i].setProfilePic(avatars[i]);
                         this._Players[i].setplayId(playIds[i]);
                     }
@@ -4260,6 +4278,7 @@ var Ludo_Wild;
             let currentQuad = pid;
             let pileUpData = [];
             const totalPlayers = this._Num_Of_Players;
+
             if (totalPlayers == 2 && currentPid == 1) {
                 currentQuad = 2;
             }
@@ -6751,13 +6770,13 @@ var Ludo_Wild;
                 /* setTimeout(() => {
                                  if(scoreTexts != undefined){
                                                   //alert(id);
-                
+
                                                   //scoreTexts[id].setText("Score: " + players[id].totalScore);
-                
+
                                                   }
-                
+
                                  }, 1000)
-                
+
                 */
 
                 //const playerScore = this.getPlayerScore(playerIndex); // however you calculate score
@@ -7289,7 +7308,7 @@ var Ludo_Wild;
 
 
                     /* this.tokenKilled = true;
- 
+
                      this.gameObjects["playerData"][cpid].tokenActive = false;
                      killedTokenState = this.gameObjects["playerData"][kpid].tokenState[ktid];
                      this.killedData = { cpid, ctid, kpid, ktid, state: killedTokenState };
@@ -7299,7 +7318,7 @@ var Ludo_Wild;
                      }
                      else {
                          //alert('ok');
- 
+
                          this.gameObjects["playerData"][kpid].tokenState[ktid] = 0;
                      }
                      */
@@ -9571,7 +9590,7 @@ var Ludo_Wild;
                 "",
                 "SOUND",
                 "MUSIC",
-                "CHOOSE NUMBER OF PLAYERS",
+                "SELECT NUMBER OF PLAYERS",
                 "CHOOSE COLOR",
                 "CONTINUE" + '\n' + "WATCHING",
                 "EXIT TO MAIN MENU",
@@ -9826,6 +9845,7 @@ var Ludo_Wild;
         }
         ;
         createOtherPlayerProfiles(players) {
+            //alert('ok')
             console.log("MatchMakigBattleUI -> createOtherPlayerProfiles -> players", players);
             const vsText = Ludo_Wild.Main.GAME.add.text(0, 0 + (Ludo_Wild.Home.textYgap * -20), "VS", { font: "60px KG", fill: "#ffffff" });
             vsText.anchor.setTo(0.5);
@@ -11810,6 +11830,7 @@ var Ludo_Wild;
 
         }
         startBotMatch(vents, data) {
+            //alert('ok')
             this.matchMakingUI.onMatchMakingCompleted(this.botPlayerList);
             const intervalTimerRef = window.setInterval(() => {
                 if (this.matchMakingUI.isAnimationCompleted()) {
@@ -13750,8 +13771,9 @@ var Ludo_Wild;
         }
         ;
         createStartButton() {
-            let btn_text = this.game.add.text(0, -8 + (Ludo_Wild.Home.textYgap * -20), this.langMgr.getText(Ludo_Wild.TEXTS.START), { font: (40 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" });
-            this.startButton = this.add.image(this.world.centerX, this.world.height - 80, Ludo_Wild.generalSheet, "btn_Standard0");
+            //alert('gllll')
+            let btn_text = this.game.add.text(-1000, -1000, this.langMgr.getText(Ludo_Wild.TEXTS.START), { font: (40 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" });
+            this.startButton = this.add.image(-1000, -1000, Ludo_Wild.generalSheet, "btn_Standard0");
             this.startButton.anchor.setTo(0.5);
             this.startButton.events.onInputDown.add(() => {
                 this.startButton.loadTexture(Ludo_Wild.generalSheet, "btn_standard1");
@@ -13761,14 +13783,158 @@ var Ludo_Wild;
             btn_text.anchor.set(0.5);
             this.startButton.addChild(btn_text);
             if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
-                this.startButton.alpha = 0.6;
-                this.startButton.inputEnabled = false;
+                //alert('okk')
+                this.startButton.alpha = 1;
+                this.startButton.inputEnabled = true;
+                this.game.time.events.add(Phaser.Timer.SECOND * 3, () => {
+                    if (this.selectedTokenList !== undefined && this.selectedTokenList !== null) {
+                        //alert('kkk')
+                        //this.startButton.alpha = 1;
+                        //this.startButton.inputEnabled = true;
+                        this.onClickStartButton(this.startButton);
+                    }
+                });
+
+
             }
             else if (this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE) {
                 this.startButton.alpha = 1;
                 this.startButton.inputEnabled = true;
+                this.game.time.events.add(Phaser.Timer.SECOND * 3, () => {
+                    if (this.selectedTokenList !== undefined && this.selectedTokenList !== null) {
+                        //alert('kkk')
+                        //this.startButton.alpha = 1;
+                        //this.startButton.inputEnabled = true;
+                        this.onClickStartButton(this.startButton);
+                    }
+                });
+
+            }
+
+        }
+
+
+        /* createStartButton() {
+            let btn_text = this.game.add.text(0, -8, "Start", {
+                font: "40px Arial",
+                fill: "#ffffff"
+            });
+            btn_text.anchor.set(0.5);
+
+            this.startButton = this.add.image(this.world.centerX, this.world.height - 80, null);
+            this.startButton.anchor.set(0.5);
+            this.startButton.inputEnabled = true;
+            this.startButton.input.useHandCursor = true;
+            this.startButton.addChild(btn_text);
+
+            this.startButton.events.onInputDown.add(() => {
+                console.log("Button pressed down");
+            });
+
+            this.startButton.events.onInputUp.add(() => {
+                console.log("Button released");
+                //alert("Start Clicked");
+            });
+
+            // Simulate click after delay (only after it's created)
+            // Inside createStartButton
+            this.game.time.events.add(Phaser.Timer.SECOND * 3.0, () => {
+                //alert("Auto Start Triggered");
+                 //alert(JSON.stringify(this.selectedTokenList))
+                if (this.selectedTokenList !== undefined && this.selectedTokenList !== null) {
+                    //alert('okk')
+                    this.onClickStartButton(); // ✅ now this should fire alert
+                } else {
+                    //alert("Token not selected yet. Retrying...");
+                    this.game.time.events.add(Phaser.Timer.SECOND * 0.3, () => {
+                        if (this.selectedTokenList !== undefined && this.selectedTokenList !== null) {
+                            this.onClickStartButton();
+                        }
+                    });
+                }
+            });
+
+        }
+        */
+
+        waitForTokenAndStart() {
+            if (this.selectedTokenList !== undefined && this.selectedTokenList !== null) {
+                //alert("Auto Start Triggered ok");
+                this.onClickStartButton();
+            } else {
+                // Wait and retry after 300ms
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.3, () => {
+                    this.waitForTokenAndStart();
+                });
             }
         }
+
+
+        /* onClickStartButton() {
+            //alert('lllkk')
+            if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
+                this.startButton.alpha = 1;
+                this.startButton.inputEnabled = true;
+                //alert('lll')
+                // Start checking for token selection
+                this.waitForTokenAndStart();
+            }
+
+        }
+*/
+
+
+
+
+        /* createStartButton() {
+
+                   let btn_text = this.game.add.text(
+                       0,
+                       -8 + (Ludo_Wild.Home.textYgap * -20),
+                       this.langMgr.getText(Ludo_Wild.TEXTS.START),
+                       { font: (40 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" }
+                   );
+
+                   this.startButton = this.add.image(
+                       -1000,
+                       -1000,
+                       Ludo_Wild.generalSheet,
+                       "btn_Standard0"
+                   );
+                   this.startButton.anchor.setTo(0.5);
+
+
+                   this.startButton.events.onInputDown.add(() => {
+                       this.startButton.loadTexture(Ludo_Wild.generalSheet, "btn_standard1");
+                   });
+
+
+                   this.startButton.events.onInputUp.add(this.onClickStartButton.bind(this));
+
+                   btn_text.font = Ludo_Wild.Main.FONT;
+                   btn_text.anchor.set(0.5);
+                   this.startButton.addChild(btn_text);
+
+                   if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
+                       this.startButton.alpha = 0.6;
+                       this.startButton.inputEnabled = false;
+                   } else if (this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE) {
+                       this.startButton.alpha = 1;
+                       this.startButton.inputEnabled = true;
+
+
+                       this.time.events.add(0, () => {
+                           //alert('okkk')
+                           if (this.startButton.inputEnabled) {
+
+                               this.onClickStartButton(this.startButton);
+                           }
+                       });
+
+
+                   }
+       }
+*/
         ;
         onStartGameOffline(_data) {
 
@@ -13854,7 +14020,7 @@ var Ludo_Wild;
                 this._gamePlayManager = null;
             }
         }
-        createPlayerNumTray() {
+        /* createPlayerNumTray() {
             this.playerNumTray = this.game.add.image(this.game.world.centerX, this.game.world.centerY, Ludo_Wild.generalSheet, "lobby_playernumtray");
             this.playerNumTray.anchor.setTo(0.5, 0.5);
             const labelBackground = this.game.add.image(0, -this.playerNumTray.height / 5 - 10, Ludo_Wild.generalSheet, "lobby_name_plate");
@@ -13869,31 +14035,139 @@ var Ludo_Wild;
             this.trayEntities.push(headerText);
         }
         ;
+*/
+        createPlayerNumTray() {
+            this.playerNumTray = this.game.add.image(-1000, -1000, Ludo_Wild.generalSheet, "lobby_playernumtray");
+            this.playerNumTray.anchor.setTo(0.5, 0.5);
+
+            const labelBackground = this.game.add.image(-1000, -1000, Ludo_Wild.generalSheet, "lobby_name_plate");
+            labelBackground.anchor.setTo(0.5, 0.5);
+            labelBackground.scale.setTo(1.1, 1.1);
+
+            const headerText = this.game.add.text(
+                0,
+                -this.playerNumTray.height / 5 - 10 + (Ludo_Wild.Home.textYgap * -20),
+                this.langMgr.getText(Ludo_Wild.TEXTS.CHOOSE_PLAYERS),
+                { font: (34 + Ludo_Wild.Main.FONTSIZE) + "px", fill: "#322c22" }
+            );
+            headerText.font = Ludo_Wild.Main.FONT;
+            headerText.anchor.set(0.5);
+
+            this.playerNumTray.addChild(labelBackground);
+            this.playerNumTray.addChild(headerText);
+
+            // Create the actual player selection buttons
+            this.createPlayernumTabs();
+            //alert(Phaser.Timer.SECOND)
+            this.time.events.add(0, () => {
+                if (this.playerNum2Btn) {
+                    // Auto call the same handler used in onInputUp
+                    this.onPlayerNumSelect(this.playerNum2Btn);
+                } else {
+                    console.warn("playerNum2Btn not found for auto-click");
+                }
+            });
+        }
+        ;
+
+
+        /* createPlayernumTabs() {
+             //alert('okk')
+             const k = 0;
+             const startX = -200;
+             for (let i = 0; i < 3; i++) {
+ 
+                 if(i == 0){
+                 const playerString = (i + 2 + k).toString();
+ 
+ 
+                 const numButton = this.add.image(startX + (i * 150), -35, Ludo_Wild.generalSheet, "lobby_playernum1");
+ 
+ 
+                 const numLabel = Ludo_Wild.Main.GAME.add.text(numButton.width / 2, numButton.height / 2 - 5 + (Ludo_Wild.Home.textYgap * -20), playerString + "P", { font: "36px KG", fill: "#ffffff" });
+                 numLabel.anchor.setTo(0.5);
+                 numLabel.setShadow(3, 3, "#808080", 2);
+                 numButton.addChild(numLabel);
+                 numButton.inputEnabled = true;
+                 numButton.data = { num: i + 2 + k, isSelected: false };
+ 
+                 numButton.events.onInputUp.add(this.onPlayerNumSelect.bind(this));
+                 numButton.events.onInputDown.add(() => {
+ 
+                     numButton.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum2");
+ 
+                 });
+ 
+ 
+                 //numButton.tint = 0x808080;
+ 
+ 
+                 this.playerNumTray.addChild(numButton);
+                 }
+             }
+ 
+ 
+ 
+         }
+         */
+
         createPlayernumTabs() {
+            let k = 0; // Declare 'k' outside
+
+            const noOfPlayers = getCookie('noOfPlayers');
+            // alert(noOfPlayers);
+
+            if (noOfPlayers === 'PLAYERS 4') {
+                k = 2;
+            }
+
 
             const startX = -200;
+
             for (let i = 0; i < 3; i++) {
-                const playerString = (i + 2).toString();
-                const numButton = this.add.image(startX + (i * 150), -35, Ludo_Wild.generalSheet, "lobby_playernum1");
-                const numLabel = Ludo_Wild.Main.GAME.add.text(numButton.width / 2, numButton.height / 2 - 5 + (Ludo_Wild.Home.textYgap * -20), playerString + "P", { font: "36px KG", fill: "#ffffff" });
-                numLabel.anchor.setTo(0.5);
-                numLabel.setShadow(3, 3, "#808080", 2);
-                numButton.addChild(numLabel);
-                numButton.inputEnabled = true;
-                numButton.data = { num: i + 2, isSelected: false };
-                numButton.events.onInputUp.add(this.onPlayerNumSelect.bind(this));
-                numButton.events.onInputDown.add(() => {
-                    numButton.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum2");
-                });
-                this.playerNumTray.addChild(numButton);
+                if (i === 0) {
+                    const playerString = (i + 2 + k).toString();
+
+                    const numButton = this.add.image(startX + (i * 150), -35, Ludo_Wild.generalSheet, "lobby_playernum1");
+
+                    const numLabel = this.game.add.text(
+                        numButton.width / 2,
+                        numButton.height / 2 - 5 + (Ludo_Wild.Home.textYgap * -20),
+                        playerString + "P",
+                        { font: "36px KG", fill: "#ffffff" }
+                    );
+                    numLabel.anchor.setTo(0.5);
+                    numLabel.setShadow(3, 3, "#808080", 2);
+
+                    numButton.addChild(numLabel);
+                    numButton.inputEnabled = true;
+                    numButton.data = { num: i + 2 + k, isSelected: false };
+
+                    numButton.events.onInputUp.add(this.onPlayerNumSelect.bind(this));
+
+                    numButton.events.onInputDown.add(() => {
+                        numButton.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum2");
+                    });
+
+                    this.playerNumTray.addChild(numButton);
+
+                    this.playerNum2Btn = numButton;
+
+                }
             }
         }
         ;
-        onPlayerNumSelect(e) {
+
+
+
+        /* onPlayerNumSelect(e) {
+            //alert(e.data.num)
             Manager.AudioManager.getAudioInstance().playLongClick();
             const numLabel = e.getChildAt(0);
-
+            //alert(JSON.stringify(numLabel))
             for (let i = 2; i < 5; i++) {
+
+                if(i == 2){
                 const numButton = this.playerNumTray.getChildAt(i);
                 if (numButton.data.isSelected) {
                     numButton.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum1");
@@ -13902,14 +14176,60 @@ var Ludo_Wild;
                     numButton.getChildAt(0).fill = "#ffffff";
                     break;
                 }
+
+                }
+
+
             }
+
             numLabel.fill = "#ffffff";
             e.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum0");
             e.data.isSelected = true;
             this.manageTokenSelection(e.data.num);
+
+        }
+        */
+
+        onPlayerNumSelect(e) {
+            //alert(e.data.num)
+            Manager.AudioManager.getAudioInstance().playLongClick();
+            const numLabel = e.getChildAt(0);
+            //alert(JSON.stringify(numLabel))
+            for (let i = 2; i < 5; i++) {
+
+                if (i == 2) {
+                    const numButton = this.playerNumTray.getChildAt(i);
+                    if (numButton.data.isSelected) {
+                        numButton.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum1");
+                        numButton.data.isSelected = false;
+
+                        numButton.getChildAt(0).fill = "#ffffff";
+                        break;
+                    }
+
+                }
+
+
+            }
+
+            numLabel.fill = "#ffffff";
+            e.loadTexture(Ludo_Wild.generalSheet, "lobby_playernum0");
+            e.data.isSelected = true;
+            this.manageTokenSelection(e.data.num);
+
+            this.time.events.add(0, () => {
+                if (this.playerNum2Btn) {
+
+                    this.onPlayerNumSelect(this.playerNum2Btn);
+
+                }
+            });
+
         }
         ;
+
         manageTokenSelection(numOfPlayers) {
+            //alert(numOfPlayers)
             if (this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE) {
                 this.maxPeersUI = numOfPlayers;
             }
@@ -13949,7 +14269,7 @@ var Ludo_Wild;
         }
         ;
         renderTokenSelectTray() {
-            this.tokenSelectTray = this.game.add.image(this.game.world.centerX, this.game.world.centerY + 210, Ludo_Wild.generalSheet, "lobby_tokenTray");
+            this.tokenSelectTray = this.game.add.image(-1000, -1000, Ludo_Wild.generalSheet, "lobby_tokenTray");
             this.tokenSelectTray.anchor.setTo(0.5, 0.5);
             const labelBackground = this.game.add.image(0, -this.tokenSelectTray.height / 2 + 120, Ludo_Wild.generalSheet, "lobby_name_plate");
             labelBackground.anchor.setTo(0.5, 0.5);
@@ -13961,15 +14281,23 @@ var Ludo_Wild;
             this.tokenSelectTray.addChild(headerText);
 
             this.createStartButton();
+            //alert(this.gameMode)
             if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
                 this.createTokenSelectButtons();
-            }
-            else {
+
+                // Auto-select first token with a slight delay
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.3, () => {
+                    //alert(this.tokenButtons.length)
+                    if (this.tokenButtons && this.tokenButtons.length > 0) {
+                        this.onTokenButtonSelect(this.tokenButtons[0]);
+                    }
+                });
+            } else {
                 this.createInputButtons2();
             }
         }
         ;
-        createTokenSelectButtons() {
+        /* createTokenSelectButtons() {
             const startX = -110;
             const startY = -80;
             for (let i = 0; i < 4; i++) {
@@ -13993,6 +14321,61 @@ var Ludo_Wild;
                 this.tokenSelectTray.addChild(inputButton);
             }
         }
+        */
+        createTokenSelectButtons() {
+            const startX = -110;
+            const startY = -80;
+            let firstTokenButton = null; // Store reference for auto-selection
+
+            for (let i = 0; i < 4; i++) {
+                const iOffsetX = i % 2;
+                const iOffsetY = i < 2 ? 0 : 1;
+
+                const inputButton = this.add.image(
+                    startX + (iOffsetX * 220),
+                    startY + (iOffsetY * 220),
+                    Ludo_Wild.generalSheet,
+                    "lobby_nametray0"
+                );
+
+                inputButton.anchor.setTo(0.5);
+                inputButton.inputEnabled = true;
+                inputButton.data = { token: i, isSelected: false };
+
+                const tokenImg = this.game.add.image(0, 0, Ludo_Wild.generalSheet, "lobby_token" + (i + 1));
+                tokenImg.anchor.setTo(0.5);
+                inputButton.addChild(tokenImg);
+
+                const nameLabel = this.game.add.text(0, 45 + (Ludo_Wild.Home.textYgap * -10), Ludo_Wild.trimName("YOU"), {
+                    font: "24px KG",
+                    fill: "#ffffff"
+                });
+                nameLabel.anchor.setTo(0.5);
+                nameLabel.visible = false;
+                inputButton.addChild(nameLabel);
+
+                inputButton.events.onInputDown.add(() => {
+                    inputButton.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray2");
+                });
+
+                inputButton.events.onInputUp.add(this.onTokenButtonSelect.bind(this));
+
+                this.tokenSelectTray.addChild(inputButton);
+
+                // Save the first button for auto-selection
+                if (i === 0) {
+                    firstTokenButton = inputButton;
+                }
+            }
+
+            // Auto-select first token if in Single Player mode
+            if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER && firstTokenButton) {
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.2, () => {
+                    this.onTokenButtonSelect(firstTokenButton);
+                });
+            }
+        }
+
         ;
         createInputButtons2() {
             const startX = -110;
@@ -14110,8 +14493,8 @@ var Ludo_Wild;
             parentButton.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray1");
         }
         ;
-        onTokenButtonSelect(e) {
-
+        /* onTokenButtonSelect(e) {
+            //alert('ok')
             Manager.AudioManager.getAudioInstance().playLongClick();
             const indexStart = this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE ? 3 : 2;
             for (let i = indexStart; i < indexStart + 4; i++) {
@@ -14131,19 +14514,111 @@ var Ludo_Wild;
 
             e.getChildAt(1).visible = true;
             this.toggleStartButton();
+
+
         }
+        */
+        onTokenButtonSelect(e) {
+            Manager.AudioManager.getAudioInstance().playLongClick();
+            const indexStart = this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE ? 3 : 2;
+
+            for (let i = indexStart; i < indexStart + 4; i++) {
+                const tokenButton = this.tokenSelectTray.getChildAt(i);
+                if (tokenButton.data.isSelected) {
+                    tokenButton.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray0");
+                    tokenButton.data.isSelected = false;
+
+                    tokenButton.getChildAt(1).visible = false;
+                    this.selectedTokenList.pop();
+                    break;
+                }
+            }
+
+            e.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray1");
+            e.data.isSelected = true;
+            this.selectedTokenList.push(e.data.token);
+
+            e.getChildAt(1).visible = true;
+            this.toggleStartButton();
+
+            // ✅ Auto-start for SINGLE_PLAYER and MULTIPLAYER_OFFLINE
+            if (
+                (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER ||
+                    this.gameMode === Ludo_Wild.gameMode.MULTIPLAYER_OFFLINE)
+            ) {
+                // Delay start to allow UI to update first
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.6, () => {
+                    if (this.startButton && this.startButton.inputEnabled) {
+                        //alert("Token selected: " + this.selectedTokenList[0]);
+                        this.onClickStartButton();
+                    }
+                });
+            }
+
+        }
+
+        /* onTokenButtonSelect(button) {
+            this.selectedToken = button.data.token; // ✅ sets the token
+            console.log("Token selected:", this.selectedToken);
+           // alert("Token selected: " + this.selectedToken);
+
+            // Optional: highlight selected token visually
+            this.tokenButtons.forEach(btn => {
+                btn.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray0"); // Unselected
+                btn.children[1].visible = false; // Name label off
+                btn.data.isSelected = false;
+            });
+
+            button.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray2"); // Selected
+            button.children[1].visible = true;
+            button.data.isSelected = true;
+        }
+*/
+
+
+        /* onTokenButtonSelect(inputButton) {
+            // Deselect other buttons
+            this.tokenSelectTray.children.forEach(child => {
+                if (child.data && child.data.isSelected) {
+                    child.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray0");
+                    child.data.isSelected = false;
+                }
+            });
+
+            // Mark this one as selected
+            inputButton.loadTexture(Ludo_Wild.generalSheet, "lobby_nametray2");
+            inputButton.data.isSelected = true;
+
+            // Store selected token (optional)
+            this.selectedToken = inputButton.data.token;
+
+            // Auto-click the Play button if in single player mode
+            if (this.gameMode === Ludo_Wild.gameMode.SINGLE_PLAYER) {
+                // Optionally delay to show button press feedback
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.3, () => {
+                    this.toggleStartButton(); // This should be your start/play game function
+                });
+            }
+        }
+*/
         ;
         toggleStartButton() {
             if (this.selectedTokenList.length === this.maxPeersUI) {
                 this.startButton.alpha = 1;
                 this.startButton.inputEnabled = true;
-                this.add.tween(this.startButton).to({ angle: 20 }, 80, Phaser.Easing.Quadratic.Out)
+
+                this.add.tween(this.startButton)
+                    .to({ angle: 20 }, 80, Phaser.Easing.Quadratic.Out)
                     .to({ angle: -20 }, 80, Phaser.Easing.Quadratic.Out)
                     .to({ angle: 0 }, 80, Phaser.Easing.Quadratic.Out, true);
+            } else {
+                this.startButton.alpha = 0.6;
+                this.startButton.inputEnabled = false;
             }
         }
         ;
         onClickStartButton(button) {
+            //alert('kkkk')
             Manager.AudioManager.getAudioInstance().playLongClick();
             button.loadTexture(Ludo_Wild.generalSheet, "btn_Standard0");
             switch (this.gameMode) {
@@ -14483,6 +14958,7 @@ var Ludo_Wild;
         createTokenSelectButtons() {
             const startX = -110;
             const startY = -80;
+            this.tokenButtons = [];
             for (let i = 0; i < 4; i++) {
                 const iOffsetX = i % 2;
                 const iOffsetY = i < 2 ? 0 : 1;
@@ -14502,6 +14978,7 @@ var Ludo_Wild;
                 });
                 inputButton.events.onInputUp.add(this.onTokenButtonSelect.bind(this));
                 this.tokenSelectTray.addChild(inputButton);
+                this.tokenButtons.push(inputButton);
             }
         }
         ;
@@ -14539,6 +15016,7 @@ var Ludo_Wild;
         }
         ;
         createStartButton() {
+            //alert('okkkk')
             let btn_text = this.game.add.text(0, -8 + (Ludo_Wild.Home.textYgap * -20), Ludo_Wild.LanguageManager.getLangInstance().getText(Ludo_Wild.TEXTS.START), { font: (40 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" });
             this.startButton = this.add.image(this.world.centerX, this.world.height - 80, Ludo_Wild.generalSheet, "btn_Standard0");
             this.startButton.anchor.setTo(0.5);

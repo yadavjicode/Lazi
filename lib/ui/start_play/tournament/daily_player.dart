@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/model/subscription_model.dart';
+import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
 import 'package:ludonew/routes/conssiste.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -148,14 +149,11 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(
-                                    LoadingScreen(
-                                      entryfree: "63",
-                                    ),
-                                    duration: Duration(
-                                        milliseconds:
-                                            ApiConstants.screenTransitionTime),
-                                    transition: Transition.rightToLeft);
+                                 Get.to(FirstScreen(
+                                tournmentId: item.id.toString(),
+                                noOfPlayer: item.noOfPlayers.toString(),
+                                tournmentTime: item.timerInSecond.toString(),
+                              ));
                                 // Get.toNamed(Routes.loadingScreen);
                               },
                               child: Container(

@@ -1,34 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// class FirstScreen extends StatefulWidget {
+//   final String noOfPlayer;
+//   final String tournmentId;
+//   final String tournmentTime;
+//   const FirstScreen(
+//       {super.key,
+//       required this.noOfPlayer,
+//       required this.tournmentId,
+//       required this.tournmentTime});
+
+//   @override
+//   State<FirstScreen> createState() => _FirstScreenState();
+// }
+
+// class _FirstScreenState extends State<FirstScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+//     return const MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: MyHomePage(),
+//     );
+//   }
+// }
+
 class FirstScreen extends StatefulWidget {
-  const FirstScreen({super.key});
+  final String noOfPlayer;
+  final String tournmentId;
+  final String tournmentTime;
+  const FirstScreen(
+      {super.key,
+      required this.noOfPlayer,
+      required this.tournmentId,
+      required this.tournmentTime});
 
   @override
-  State<FirstScreen> createState() => _FirstScreenState();
+  State<FirstScreen> createState() => _FirstScreen();
 }
 
-class _FirstScreenState extends State<FirstScreen> {
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _FirstScreen extends State<FirstScreen> {
   final InAppLocalhostServer localhostServer = InAppLocalhostServer();
   late InAppWebViewController webViewController;
   String? token = '';
@@ -37,6 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _startServer();
+    print(
+        "tournmentId ${widget.tournmentId} noOfPlayer ${widget.noOfPlayer} tournmentTime ${widget.tournmentTime}");
   }
 
   Future<void> _startServer() async {
@@ -69,43 +84,51 @@ class _MyHomePageState extends State<MyHomePage> {
           webViewController = controller;
         },
         onLoadStop: (controller, url) async {
-  await controller.evaluateJavascript(source: '''
-    // ✅ Define setCookie function
-    function setCookie(name, value, days = 1) {
-      const maxAge = 60 * 60 * 24 * days;
-      document.cookie = name + '=' + value + '; path=/; max-age=' + maxAge;
-    }
+          await controller.evaluateJavascript(source: '''
+            // ✅ Define setCookie function
+            function setCookie(name, value, days = 1) {
+              const maxAge = 60 * 60 * 24 * days;
+              document.cookie = name + '=' + value + '; path=/; max-age=' + maxAge;
+            }
 
-    // ✅ Ensure window.awebapp is set
-    if (!window.awebapp) {
-      window.awebapp = {
-        itspro: function(value) {
-          window.flutter_inappwebview.callHandler('Android', 'itspro:' + value);
-        }
-      };
-    }
+            // ✅ Ensure window.awebapp is set
+            if (!window.awebapp) {
+              window.awebapp = {
+                itspro: function(value) {
+                  window.flutter_inappwebview.callHandler('Android', 'itspro:' + value);
+                }
+              };
+            }
 
-    // ✅ Store token and use it
-    const token = "$token";
-    setCookie("userToken", token);
-    showName(token); // Call JS function from HTML
-  ''');
-},
 
-  //       onLoadStop: (controller, url) async {
-  //         await controller.evaluateJavascript(source: '''
-  //   if (!window.awebapp) {
-  //     window.awebapp = {
-  //       itspro: function(value) {
-  //         window.flutter_inappwebview.callHandler('Android', 'itspro:' + value);
-  //       }
-  //     };
-  //   }
- 
-  //   // ✅ Call the function to show name on page load
-  //   showName("$token");
-  // ''');
-  //       },
+            // ✅ Store token and use it
+            const token = "$token";
+
+            
+            setCookie("userToken", "$token");
+            setCookie("tournamentId", "${widget.tournmentId}");
+            setCookie("noOfPlayers", "${widget.noOfPlayer}");
+            setCookie("tournamentTimeInSec", "${widget.tournmentTime}");
+
+            
+            showName(token); // Call JS function from HTML
+          ''');
+        },
+
+        //       onLoadStop: (controller, url) async {
+        //         await controller.evaluateJavascript(source: '''
+        //   if (!window.awebapp) {
+        //     window.awebapp = {
+        //       itspro: function(value) {
+        //         window.flutter_inappwebview.callHandler('Android', 'itspro:' + value);
+        //       }
+        //     };
+        //   }
+
+        //   // ✅ Call the function to show name on page load
+        //   showName("$token");
+        // ''');
+        //       },
         onConsoleMessage: (controller, message) {
           print("Console log: ${message.message}");
         },

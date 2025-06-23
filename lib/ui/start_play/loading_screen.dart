@@ -35,12 +35,12 @@ class _LoadingScreenState extends State<LoadingScreen>
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         //  Get.to(MainScreen());
-        Get.to(
-            FirstScreen(
-                // entryfree: widget.entryfree,
-                ),
-            duration: Duration(milliseconds: ApiConstants.screenTransitionTime),
-            transition: Transition.rightToLeft);
+        // Get.to(
+        //     FirstScreen(
+        //         // entryfree: widget.entryfree,
+        //         ),
+        //     duration: Duration(milliseconds: ApiConstants.screenTransitionTime),
+        //     transition: Transition.rightToLeft);
       }
     });
 

@@ -179,7 +179,12 @@ class RankModalComponent extends PositionComponent with TapCallbacks {
     if (_closeButton.toRect().contains(tapPosition)) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>  FirstScreen()),
+        MaterialPageRoute(
+            builder: (context) => FirstScreen(
+                  tournmentId: "",
+                  tournmentTime: "",
+                  noOfPlayer: "",
+                )),
       );
     }
   }
