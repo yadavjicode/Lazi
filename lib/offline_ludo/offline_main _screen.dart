@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
+import 'package:ludonew/controller/profile_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // class FirstScreen extends StatefulWidget {
@@ -44,11 +46,13 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreen extends State<FirstScreen> {
   final InAppLocalhostServer localhostServer = InAppLocalhostServer();
   late InAppWebViewController webViewController;
+  final ProfileController profileController = Get.put(ProfileController());
   String? token = '';
 
   @override
   void initState() {
     super.initState();
+    profileController.profile(context);
     _startServer();
     print(
         "tournmentId ${widget.tournmentId} noOfPlayer ${widget.noOfPlayer} tournmentTime ${widget.tournmentTime}");
@@ -82,6 +86,15 @@ class _FirstScreen extends State<FirstScreen> {
         ),
         onWebViewCreated: (controller) {
           webViewController = controller;
+          controller.addJavaScriptHandler(
+            handlerName: "homeBack",
+            callback: (args) {
+              // 👇 Navigate to Flutter Home page
+              profileController.profile(context);
+              Navigator.pushReplacementNamed(context, '/StartPlay');
+              return;
+            },
+          );
         },
         onLoadStop: (controller, url) async {
           await controller.evaluateJavascript(source: '''
@@ -103,8 +116,6 @@ class _FirstScreen extends State<FirstScreen> {
 
             // ✅ Store token and use it
             const token = "$token";
-
-            
             setCookie("userToken", "$token");
             setCookie("tournamentId", "${widget.tournmentId}");
             setCookie("noOfPlayers", "${widget.noOfPlayer}");

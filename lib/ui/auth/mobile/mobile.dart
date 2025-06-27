@@ -138,16 +138,7 @@ class _MobileState extends State<Mobile> {
                                   fontSize: 17, color: AppColors.white),
                             )),
                       ),
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                      ),
-                      Container(
-                        height: 1,
-                        color: Colors.grey.shade400,
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                      ),
+                      Divider(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

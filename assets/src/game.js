@@ -1150,9 +1150,9 @@ var Ludo_Wild;
 
                 const x = this.pocketOffset["x_p" + 1];
                 const y = this.pocketOffset["y_p" + 1];
-
+                const timeLefts = getCookie('tournamentTimeInSec');
                 // Step 1: Create the text first (needed to measure width/height)
-                const timeText = game.add.text(0, 0, "Time: 60", {
+                const timeText = game.add.text(0, 0, "Time: " + timeLefts, {
                     font: "32px Arial",
                     fill: "#ffffff",
                     stroke: "#ffffff",
@@ -1182,8 +1182,7 @@ var Ludo_Wild;
                 timeText.x = (timeText.width / 2) + padding;
                 timeText.y = (timeText.height / 2) - 300;
 
-
-                let timeLeft = 300;
+                let timeLeft = getCookie('tournamentTimeInSec');
 
                 const timer = game.time.events.loop(Phaser.Timer.SECOND, () => {
                     timeLeft--;
@@ -1199,17 +1198,6 @@ var Ludo_Wild;
                 }, this);
 
             }
-
-
-
-
-
-
-
-
-
-
-
         }
         ;
 
@@ -1231,12 +1219,118 @@ var Ludo_Wild;
             const playerIdWin = userDataPlayer[0].players[topPlayerId].id;
             const game_id = userDataPlayer[0].players[topPlayerId].offline_game_id;
 
-            const topScoreNew = `Winner \n\n  Name: ${playerName} \n\n Score: ${topScore}`;
+            const topScoreNew = `Winner \n\n  Name: ${playerName} \n Score: ${topScore}`;
 
 
+            //start popup
+
+            // 1. Overlay
+            const overlay = Ludo_Wild.Main.GAME.add.graphics(0, 0);
+            overlay.beginFill(0x000000, 0.5);
+            overlay.drawRect(0, 0, Ludo_Wild.Main.GAME.width, Ludo_Wild.Main.GAME.height);
+            overlay.endFill();
+
+            // 2. Popup Panel Image (styled)
+            this.gameOverPopup = Ludo_Wild.Main.GAME.add.image(
+                Ludo_Wild.Main.GAME.world.centerX,
+                Ludo_Wild.Main.GAME.world.centerY - 100,
+                Ludo_Wild.popupSheet,
+                "exit_popup"  // Reuse the exit-style background
+            );
+            this.gameOverPopup.anchor.setTo(0.5);
+
+            // 3. Score Text (centered in the popup)
+            const scoreText = Ludo_Wild.Main.GAME.add.text(
+                0,
+                -60,
+                topScoreNew.toString(),
+                {
+                    font: (36 + Ludo_Wild.Main.FONTSIZE - 4).toString() + "px",
+                    fill: "#401b0b",
+                    align: "center"
+                }
+            );
+            scoreText.font = Ludo_Wild.Main.FONT;
+            scoreText.anchor.setTo(0.5);
+            this.gameOverPopup.addChild(scoreText);
+
+
+            /* const btnYesOk = Ludo_Wild.Main.GAME.add.image(0, 70, Ludo_Wild.popupSheet, "btn_yes0");
+                        btnYesOk.anchor.setTo(0.5);
+                        btnYesOk.inputEnabled = true;
+                        btnYesOk.events.onInputDown.add(() => {
+                            btnYesOk.loadTexture(Ludo_Wild.popupSheet, "btn_yes1");
+                        });
+                        btnYesOk.events.onInputUp.add(this.onExitYes.bind(this), this);
+                        const yesTextOk = Ludo_Wild.Main.GAME.add.text(0, -5 + (Ludo_Wild.Home.textYgap * -20), 'OK', { font: (34 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" });
+                        yesTextOk.font = Ludo_Wild.Main.FONT;
+                        yesTextOk.anchor.setTo(0.5);
+                        yesTextOk.setShadow(0, 2, "#000000", 3);
+                        btnYesOk.addChild(yesTextOk);
+                        btnYesOk.input.priorityID = 2;
+*/
+            const btnYesOk = Ludo_Wild.Main.GAME.add.image(0, 70, Ludo_Wild.generalSheet, "btn_Standard0");
+            btnYesOk.anchor.setTo(0.5);
+            btnYesOk.inputEnabled = true;
+            btnYesOk.events.onInputDown.add(() => {
+                btnYesOk.loadTexture(Ludo_Wild.generalSheet, "btn_standard1");
+            });
+            btnYesOk.events.onInputUp.add(async () => {
+                const responseStart = await fetch('https://lazioludo.com/api/offline-game/game-over', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + getCookie('userToken')
+                    },
+                    body: JSON.stringify({
+                        player_id: playerIdWin,
+                        game_id: game_id
+                    })
+
+                });
+                //alert(playerIdWin);
+                //alert(game_id);
+                const dataStart = await responseStart.json();
+                //alert(JSON.stringify(dataStart));
+
+                var currentDiceValue = 0;
+                initialPlayerScore(0);
+                initialPlayerScore(1);
+                initialPlayerScore(2);
+                initialPlayerScore(3);
+                this.onExitClickNew();
+                popupGroup.destroy(); // Close popup
+                overlay.destroy();    // Remove background
+                this.renderHome();
+
+            });
+            const noTextOk = Ludo_Wild.Main.GAME.add.text(0, -5 + (Ludo_Wild.Home.textYgap * -20), 'OK', { font: (34 + Ludo_Wild.Main.FONTSIZE).toString() + "px", fill: "#ffffff" });
+            noTextOk.font = Ludo_Wild.Main.FONT;
+            noTextOk.anchor.setTo(0.5);
+            noTextOk.setShadow(0, 2, "#000000", 3);
+            btnYesOk.addChild(noTextOk);
+            btnYesOk.input.priorityID = 2;
+
+
+            this.gameOverPopup.addChild(btnYesOk);
+
+
+            // 5. Optional: scale effect (like in exitPopUpPanel)
+            this.gameOverPopup.scale.setTo(0);
+            this.gameOverPopup.visible = true;
+            this.gameOverPopup.alive = true;
+            Ludo_Wild.Main.GAME.add.tween(this.gameOverPopup.scale).to({ x: 1, y: 1 }, 300, Phaser.Easing.Back.Out, true);
+
+
+
+            //end popup
+
+            /*
             const game = Ludo_Wild.Main.GAME;
 
             // Dim background
+            
             const overlay = game.add.graphics(0, 0);
             overlay.beginFill(0x000000, 0.5);
             overlay.drawRect(0, 0, game.width, game.height);
@@ -1288,9 +1382,6 @@ var Ludo_Wild;
             okText.inputEnabled = true;
             okText.input.useHandCursor = true;
             okText.events.onInputDown.add(async () => {
-                //alert(playerIdWin);
-                //alert(game_id)
-
                 const responseStart = await fetch('https://lazioludo.com/api/offline-game/game-over', {
                     method: 'POST',
                     mode: 'cors',
@@ -1298,8 +1389,14 @@ var Ludo_Wild;
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + getCookie('userToken')
                     },
-                    body: JSON.stringify({ player_id: playerIdWin, game_id: game_id })
+                    body: JSON.stringify({
+                        player_id: playerIdWin,
+                        game_id: game_id
+                    })
+
                 });
+                //alert(playerIdWin);
+                //alert(game_id);
                 const dataStart = await responseStart.json();
                 //alert(JSON.stringify(dataStart));
 
@@ -1311,15 +1408,17 @@ var Ludo_Wild;
                 this.onExitClickNew();
                 popupGroup.destroy(); // Close popup
                 overlay.destroy();    // Remove background
-
-
-                //this.renderHome();
+                this.renderHome();
             }, this);
             popupGroup.add(okText);
+            */
         };
 
         onExitClickNew() {
-            //alert('okkkk')
+
+            if (window.flutter_inappwebview) {
+                window.flutter_inappwebview.callHandler("homeBack");
+            }
             radio('exitGame').broadcast({});
             segadroid.setState({
                 state: "over",
@@ -1330,6 +1429,7 @@ var Ludo_Wild;
             }
             catch (e) {
             }
+
             Ludo_Wild.Main.GAME.state.start('Home');
             window.parent.history.replaceState({ state: Ludo_Wild.gameScenes.BOOT }, "", "#Boot");
         }
@@ -2306,6 +2406,7 @@ var Ludo_Wild;
         ;
         createYesButton() {
 
+
             const btnYes = Ludo_Wild.Main.GAME.add.image((-680 / 2) + 180, (531 / 2) + 50, Ludo_Wild.popupSheet, "btn_yes0");
             btnYes.anchor.setTo(0.5);
             btnYes.inputEnabled = true;
@@ -2345,6 +2446,11 @@ var Ludo_Wild;
             initialPlayerScore(1);
             initialPlayerScore(2);
             initialPlayerScore(3);
+
+            if (window.flutter_inappwebview) {
+                window.flutter_inappwebview.callHandler("homeBack");
+            }
+
             Manager.AudioManager.getAudioInstance().playLongClick();
             this.exitPopUpPanel.getChildAt(1).loadTexture(Ludo_Wild.popupSheet, "btn_yes0");
             Ludo_Wild.Main.GAME.add.tween(this.exitPopUpPanel.scale).to({ x: 0, y: 0 }, 50, Phaser.Easing.Bounce.In, true)
@@ -4047,21 +4153,14 @@ var Ludo_Wild;
                 // body: JSON.stringify({ name: 'test' })
             });
 
-
-
             const data = await response.json();
             userDataPlayer.push(data);
-            //alert(JSON.stringify(data))
-
+            //alert(JSON.stringify(data)
             // Call the function
-
             //alert(JSON.stringify(data))
             //dataResult=data;
             //  console.log("Final Data:", data); // Use your data here
-
             //const data = {}
-
-
             this.createPlayers(_data.names, _data.avatars, _data.playIds, data);
 
 
@@ -6783,7 +6882,7 @@ var Ludo_Wild;
 
 
                 this.gameObjects["playerData"][id].dice = 0;
-                this.gameObjects["playerData"][id].diceActive = true;
+                //this.gameObjects["playerData"][id].diceActive = true;
             } else {
                 this.gameObjects["playerData"][id].dice = 0;
                 this.gameObjects["playerData"][id].diceActive = true;
@@ -12361,7 +12460,7 @@ var Ludo_Wild;
         }
         ;
         createBackButton() {
-            const backButton = this.add.image(65, 65, Ludo_Wild.generalSheet, "btn_back");
+            const backButton = this.add.image(-1000, -1000, Ludo_Wild.generalSheet, "btn_back");
             backButton.inputEnabled = true;
             backButton.anchor.setTo(0.5, 0.5);
             backButton.events.onInputUp.add(this.onBackButtonClick.bind(this, backButton), this);
@@ -13201,18 +13300,34 @@ var Ludo_Wild;
         }
         ;
         createSinglePlayerButton(paddingY, xDiff) {
+            //  Create the button  
 
-            this.singlePlayBtn = this.add.image(xDiff, paddingY, Ludo_Wild.generalSheet, "btn_general1");
-            this.singlePlayBtn.anchor.setTo(0.4, 0.5);
-            this.singlePlayBtn.inputEnabled = true;
+            this.singlePlayBtn = this.add.image(-1000, -1000, Ludo_Wild.generalSheet, "btn_general1");
+            this.singlePlayBtn.anchor.setTo(0.4, 0.5); this.singlePlayBtn.inputEnabled = true;
             this.singlePlayBtn.data = { mode: "single" };
             this.singlePlayBtn.events.onInputUp.add(this.onMenuButtonClick.bind(this, this.singlePlayBtn, this));
             this.singlePlayBtn.addChild(this.createButtonText(Ludo_Wild.TEXTS.SIN_PLAY));
             this.menuButtonGroup.addChild(this.singlePlayBtn);
+            // Simulate auto click after short delay  
+            this.time.events.add(Phaser.Timer.SECOND * 0.5, () => { this.singlePlayBtn.events.onInputUp.dispatch(this.singlePlayBtn); }, this);
         }
+
+
+
+
+        // createSinglePlayerButton(paddingY, xDiff) {
+
+        //     this.singlePlayBtn = this.add.image(xDiff, paddingY, Ludo_Wild.generalSheet, "btn_general1");
+        //     this.singlePlayBtn.anchor.setTo(0.4, 0.5);
+        //     this.singlePlayBtn.inputEnabled = true;
+        //     this.singlePlayBtn.data = { mode: "single" };
+        //     this.singlePlayBtn.events.onInputUp.add(this.onMenuButtonClick.bind(this, this.singlePlayBtn, this));
+        //     this.singlePlayBtn.addChild(this.createButtonText(Ludo_Wild.TEXTS.SIN_PLAY));
+        //     this.menuButtonGroup.addChild(this.singlePlayBtn);
+        // }
         ;
         createLocalMultiplayerButton(paddingY, xDiff) {
-            this.localMultiPlayBtn = this.add.image(xDiff, paddingY, Ludo_Wild.generalSheet, "btn_general2");
+            this.localMultiPlayBtn = this.add.image(-1000, -1000, Ludo_Wild.generalSheet, "btn_general2");
             this.localMultiPlayBtn.anchor.setTo(1.1, 0.5);
             this.localMultiPlayBtn.inputEnabled = true;
             this.localMultiPlayBtn.data = { mode: "local" };
@@ -13253,7 +13368,7 @@ var Ludo_Wild;
         ;
         onMenuButtonClick(button, context) {
             if (!this.canClickMenuButtons) {
-                return;
+                // return;
             }
             context.add.tween(button.scale).to({ x: 0.9, y: 0.9 }, 75, Phaser.Easing.Quadratic.In)
                 .to({ x: 1, y: 1 }, 75, Phaser.Easing.Quadratic.Out, true).onComplete.add(() => {
@@ -14674,7 +14789,7 @@ var Ludo_Wild;
             });
         }
         createBackButton() {
-            const backButton = this.add.image(65, 65, Ludo_Wild.generalSheet, "btn_back");
+            const backButton = this.add.image(-1000, -1000, Ludo_Wild.generalSheet, "btn_back");
             backButton.inputEnabled = true;
             backButton.anchor.setTo(0.5, 0.5);
             backButton.events.onInputUp.add(this.onBackButtonClick.bind(this, backButton), this);
@@ -15164,3 +15279,6 @@ var Ludo_Wild;
     }
     Ludo_Wild.RandomOnlineLobbyState = RandomOnlineLobbyState;
 })(Ludo_Wild || (Ludo_Wild = {}));
+
+
+

@@ -26,8 +26,6 @@ class _HomeState extends State<Home> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       profileController.profile(context);
-
-    
     });
   }
 
@@ -87,7 +85,8 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Container(
-                  height: 1,color: Colors.grey.shade300,
+                  height: 1,
+                  color: Colors.grey.shade300,
                 ),
                 Expanded(
                   child: SingleChildScrollView(

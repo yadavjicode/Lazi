@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
-import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
-import 'package:ludonew/routes/conssiste.dart';
-import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 
@@ -23,6 +21,8 @@ class _FourPlayer extends State<FourPlayer> {
   bool isExpanded = false;
 
   List<bool> isExpandedList = [];
+  final CheckBalanceController checkBalanceController =
+      Get.put(CheckBalanceController());
 
   @override
   Widget build(BuildContext ctx) {
@@ -144,13 +144,11 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                           GestureDetector(
                             onTap: () {
-                         
-                               Get.to(FirstScreen(
-                                tournmentId: item.id.toString(),
-                                noOfPlayer: item.noOfPlayers.toString(),
-                                tournmentTime: item.timerShow.toString(),
-                              ));
-                               
+                              checkBalanceController.checkBalance(
+                                  context,
+                                  item.id.toString(),
+                                  item.noOfPlayers.toString(),
+                                  item.timerShow.toString());
                               // Get.toNamed(Routes.loadingScreen);
                             },
                             child: Container(

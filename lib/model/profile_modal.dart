@@ -1,18 +1,18 @@
 class ProfileModel {
-  int? id;
-  String? mobileNo;
-  String? otp;
-  String? email;
-  String? name;
-  String? age;
-  String? dateOfBirth;
-  String? gender;
-  String? userId;
-  String? createdAt;
-  String? updatedAt;
-  String? profileImage;
-  int? status;
-  int? wallet;
+  dynamic id;
+  dynamic mobileNo;
+  dynamic otp;
+  dynamic email;
+  dynamic name;
+  dynamic age;
+  dynamic dateOfBirth;
+  dynamic gender;
+  dynamic userId;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic profileImage;
+  dynamic status;
+  dynamic wallet;
 
   ProfileModel({
     this.id,

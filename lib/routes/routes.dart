@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:ludonew/routes/conssiste.dart';
+import 'package:ludonew/ui/dashboard/account/my_balance/transaction_history/transaction_history.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/ui/start_play/start_play.dart';
 import 'package:ludonew/ui/auth/language/language.dart';
@@ -23,6 +24,7 @@ class Routes {
   static const String myProfile = "/myProfile";
   static const String myBalance = "/myBalance";
   static const String withdraw = "/withdraw";
+  static const String transactionHistory = "/transactionHistory";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -90,6 +92,13 @@ class Routes {
     GetPage(
       name: withdraw,
       page: () => Withdraw(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: transactionHistory,
+      page: () => TransactionHistory(),
       transition: Transition.fadeIn,
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),

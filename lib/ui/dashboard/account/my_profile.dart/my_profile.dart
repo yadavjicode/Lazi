@@ -16,6 +16,15 @@ class _MyProfileState extends State<MyProfile> {
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      profileController.profile(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.white,

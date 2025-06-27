@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/controller/subscription_controller.dart';
 import 'package:ludonew/routes/routes.dart';
@@ -27,6 +28,8 @@ class _StartPlayState extends State<StartPlay> {
   final SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
   final ProfileController profileController = Get.put(ProfileController());
+  final CheckBalanceController checkBalanceController =
+      Get.put(CheckBalanceController());
 
   @override
   void initState() {
@@ -81,25 +84,30 @@ class _StartPlayState extends State<StartPlay> {
                         SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                          decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(18)),
-                          child: Row(
-                            children: [
-                              Text(
-                                "₹ ${profileController.member?.wallet ?? 0}",
-                                style: FontConstant.styleSemiBold(
-                                    fontSize: 15,
-                                    color: AppColors.secondaryColor),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              SvgPicture.asset(IconsPath.walletC)
-                            ],
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.myBalance);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(18)),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "₹ ${profileController.member?.wallet ?? 0}",
+                                  style: FontConstant.styleSemiBold(
+                                      fontSize: 15,
+                                      color: AppColors.secondaryColor),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SvgPicture.asset(IconsPath.walletC)
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -115,7 +123,7 @@ class _StartPlayState extends State<StartPlay> {
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20))),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 16),
                   child: Column(
                     children: [
                       SizedBox(height: 0),
@@ -124,7 +132,7 @@ class _StartPlayState extends State<StartPlay> {
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: filters.length,
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 10),
                           itemBuilder: (context, index) {
@@ -161,19 +169,30 @@ class _StartPlayState extends State<StartPlay> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Image.asset(
-                        ImagePath.zada,
-                        width: screenWidth * 1,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                ImagePath.zada,
+                                width: screenWidth * 1,
+                              ),
+                              SizedBox(height: 10),
+                              Expanded(child: tournament(selectedFilter)),
+                            ],
+                          ),
+                        ),
                       ),
-                      SizedBox(height: 10),
-                      Expanded(child: tournament(selectedFilter)),
                     ],
                   ),
                 ),
               ))
             ],
           )),
-          if (subscriptionController.isLoading.value)
+          if (subscriptionController.isLoading.value ||
+              checkBalanceController.isLoading.value ||
+              profileController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,
