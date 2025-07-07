@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ludonew/api_service/api_constant.dart';
 import 'package:ludonew/model/add_wallet_model.dart';
 import 'package:ludonew/model/check_balance_model.dart';
+import 'package:ludonew/model/dashboard_banner_model.dart';
 import 'package:ludonew/model/profile_modal.dart';
 import 'package:ludonew/model/send_otp_model.dart';
 import 'package:http/http.dart' as http;
@@ -105,7 +106,8 @@ class ApiService {
 // End get subscription api ===================================================================================>
 
 // Start check balance ===============================================================================>
-  Future<CheckBalanceModel> checkBalance(String tournamentId) async {
+  Future<CheckBalanceModel> checkBalance(
+      String tournamentId, String type) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.post(
@@ -114,9 +116,7 @@ class ApiService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       },
-      body: jsonEncode({
-        'tournament_id': tournamentId,
-      }),
+      body: jsonEncode({'tournament_id': tournamentId, 'check_type': type}),
     );
 
     if (response.statusCode == 200) {
@@ -156,9 +156,12 @@ class ApiService {
 // End transaction history api ===================================================================================>
 
 // Start add wallet api ===============================================================================>
-  Future<AddWalletModel> addWallet(String amount) async {
+  Future<AddWalletModel> addWallet(String amount, String transactionId,
+      String paymentStatus, String orderId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    print(
+        "amount. ${amount}. transactionId. ${transactionId}. paymentStatus. ${paymentStatus}.  orderId. ${orderId}");
     final response = await http.post(
       Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addWalletUrl}'),
       headers: {
@@ -167,6 +170,9 @@ class ApiService {
       },
       body: jsonEncode({
         'amount': amount,
+        "transaction_id": transactionId,
+        "payment_status": paymentStatus,
+        "order_id": orderId
       }),
     );
 
@@ -181,4 +187,30 @@ class ApiService {
     }
   }
 // End add wallet  api ===================================================================================>
+
+// Start dashboard Banner api ===============================================================================>
+
+  Future<DashboardBannerModel> dashboardBanner() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.dashboardBannerUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return DashboardBannerModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End dashboard Banner  api ===================================================================================>
 }

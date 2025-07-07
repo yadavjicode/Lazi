@@ -14,12 +14,14 @@ class AddWalletController extends GetxController {
   String? get error => _error;
   final ProfileController profileController = Get.put(ProfileController());
 
-  Future<void> addWallet(BuildContext context, String amount) async {
+  Future<void> addWallet(BuildContext context, String amount,
+      String transactionId, String paymentStatus, String orderId) async {
     isLoading.value = true;
     _error = null;
 
     try {
-      _member = await apiService.addWallet(amount);
+      _member = await apiService.addWallet(
+          amount, transactionId, paymentStatus, orderId);
 
       if ((_member?.status ?? false)) {
         CustomSanckbar.showSnackbar(context, _member?.message ?? "", true);

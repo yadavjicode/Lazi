@@ -6,4 +6,5 @@ class ApiConstants {
   static const String checkBalanceUrl = "offline-game-start";
   static const String addWalletUrl = "add-wallet";
   static const String transactionHistoryUrl = "get-transaction-history";
+  static const String dashboardBannerUrl = "dashboard";
 }

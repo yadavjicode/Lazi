@@ -149,12 +149,12 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // checkBalanceController.checkBalance(
-                                //     context,
-                                //     item.id.toString(),
-                                //     item.noOfPlayers.toString(),
-                                //     item.timerInSecond.toString());
-                                // Get.toNamed(Routes.loadingScreen);
+                               checkBalanceController.checkBalance(
+                                    context,
+                                    item.id.toString(),
+                                    item.noOfPlayers.toString(),
+                                    item.timerInSecond.toString(),
+                                    'daily','daily');
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

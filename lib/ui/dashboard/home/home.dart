@@ -1,10 +1,11 @@
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/dashbord_banner_controller.dart';
 import 'package:ludonew/controller/profile_controller.dart';
-import 'package:ludonew/routes/conssiste.dart';
 import 'package:ludonew/routes/routes.dart';
-import 'package:ludonew/ui/dashboard/home/superme_leage.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/icons_path.dart';
 import 'package:ludonew/util/constant/images_path.dart';
@@ -20,12 +21,60 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final ProfileController profileController = Get.put(ProfileController());
 
+  final DashbordBannerController dashbordBannerController =
+      Get.put(DashbordBannerController());
+
+  List<String> bannerA = [];
+  List<String> bannerB = [];
+  List<String> bannerC = [];
+  int _currentIndexA = 0;
+  int _currentIndexB = 0;
+  int _currentIndexC = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       profileController.profile(context);
+
+      dashbordBannerController.dashboardBanner(context).then((_) {
+        setState(() {
+          bannerA.add(
+              dashbordBannerController.member?.data?.banner?.topBanners1 ?? "");
+          bannerA.add(
+              dashbordBannerController.member?.data?.banner?.topBanners2 ?? "");
+          bannerA.add(
+              dashbordBannerController.member?.data?.banner?.topBanners3 ?? "");
+          bannerA.add(
+              dashbordBannerController.member?.data?.banner?.topBanners4 ?? "");
+
+          bannerB.add(
+              dashbordBannerController.member?.data?.banner?.middleBanners1 ??
+                  "");
+          bannerB.add(
+              dashbordBannerController.member?.data?.banner?.middleBanners2 ??
+                  "");
+          bannerB.add(
+              dashbordBannerController.member?.data?.banner?.middleBanners3 ??
+                  "");
+          bannerB.add(
+              dashbordBannerController.member?.data?.banner?.middleBanners4 ??
+                  "");
+
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners1 ??
+                  "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners2 ??
+                  "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners3 ??
+                  "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners4 ??
+                  "");
+        });
+      });
     });
   }
 
@@ -37,6 +86,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey.shade200,
       body: Obx(() {
         return Stack(children: [
+          // if (!dashbordBannerController.isLoading.value)
           SafeArea(
             child: Column(
               children: [
@@ -121,14 +171,58 @@ class _HomeState extends State<Home> {
                                           color: Colors.grey.shade300)),
                                   child: Column(
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(17),
-                                        child: Image.asset(
-                                          fit: BoxFit.cover,
+                                      CarouselSlider.builder(
+                                        itemCount: bannerA.length,
+                                        itemBuilder:
+                                            (context, index, realIndex) {
+                                          return ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(17),
+                                            child: Image.network(
+                                              "https://lazioludo.com/${bannerA[index]}",
+                                              fit: BoxFit.fill,
+                                              width: double.infinity,
+                                            ),
+                                          );
+                                        },
+                                        options: CarouselOptions(
+                                          viewportFraction: 1,
                                           height: 200,
-                                          ImagePath.homeB,
-                                          width: double.infinity,
+                                          autoPlay: true,
+                                          enlargeCenterPage: true,
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              _currentIndexA = index;
+                                            });
+                                          },
                                         ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: bannerA
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          return GestureDetector(
+                                            // onTap: () => _carouselController
+                                            //     .animateToPage(entry.key),
+                                            child: Container(
+                                              width: 8.0,
+                                              height: 8.0,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 4.0),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: _currentIndexA ==
+                                                          entry.key
+                                                      ? AppColors.primaryColor
+                                                      : Colors.grey),
+                                            ),
+                                          );
+                                        }).toList(),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
@@ -217,131 +311,68 @@ class _HomeState extends State<Home> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(SupermeLeaguePage(),
-                                      duration: Duration(
-                                          milliseconds: ApiConstants
-                                              .screenTransitionTime),
-                                      transition: Transition.rightToLeft);
-
-                                  // Get.to(LudoTournament());
+                                  // Get.toNamed(Routes.startPlay);
                                 },
-                                child: Card(
-                                  margin: EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  elevation: 2,
-                                  child: Row(
-                                    children: [
-                                      // Zig-Zag clipped container
-                                      ClipPath(
-                                        clipper: ZigZagClipper(),
-                                        child: Container(
-                                          width: 180,
-                                          height: 150,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF4B0082),
-                                              borderRadius:
-                                                  BorderRadius.circular(12)),
-                                          padding: EdgeInsets.all(16),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Ludo\nSupreme League",
-                                                style: FontConstant.styleMedium(
-                                                    fontSize: 15,
-                                                    color: AppColors.white),
-                                              ),
-                                              SizedBox(height: 20),
-                                              Text(
-                                                "FIRST PRIZE",
-                                                style: FontConstant.styleMedium(
-                                                    fontSize: 12,
-                                                    color: AppColors.white),
-                                              ),
-                                              Text(
-                                                "₹1.5 LAKH",
-                                                style:
-                                                    FontConstant.styleSemiBold(
-                                                        fontSize: 20,
-                                                        color: AppColors.white),
-                                              ),
-                                            ],
+                                child: Stack(
+                                  children: [
+                                    CarouselSlider.builder(
+                                      itemCount: bannerB.length,
+                                      itemBuilder: (context, index, realIndex) {
+                                        return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(17),
+                                          child: Image.network(
+                                            "https://lazioludo.com/${bannerB[index]}",
+                                            fit: BoxFit.fill,
+                                            width: double.infinity,
                                           ),
-                                        ),
+                                        );
+                                      },
+                                      options: CarouselOptions(
+                                        viewportFraction: 1,
+                                        height: 200,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        onPageChanged: (index, reason) {
+                                          setState(() {
+                                            _currentIndexB = index;
+                                          });
+                                        },
                                       ),
-                                      // Right side
-                                      Expanded(
-                                        child: Container(
-                                          height: 150,
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12)),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Closes in 06h 56m",
-                                                style: FontConstant.styleMedium(
-                                                    fontSize: 12,
-                                                    color: AppColors.green),
-                                              ),
-                                              Text(
-                                                "70%",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              ),
-                                              Text(
-                                                "Assured Winners",
-                                                style: FontConstant.styleMedium(
-                                                    fontSize: 15,
-                                                    color: Colors.black87),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Text("ENTRY",
-                                                      style: TextStyle(
-                                                          color: Colors.grey)),
-                                                  SizedBox(height: 4),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 6,
-                                                            horizontal: 40),
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .secondaryColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18),
-                                                    ),
-                                                    child: Text(
-                                                      "₹25",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
+                                    ),
+                                    Positioned(
+                                      bottom: 5,
+                                      left: 0,
+                                      right: 0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: bannerA
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          return GestureDetector(
+                                            // onTap: () => _carouselController
+                                            //     .animateToPage(entry.key),
+                                            child: Container(
+                                              width: 8.0,
+                                              height: 8.0,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 4.0),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: _currentIndexB ==
+                                                          entry.key
+                                                      ? AppColors.primaryColor
+                                                      : AppColors.white),
+                                            ),
+                                          );
+                                        }).toList(),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(
@@ -363,25 +394,71 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   // Get.toNamed(Routes.startPlay);
                                 },
-                                child: Image.asset(
-                                  ImagePath.homeA,
-                                  width: double.infinity,
-                                  fit: BoxFit.contain,
+                                child: Stack(
+                                  children: [
+                                    CarouselSlider.builder(
+                                      itemCount: bannerC.length,
+                                      itemBuilder: (context, index, realIndex) {
+                                        return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(17),
+                                          child: Image.network(
+                                            "https://lazioludo.com/${bannerC[index]}",
+                                            fit: BoxFit.fill,
+                                            width: double.infinity,
+                                          ),
+                                        );
+                                      },
+                                      options: CarouselOptions(
+                                        viewportFraction: 1,
+                                        height: 200,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        onPageChanged: (index, reason) {
+                                          setState(() {
+                                            _currentIndexC = index;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 5,
+                                      left: 0,
+                                      right: 0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: bannerA
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          return GestureDetector(
+                                            // onTap: () => _carouselController
+                                            //     .animateToPage(entry.key),
+                                            child: Container(
+                                              width: 8.0,
+                                              height: 8.0,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 4.0),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: _currentIndexC ==
+                                                          entry.key
+                                                      ? AppColors.primaryColor
+                                                      : AppColors.white),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(
                                 height: screenHeight * 0.02,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  // Get.toNamed(Routes.startPlay);
-                                },
-                                child: Image.asset(
-                                  ImagePath.bonous,
-                                  width: double.infinity,
-                                  fit: BoxFit.contain,
-                                ),
-                              )
                             ],
                           ),
                         ),
@@ -392,7 +469,8 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          if (profileController.isLoading.value)
+          if (profileController.isLoading.value ||
+              dashbordBannerController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,

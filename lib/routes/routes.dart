@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 import 'package:ludonew/routes/conssiste.dart';
+import 'package:ludonew/ui/dashboard/account/faqs/faqs.dart';
 import 'package:ludonew/ui/dashboard/account/my_balance/transaction_history/transaction_history.dart';
+import 'package:ludonew/ui/dashboard/account/privacy_policy/privacy_policy.dart';
+import 'package:ludonew/ui/dashboard/account/terms_and_condition/terms_and_conditions.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/ui/start_play/start_play.dart';
 import 'package:ludonew/ui/auth/language/language.dart';
@@ -25,6 +28,9 @@ class Routes {
   static const String myBalance = "/myBalance";
   static const String withdraw = "/withdraw";
   static const String transactionHistory = "/transactionHistory";
+  static const String faqs = "/faqs";
+  static const String privacyPolicy = "/privacyPolicy";
+  static const String termsAndConditions = "/termsAndConditions";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -99,6 +105,27 @@ class Routes {
     GetPage(
       name: transactionHistory,
       page: () => TransactionHistory(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: faqs,
+      page: () => FAQ(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: privacyPolicy,
+      page: () => PrivacyPolicy(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: termsAndConditions,
+      page: () => TermsAndConditions(),
       transition: Transition.fadeIn,
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),

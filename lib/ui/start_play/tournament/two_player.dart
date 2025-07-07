@@ -151,8 +151,9 @@ class _twoPlayer extends State<twoPlayer> {
                                   context,
                                   item.id.toString(),
                                   item.noOfPlayers.toString(),
-                                  item.timerShow.toString());
-                            
+                                  item.timerShow.toString(),
+                                  'offline',
+                                  'offline');
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

@@ -152,12 +152,13 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // checkBalanceController.checkBalance(
-                                //     context,
-                                //     item.id.toString(),
-                                //     item.noOfPlayers.toString(),
-                                //     item.timerInSecond.toString());
-                                // Get.toNamed(Routes.loadingScreen);
+                              checkBalanceController.checkBalance(
+                                    context,
+                                    item.id.toString(),
+                                    item.noOfPlayers.toString(),
+                                    item.timerInSecond.toString(),
+                                    'weekly',
+                                    'weekly');
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

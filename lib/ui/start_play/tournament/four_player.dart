@@ -144,12 +144,11 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              checkBalanceController.checkBalance(
+                           checkBalanceController.checkBalance(
                                   context,
                                   item.id.toString(),
                                   item.noOfPlayers.toString(),
-                                  item.timerShow.toString());
-                              // Get.toNamed(Routes.loadingScreen);
+                                  item.timerShow.toString(),'offline','offline');
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

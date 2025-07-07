@@ -156,7 +156,27 @@ class _AccountState extends State<Account> {
 
                         // ),
                         GestureDetector(
-                          onTap: () => {},
+                          onTap: () => {Get.toNamed(Routes.privacyPolicy)},
+                          child: buildoptionIcon(
+                              icons: Icon(
+                                Icons.privacy_tip,
+                                color: AppColors.primaryColor,
+                              ),
+                              tittle: "Privacy Policy",
+                              forward: false),
+                        ),
+                        GestureDetector(
+                          onTap: () => {Get.toNamed(Routes.termsAndConditions)},
+                          child: buildoptionIcon(
+                              icons: Icon(
+                                Icons.rule,
+                                color: AppColors.primaryColor,
+                              ),
+                              tittle: "Terms And Conditions",
+                              forward: false),
+                        ),
+                        GestureDetector(
+                          onTap: () => {Get.toNamed(Routes.faqs)},
                           child: buildoption(
                               icons: IconsPath.faq,
                               tittle: "FAQs",
@@ -209,6 +229,63 @@ Widget buildoption(
                 width: 50,
                 height: 50,
               ),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      tittle,
+                      style: FontConstant.styleMedium(
+                          fontSize: 15, color: AppColors.black),
+                    ),
+                    if (subtile != null)
+                      Text(
+                        subtile,
+                        style: FontConstant.styleRegular(
+                            fontSize: 13, color: AppColors.darkgrey),
+                      )
+                  ],
+                ),
+              ),
+              if (forward)
+                Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: AppColors.grey,
+                  size: 15,
+                )
+            ],
+          ),
+        ),
+        Divider(
+          color: Colors.grey.shade300,
+        )
+      ],
+    ),
+  );
+}
+
+Widget buildoptionIcon(
+    {required Icon icons,
+    required String tittle,
+    String? subtile,
+    required bool forward}) {
+  return Container(
+    color: AppColors.white,
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Row(
+            children: [
+              Container(
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                      color: AppColors.secondaryColor.withOpacity(0.1),
+                      shape: BoxShape.circle),
+                  child: icons),
               const SizedBox(
                 width: 20,
               ),
