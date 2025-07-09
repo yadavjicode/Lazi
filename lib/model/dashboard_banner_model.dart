@@ -54,6 +54,11 @@ class Banner {
   String? bottomBanners2;
   String? bottomBanners3;
   String? bottomBanners4;
+  String? bottomBanners5;
+  String? bottomBanners6;
+  String? bottomBanners7;
+  String? beneathBanners1;
+  String? beneathBanners2;
 
   Banner(
       {this.id,
@@ -70,7 +75,12 @@ class Banner {
       this.bottomBanners1,
       this.bottomBanners2,
       this.bottomBanners3,
-      this.bottomBanners4});
+      this.bottomBanners4,
+      this.bottomBanners5,
+      this.bottomBanners6,
+      this.bottomBanners7,
+      this.beneathBanners1,
+      this.beneathBanners2});
 
   Banner.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -88,6 +98,11 @@ class Banner {
     bottomBanners2 = json['bottom_banners_2'];
     bottomBanners3 = json['bottom_banners_3'];
     bottomBanners4 = json['bottom_banners_4'];
+    bottomBanners5 = json['bottom_banners_5'];
+    bottomBanners6 = json['bottom_banners_6'];
+    bottomBanners7 = json['bottom_banners_7'];
+    beneathBanners1 = json['beneath_banners_1'];
+    beneathBanners2 = json['beneath_banners_2'];
   }
 
   Map<String, dynamic> toJson() {
@@ -107,6 +122,11 @@ class Banner {
     data['bottom_banners_2'] = this.bottomBanners2;
     data['bottom_banners_3'] = this.bottomBanners3;
     data['bottom_banners_4'] = this.bottomBanners4;
+    data['bottom_banners_5'] = this.bottomBanners5;
+    data['bottom_banners_6'] = this.bottomBanners6;
+    data['bottom_banners_7'] = this.bottomBanners7;
+    data['beneath_banners_1'] = this.beneathBanners1;
+    data['beneath_banners_2'] = this.beneathBanners2;
     return data;
   }
 }

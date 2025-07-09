@@ -4,14 +4,16 @@ import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
+import 'package:ludonew/widgets/start_timer.dart';
 
 /// 1) PROMOTED CARD
 class DailyPlayer extends StatefulWidget {
   final List<Daily> daily;
-  const DailyPlayer({
-    Key? key,
-    required this.daily,
-  }) : super(key: key);
+  final String userId;
+  final String name;
+  const DailyPlayer(
+      {Key? key, required this.daily, required this.userId, required this.name})
+      : super(key: key);
 
   @override
   State<DailyPlayer> createState() => _DailyPlayer();
@@ -93,7 +95,8 @@ class _DailyPlayer extends State<DailyPlayer> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
+                  CountdownScreen(),
 
                   // values
                   Padding(
@@ -149,12 +152,15 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                               checkBalanceController.checkBalance(
+                                checkBalanceController.checkBalance(
                                     context,
                                     item.id.toString(),
                                     item.noOfPlayers.toString(),
                                     item.timerInSecond.toString(),
-                                    'daily','daily');
+                                    'daily',
+                                    'daily',
+                                    widget.userId,
+                                    widget.name);
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

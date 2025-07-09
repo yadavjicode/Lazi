@@ -7,4 +7,5 @@ class ApiConstants {
   static const String addWalletUrl = "add-wallet";
   static const String transactionHistoryUrl = "get-transaction-history";
   static const String dashboardBannerUrl = "dashboard";
+  static const String editProfileUrl = "update-profile";
 }

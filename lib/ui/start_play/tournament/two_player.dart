@@ -5,14 +5,20 @@ import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
+import 'package:ludonew/widgets/start_timer.dart';
 
 /// 1) PROMOTED CARD
 class twoPlayer extends StatefulWidget {
   final List<Players2> players2;
-  const twoPlayer({
-    Key? key,
-    required this.players2,
-  }) : super(key: key);
+  final String userId;
+  final String name;
+
+  const twoPlayer(
+      {Key? key,
+      required this.players2,
+      required this.userId,
+      required this.name})
+      : super(key: key);
 
   @override
   State<twoPlayer> createState() => _twoPlayer();
@@ -91,9 +97,8 @@ class _twoPlayer extends State<twoPlayer> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
-
-                // values
+                SizedBox(height: 10),
+                  CountdownScreen(),
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
@@ -136,6 +141,7 @@ class _twoPlayer extends State<twoPlayer> {
                           ),
                         ],
                       ),
+               
 
                       Column(
                         children: [
@@ -153,7 +159,9 @@ class _twoPlayer extends State<twoPlayer> {
                                   item.noOfPlayers.toString(),
                                   item.timerShow.toString(),
                                   'offline',
-                                  'offline');
+                                  'offline',
+                                  widget.userId,
+                                  widget.name);
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ludonew/controller/profile_controller.dart';
+import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
-import 'package:ludonew/util/constant/images_path.dart';
 import 'package:ludonew/widgets/font.dart';
 
 class MyProfile extends StatefulWidget {
@@ -24,6 +25,15 @@ class _MyProfileState extends State<MyProfile> {
     });
   }
 
+  String convertDateFormat(String inputDate) {
+    try {
+      DateTime date = DateFormat("yyyy-MM-dd").parse(inputDate);
+      return DateFormat("dd-MM-yyyy").format(date);
+    } catch (e) {
+      return "__-__-__"; // Handle invalid date format
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +49,11 @@ class _MyProfileState extends State<MyProfile> {
         ),
         body: Obx(() {
           if (profileController.isLoading.value) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: AppColors.primaryColor,
+            ));
           } else {
-            var user = profileController.member;
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -55,37 +67,50 @@ class _MyProfileState extends State<MyProfile> {
                     child: Column(
                       children: [
                         Stack(children: [
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.grey.shade300)),
-                            child: Icon(
-                              Icons.person,
-                              color: AppColors.secondaryColor,
-                              size: 40,
-                            ),
+                          CircleAvatar(
+                            radius: 55,
+                            backgroundColor: Colors.grey[300],
+                            backgroundImage: (profileController
+                                            .member?.profileImage !=
+                                        null &&
+                                    profileController
+                                        .member!.profileImage!.isNotEmpty)
+                                ? NetworkImage(
+                                        "https://lazioludo.com/${profileController.member?.profileImage ?? ""}")
+                                    as ImageProvider<Object>
+                                : null,
+                            child: ((profileController.member?.profileImage ==
+                                        null ||
+                                    profileController
+                                        .member!.profileImage!.isEmpty))
+                                ? const Icon(Icons.person,
+                                    size: 50, color: Colors.grey)
+                                : null,
                           ),
                           Positioned(
                               right: 0,
                               top: 0,
-                              child: Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.secondaryColor),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: AppColors.white,
-                                    size: 20,
-                                  ))),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.editProfile);
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.secondaryColor),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: AppColors.white,
+                                      size: 20,
+                                    )),
+                              )),
                         ]),
                         SizedBox(
                           height: 15,
                         ),
                         Text(
-                          "${user?.mobileNo!.substring(0, 5)}xxxx${user?.mobileNo!.substring(9)}",
+                          "${profileController.member?.name ?? ""}",
                           style: FontConstant.styleMedium(
                             fontSize: 17,
                             color: AppColors.black,
@@ -95,7 +120,23 @@ class _MyProfileState extends State<MyProfile> {
                           height: 5,
                         ),
                         Text(
-                          "Phone: ${user?.mobileNo}",
+                          "Phone: ${profileController.member?.mobileNo ?? ""}",
+                          style: FontConstant.styleRegular(
+                              fontSize: 15, color: AppColors.darkgrey),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Gender: ${profileController.member?.gender ?? "____"}",
+                          style: FontConstant.styleRegular(
+                              fontSize: 15, color: AppColors.darkgrey),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "DOB: ${convertDateFormat(profileController.member?.dateOfBirth ?? "")}",
                           style: FontConstant.styleRegular(
                               fontSize: 15, color: AppColors.darkgrey),
                         ),
@@ -155,56 +196,56 @@ class _MyProfileState extends State<MyProfile> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey.shade300)),
-                    child: Column(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Game Status",
-                              style: FontConstant.styleMedium(
-                                  fontSize: 17, color: AppColors.black),
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Image.asset(
-                              ImagePath.gameStatus,
-                              width: 50,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Ludo Supreme",
-                                    style: FontConstant.styleMedium(
-                                        fontSize: 15, color: AppColors.black),
-                                  ),
-                                  Text(
-                                    "Total Games Played: 1",
-                                    style: FontConstant.styleMedium(
-                                        fontSize: 15,
-                                        color: AppColors.darkgrey),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )
+                  // Container(
+                  //   padding: EdgeInsets.all(15),
+                  //   width: double.infinity,
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       border: Border.all(color: Colors.grey.shade300)),
+                  //   child: Column(
+                  //     children: [
+                  //       Align(
+                  //           alignment: Alignment.centerLeft,
+                  //           child: Text(
+                  //             "Game Status",
+                  //             style: FontConstant.styleMedium(
+                  //                 fontSize: 17, color: AppColors.black),
+                  //           )),
+                  //       SizedBox(
+                  //         height: 20,
+                  //       ),
+                  //       Row(
+                  //         children: [
+                  //           Image.asset(
+                  //             ImagePath.gameStatus,
+                  //             width: 50,
+                  //           ),
+                  //           SizedBox(
+                  //             width: 10,
+                  //           ),
+                  //           Expanded(
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               children: [
+                  //                 Text(
+                  //                   "Ludo Supreme",
+                  //                   style: FontConstant.styleMedium(
+                  //                       fontSize: 15, color: AppColors.black),
+                  //                 ),
+                  //                 Text(
+                  //                   "Total Games Played: 1",
+                  //                   style: FontConstant.styleMedium(
+                  //                       fontSize: 15,
+                  //                       color: AppColors.darkgrey),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           )
+                  //         ],
+                  //       )
+                  //     ],
+                  //   ),
+                  // )
                 ],
               ),
             );

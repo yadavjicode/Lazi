@@ -4,14 +4,19 @@ import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
+import 'package:ludonew/widgets/start_timer.dart';
 
 /// 1) PROMOTED CARD
 class FourPlayer extends StatefulWidget {
   final List<Players2> players2;
-  const FourPlayer({
-    Key? key,
-    required this.players2,
-  }) : super(key: key);
+  final String userId;
+  final String name;
+  const FourPlayer(
+      {Key? key,
+      required this.players2,
+      required this.userId,
+      required this.name})
+      : super(key: key);
 
   @override
   State<FourPlayer> createState() => _FourPlayer();
@@ -88,7 +93,8 @@ class _FourPlayer extends State<FourPlayer> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+            SizedBox(height: 10),
+                  CountdownScreen(),
 
                 // values
                 Padding(
@@ -133,7 +139,7 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                         ],
                       ),
-
+                  
                       Column(
                         children: [
                           Text("ENTRY",
@@ -144,11 +150,15 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                           GestureDetector(
                             onTap: () {
-                           checkBalanceController.checkBalance(
+                              checkBalanceController.checkBalance(
                                   context,
                                   item.id.toString(),
                                   item.noOfPlayers.toString(),
-                                  item.timerShow.toString(),'offline','offline');
+                                  item.timerShow.toString(),
+                                  'offline',
+                                  'offline',
+                                  widget.userId,
+                                  widget.name);
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

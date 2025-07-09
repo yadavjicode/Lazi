@@ -4,14 +4,19 @@ import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
+import 'package:ludonew/widgets/start_timer.dart';
 
 /// 1) PROMOTED CARD
 class WeeklyPlayer extends StatefulWidget {
   final List<Weekly> weekly;
-  const WeeklyPlayer({
-    Key? key,
-    required this.weekly,
-  }) : super(key: key);
+  final String userId;
+  final String name;
+  const WeeklyPlayer(
+      {Key? key,
+      required this.weekly,
+      required this.userId,
+      required this.name})
+      : super(key: key);
 
   @override
   State<WeeklyPlayer> createState() => _WeeklyPlayer();
@@ -96,8 +101,9 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
 
+                  SizedBox(height: 10),
+                  CountdownScreen(),
                   // values
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -152,13 +158,15 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                              checkBalanceController.checkBalance(
+                                checkBalanceController.checkBalance(
                                     context,
                                     item.id.toString(),
                                     item.noOfPlayers.toString(),
                                     item.timerInSecond.toString(),
                                     'weekly',
-                                    'weekly');
+                                    'weekly',
+                                    widget.userId,
+                                    widget.name);
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

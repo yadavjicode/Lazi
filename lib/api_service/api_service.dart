@@ -1,15 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:ludonew/api_service/api_constant.dart';
 import 'package:ludonew/model/add_wallet_model.dart';
 import 'package:ludonew/model/check_balance_model.dart';
 import 'package:ludonew/model/dashboard_banner_model.dart';
+import 'package:ludonew/model/edit_profile_model.dart';
 import 'package:ludonew/model/profile_modal.dart';
 import 'package:ludonew/model/send_otp_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/model/transaction_history_model.dart';
 import 'package:ludonew/model/verify_otp_model.dart';
+import 'package:ludonew/ui/dashboard/account/my_profile.dart/edit_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:http_parser/src/media_type.dart";
 
 class ApiService {
 // Start send otp api ===============================================================================>
@@ -210,6 +214,69 @@ class ApiService {
       final responseJson = json.decode(response.body);
       print(responseJson);
       throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End dashboard Banner  api ===================================================================================>
+
+// Start dashboard Banner api ===============================================================================>
+
+  Future<EditProfileModel> editProfile(
+      String name, String dob, String gender, File? profileImage) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null || token.isEmpty) {
+      throw Exception('Authorization token is missing.');
+    }
+
+    // Prepare form data for multipart request
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.editProfileUrl}'),
+    );
+
+    // Add headers
+    request.headers.addAll({
+      'Content-Type': 'application/json', // Content-Type for the whole request
+      'Authorization':
+          'Bearer $token', // Replace with the actual token if needed
+    });
+
+    // Add the image file
+    if (profileImage != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+        'profile_image',
+        profileImage.path,
+        contentType:
+            MediaType('image', 'jpeg'), // Or 'png' depending on the image type
+      ));
+    }
+
+    request.fields['name'] = name;
+    request.fields['date_of_birth'] = dob;
+    request.fields['gender'] = gender;
+
+    try {
+      // Send the request
+      final response = await request.send();
+
+      // If the server responds with status code 200 (OK)
+      if (response.statusCode == 200) {
+        // Parse the response body
+        final responseBody = await response.stream.bytesToString();
+        final responseJson = json.decode(responseBody);
+        print(responseJson);
+
+        // Return the parsed response as ProfileInfoAgentModel
+        return EditProfileModel.fromJson(responseJson);
+      } else {
+        // If something goes wrong, throw an exception
+        final responseBody = await response.stream.bytesToString();
+        final responseJson = json.decode(responseBody);
+        throw Exception('Failed: ${responseJson['message']}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
   }
 // End dashboard Banner  api ===================================================================================>

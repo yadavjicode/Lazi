@@ -1,8 +1,13 @@
 import 'package:get/get.dart';
 import 'package:ludonew/routes/conssiste.dart';
+import 'package:ludonew/ui/dashboard/account/about/about.dart';
+import 'package:ludonew/ui/dashboard/account/cancellation_policy/cancellation_policy.dart';
 import 'package:ludonew/ui/dashboard/account/faqs/faqs.dart';
+import 'package:ludonew/ui/dashboard/account/help/help.dart';
 import 'package:ludonew/ui/dashboard/account/my_balance/transaction_history/transaction_history.dart';
+import 'package:ludonew/ui/dashboard/account/my_profile.dart/edit_profile.dart';
 import 'package:ludonew/ui/dashboard/account/privacy_policy/privacy_policy.dart';
+import 'package:ludonew/ui/dashboard/account/refund_policy/refund_policy.dart';
 import 'package:ludonew/ui/dashboard/account/terms_and_condition/terms_and_conditions.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/ui/start_play/start_play.dart';
@@ -31,6 +36,11 @@ class Routes {
   static const String faqs = "/faqs";
   static const String privacyPolicy = "/privacyPolicy";
   static const String termsAndConditions = "/termsAndConditions";
+  static const String about = "/about";
+  static const String refundPolicy = "/refundPolicy";
+  static const String cancelPolicy = "/cancelPolicy";
+  static const String editProfile = "/editProfile";
+  static const String help = "/help";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -126,6 +136,41 @@ class Routes {
     GetPage(
       name: termsAndConditions,
       page: () => TermsAndConditions(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: about,
+      page: () => About(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: refundPolicy,
+      page: () => RefundPolicy(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: cancelPolicy,
+      page: () => CancelPolicy(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: editProfile,
+      page: () => EditProfile(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: help,
+      page: () => Help(),
       transition: Transition.fadeIn,
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),

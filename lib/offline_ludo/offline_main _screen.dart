@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/profile_controller.dart';
+import 'package:ludonew/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // class FirstScreen extends StatefulWidget {
@@ -91,7 +92,9 @@ class _FirstScreen extends State<FirstScreen> {
             callback: (args) {
               // 👇 Navigate to Flutter Home page
               profileController.profile(context);
-              Navigator.pushReplacementNamed(context, '/StartPlay');
+              Get.offAndToNamed(Routes.startPlay,
+                  arguments: {"type": "2 Player"});
+              // Navigator.pushReplacementNamed(context, '/StartPlay');
               return;
             },
           );

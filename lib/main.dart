@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/send_otp_controller.dart';
 import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:provider/provider.dart';
 import 'ludo/ludo_provider.dart';
 
+final SendOtpController sendOtpController = Get.put(SendOtpController());
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -17,7 +19,7 @@ main() async {
         messagingSenderId: "762974786823",
         projectId: "ludoapp-c92b0"),
   );
-
+  Get.put(SendOtpController());
   return runApp(ChangeNotifierProvider(
     create: (_) => LudoProvider()..startGame(),
     child: const Root(),

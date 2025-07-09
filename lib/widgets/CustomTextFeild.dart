@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
         if (labelText != null) ...[
           Text(
             labelText!,
-            style: FontConstant.styleRegular(
+            style: FontConstant.styleMedium(
                 fontSize: 16, color: labelTextColor ?? Colors.black),
           ),
           const SizedBox(height: 8),
@@ -64,7 +64,8 @@ class CustomTextField extends StatelessWidget {
             counterText: "",
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 23),
-              borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.4)),
+              borderSide:
+                  BorderSide(color: AppColors.primaryColor.withOpacity(0.4)),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 23),

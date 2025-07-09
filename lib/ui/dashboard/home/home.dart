@@ -73,6 +73,15 @@ class _HomeState extends State<Home> {
           bannerC.add(
               dashbordBannerController.member?.data?.banner?.bottomBanners4 ??
                   "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners5 ??
+                  "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners6 ??
+                  "");
+          bannerC.add(
+              dashbordBannerController.member?.data?.banner?.bottomBanners7 ??
+                  "");
         });
       });
     });
@@ -165,7 +174,7 @@ class _HomeState extends State<Home> {
                             children: [
                               Container(
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(17),
+                                      borderRadius: BorderRadius.circular(10),
                                       color: AppColors.white,
                                       border: Border.all(
                                           color: Colors.grey.shade300)),
@@ -177,7 +186,7 @@ class _HomeState extends State<Home> {
                                             (context, index, realIndex) {
                                           return ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(17),
+                                                BorderRadius.circular(10),
                                             child: Image.network(
                                               "https://lazioludo.com/${bannerA[index]}",
                                               fit: BoxFit.fill,
@@ -254,7 +263,10 @@ class _HomeState extends State<Home> {
                                             ),
                                             ElevatedButton(
                                                 onPressed: () {
-                                                  Get.toNamed(Routes.startPlay);
+                                                  Get.toNamed(Routes.startPlay,
+                                                      arguments: {
+                                                        "type": "2 Player"
+                                                      });
                                                   // Get.to(
                                                   //     FirstScreen(
                                                   //       entryfree: '1',
@@ -295,88 +307,7 @@ class _HomeState extends State<Home> {
                                     ],
                                   )),
                               SizedBox(
-                                height: screenHeight * 0.01,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Big Rewards🤑",
-                                    style: FontConstant.styleSemiBold(
-                                        fontSize: 18, color: AppColors.black),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: screenHeight * 0.01,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  // Get.toNamed(Routes.startPlay);
-                                },
-                                child: Stack(
-                                  children: [
-                                    CarouselSlider.builder(
-                                      itemCount: bannerB.length,
-                                      itemBuilder: (context, index, realIndex) {
-                                        return ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(17),
-                                          child: Image.network(
-                                            "https://lazioludo.com/${bannerB[index]}",
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                          ),
-                                        );
-                                      },
-                                      options: CarouselOptions(
-                                        viewportFraction: 1,
-                                        height: 200,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        onPageChanged: (index, reason) {
-                                          setState(() {
-                                            _currentIndexB = index;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 5,
-                                      left: 0,
-                                      right: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: bannerA
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          return GestureDetector(
-                                            // onTap: () => _carouselController
-                                            //     .animateToPage(entry.key),
-                                            child: Container(
-                                              width: 8.0,
-                                              height: 8.0,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8.0,
-                                                      horizontal: 4.0),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: _currentIndexB ==
-                                                          entry.key
-                                                      ? AppColors.primaryColor
-                                                      : AppColors.white),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: screenHeight * 0.01,
+                                height: screenHeight * 0.02,
                               ),
                               Row(
                                 children: [
@@ -390,70 +321,287 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 height: screenHeight * 0.01,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  // Get.toNamed(Routes.startPlay);
-                                },
-                                child: Stack(
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.white,
+                                    border: Border.all(
+                                        color: Colors.grey.shade300)),
+                                child: Column(
                                   children: [
-                                    CarouselSlider.builder(
-                                      itemCount: bannerC.length,
-                                      itemBuilder: (context, index, realIndex) {
-                                        return ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(17),
-                                          child: Image.network(
-                                            "https://lazioludo.com/${bannerC[index]}",
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                          ),
-                                        );
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Get.toNamed(Routes.startPlay);
                                       },
-                                      options: CarouselOptions(
-                                        viewportFraction: 1,
-                                        height: 200,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        onPageChanged: (index, reason) {
-                                          setState(() {
-                                            _currentIndexC = index;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 5,
-                                      left: 0,
-                                      right: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: bannerA
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          return GestureDetector(
-                                            // onTap: () => _carouselController
-                                            //     .animateToPage(entry.key),
-                                            child: Container(
-                                              width: 8.0,
-                                              height: 8.0,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8.0,
-                                                      horizontal: 4.0),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: _currentIndexC ==
-                                                          entry.key
-                                                      ? AppColors.primaryColor
-                                                      : AppColors.white),
+                                      child: CarouselSlider.builder(
+                                        itemCount: bannerC.length,
+                                        itemBuilder:
+                                            (context, index, realIndex) {
+                                          return ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              "https://lazioludo.com/${bannerC[index]}",
+                                              fit: BoxFit.fill,
+                                              width: double.infinity,
                                             ),
                                           );
-                                        }).toList(),
+                                        },
+                                        options: CarouselOptions(
+                                          viewportFraction: 1,
+                                          height: 200,
+                                          autoPlay: true,
+                                          enlargeCenterPage: true,
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              _currentIndexC = index;
+                                            });
+                                          },
+                                        ),
                                       ),
                                     ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children:
+                                          bannerC.asMap().entries.map((entry) {
+                                        return GestureDetector(
+                                          // onTap: () => _carouselController
+                                          //     .animateToPage(entry.key),
+                                          child: Container(
+                                            width: 8.0,
+                                            height: 8.0,
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 8.0, horizontal: 4.0),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    _currentIndexC == entry.key
+                                                        ? AppColors.primaryColor
+                                                        : AppColors.grey),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Top Games 🎲",
+                                                  style: FontConstant
+                                                      .styleSemiBold(
+                                                          fontSize: 18,
+                                                          color:
+                                                              AppColors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Get.toNamed(Routes.startPlay,
+                                                    arguments: {
+                                                      "type": "Weekly"
+                                                    });
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColors
+                                                    .secondaryColor, // ← your color
+                                                foregroundColor: Colors
+                                                    .white, // ← text/icon color
+                                                elevation: 4, // ← optional
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 8),
+                                                shape: RoundedRectangleBorder(
+                                                  // ← optional
+                                                  borderRadius:
+                                                      BorderRadius.circular(23),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "Play Now",
+                                                style: FontConstant.styleMedium(
+                                                    fontSize: 15,
+                                                    color: AppColors.white),
+                                              )),
+                                        ],
+                                      ),
+                                    )
                                   ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.02,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    " Big Rewards🤑",
+                                    style: FontConstant.styleSemiBold(
+                                        fontSize: 18, color: AppColors.black),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.01,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.white,
+                                    border: Border.all(
+                                        color: Colors.grey.shade300)),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Get.toNamed(Routes.startPlay);
+                                      },
+                                      child: CarouselSlider.builder(
+                                        itemCount: bannerB.length,
+                                        itemBuilder:
+                                            (context, index, realIndex) {
+                                          return ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              "https://lazioludo.com/${bannerB[index]}",
+                                              fit: BoxFit.fill,
+                                              width: double.infinity,
+                                            ),
+                                          );
+                                        },
+                                        options: CarouselOptions(
+                                          viewportFraction: 1,
+                                          height: 200,
+                                          autoPlay: true,
+                                          enlargeCenterPage: true,
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              _currentIndexB = index;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children:
+                                          bannerB.asMap().entries.map((entry) {
+                                        return GestureDetector(
+                                          // onTap: () => _carouselController
+                                          //     .animateToPage(entry.key),
+                                          child: Container(
+                                            width: 8.0,
+                                            height: 8.0,
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 8.0, horizontal: 4.0),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    _currentIndexB == entry.key
+                                                        ? AppColors.primaryColor
+                                                        : AppColors.grey),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Big Rewards🤑",
+                                                  style: FontConstant
+                                                      .styleSemiBold(
+                                                          fontSize: 18,
+                                                          color:
+                                                              AppColors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Get.toNamed(Routes.startPlay,
+                                                    arguments: {
+                                                      "type": "Daily"
+                                                    });
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColors
+                                                    .secondaryColor, // ← your color
+                                                foregroundColor: Colors
+                                                    .white, // ← text/icon color
+                                                elevation: 4, // ← optional
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 8),
+                                                shape: RoundedRectangleBorder(
+                                                  // ← optional
+                                                  borderRadius:
+                                                      BorderRadius.circular(23),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "Play Now",
+                                                style: FontConstant.styleMedium(
+                                                    fontSize: 15,
+                                                    color: AppColors.white),
+                                              )),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.02,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.white,
+                                    border: Border.all(
+                                        color: Colors.grey.shade300)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    "https://lazioludo.com/${dashbordBannerController.member?.data?.banner?.beneathBanners1 ?? ""}",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.02,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.white,
+                                    border: Border.all(
+                                        color: Colors.grey.shade300)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    "https://lazioludo.com/${dashbordBannerController.member?.data?.banner?.beneathBanners2 ?? ""}",
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
                               SizedBox(

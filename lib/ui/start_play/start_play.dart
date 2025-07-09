@@ -35,6 +35,11 @@ class _StartPlayState extends State<StartPlay> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    final args = Get.arguments as Map<String, dynamic>;
+    setState(() {
+      selectedFilter = args['type'] ?? '';
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       subscriptionController.getSubs(context);
     });
@@ -206,16 +211,32 @@ class _StartPlayState extends State<StartPlay> {
   Widget tournament(String key) {
     if (key == "2 Player") {
       return twoPlayer(
-          players2: subscriptionController.member?.data?.players2 ?? []);
+        players2: subscriptionController.member?.data?.players2 ?? [],
+        userId: "${profileController.member?.id ?? ""}",
+        name:
+            "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+      );
     } else if (key == "4 Player") {
       return FourPlayer(
-          players2: subscriptionController.member?.data?.players4 ?? []);
+        players2: subscriptionController.member?.data?.players4 ?? [],
+        userId: "${profileController.member?.id ?? ""}",
+        name:
+            "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+      );
     } else if (key == "Weekly") {
       return WeeklyPlayer(
-          weekly: subscriptionController.member?.data?.weekly ?? []);
+        weekly: subscriptionController.member?.data?.weekly ?? [],
+        userId: "${profileController.member?.id ?? ""}",
+        name:
+            "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+      );
     } else if (key == "Daily") {
       return DailyPlayer(
-          daily: subscriptionController.member?.data?.daily ?? []);
+        daily: subscriptionController.member?.data?.daily ?? [],
+        userId: "${profileController.member?.id ?? ""}",
+        name:
+            "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+      );
     } else {
       return Text("NO data avilable!");
     }

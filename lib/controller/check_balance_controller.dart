@@ -22,7 +22,9 @@ class CheckBalanceController extends GetxController {
       String noOfPlayer,
       String tournmentTime,
       String type,
-      String checkType) async {
+      String checkType,
+      String userId,
+      String name) async {
     isLoading.value = true;
     _error = null;
 
@@ -30,7 +32,7 @@ class CheckBalanceController extends GetxController {
       _member = await apiService.checkBalance(tournamentId, checkType);
 
       if ((_member?.status ?? false)) {
-        CustomSanckbar.showSnackbar(context, _member?.message ?? "", true);
+        // CustomSanckbar.showSnackbar(context, _member?.message ?? "", true);
         if (type == "offline") {
           Get.to(FirstScreen(
             tournmentId: tournamentId,
@@ -38,16 +40,26 @@ class CheckBalanceController extends GetxController {
             tournmentTime: tournmentTime,
           ));
         } else if (type == "daily") {
+          // Get.to(OnlineDaily(
+          //   tournmentId: tournamentId,
+          //   noOfPlayer: noOfPlayer,
+          //   tournmentTime: tournmentTime,
+          // ));
           Get.to(OnlineDaily(
-            tournmentId: tournamentId,
-            noOfPlayer: noOfPlayer,
-            tournmentTime: tournmentTime,
+            userId: userId,
+            name: name,
+            tournamentId: tournamentId,
           ));
         } else if (type == "weekly") {
-          Get.to(OnlineWeekly(
-            tournmentId: tournamentId,
-            noOfPlayer: noOfPlayer,
-            tournmentTime: tournmentTime,
+          // Get.to(OnlineWeekly(
+          //   tournmentId: tournamentId,
+          //   noOfPlayer: noOfPlayer,
+          //   tournmentTime: tournmentTime,
+          // ));
+          Get.to(OnlineDaily(
+            userId: userId,
+            name: name,
+            tournamentId: tournamentId,
           ));
         }
       } else {

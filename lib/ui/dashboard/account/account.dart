@@ -139,7 +139,7 @@ class _AccountState extends State<Account> {
                         ),
 
                         GestureDetector(
-                          // onTap: () => {Get.to(RatingDemo())},
+                          onTap: () => {Get.toNamed(Routes.help)},
                           child: buildoption(
                               icons: IconsPath.help,
                               tittle: "Help",
@@ -147,7 +147,7 @@ class _AccountState extends State<Account> {
                               forward: true),
                         ),
                         GestureDetector(
-                          onTap: () => {},
+                          onTap: () => {Get.toNamed(Routes.about)},
                           child: buildoption(
                               icons: IconsPath.about,
                               tittle: "About",
@@ -182,7 +182,26 @@ class _AccountState extends State<Account> {
                               tittle: "FAQs",
                               forward: false),
                         ),
-
+                        GestureDetector(
+                          onTap: () => {Get.toNamed(Routes.refundPolicy)},
+                          child: buildoptionIcon(
+                              icons: Icon(
+                                Icons.keyboard_return_outlined,
+                                color: AppColors.primaryColor,
+                              ),
+                              tittle: "Refund Policy",
+                              forward: false),
+                        ),
+                        GestureDetector(
+                          onTap: () => {Get.toNamed(Routes.cancelPolicy)},
+                          child: buildoptionIcon(
+                              icons: Icon(
+                                Icons.cancel_sharp,
+                                color: AppColors.primaryColor,
+                              ),
+                              tittle: "Cancellation Policy",
+                              forward: false),
+                        ),
                         GestureDetector(
                           onTap: () => {showLogoutConfirmationDialog(context)},
                           child: buildoption(

@@ -24,20 +24,7 @@ class _FAQState extends State<FAQ> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: AppColors.white,
-        ),
-        elevation: 0,
-        title: Text(
-          "FAQ",
-          style:
-              FontConstant.styleSemiBold(fontSize: 18, color: AppColors.white),
-        ),
-      ),
-      body: WebViewWidget(controller: _controller),
+      body: SafeArea(child: WebViewWidget(controller: _controller)),
     );
   }
 }
