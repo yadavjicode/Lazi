@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ludonew/api_service/api_constant.dart';
 import 'package:ludonew/model/add_wallet_model.dart';
+import 'package:ludonew/model/ads_model.dart';
 import 'package:ludonew/model/check_balance_model.dart';
+import 'package:ludonew/model/daily_game_list_model.dart';
+import 'package:ludonew/model/daily_win_model.dart';
 import 'package:ludonew/model/dashboard_banner_model.dart';
 import 'package:ludonew/model/edit_profile_model.dart';
 import 'package:ludonew/model/profile_modal.dart';
@@ -11,6 +14,9 @@ import 'package:http/http.dart' as http;
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/model/transaction_history_model.dart';
 import 'package:ludonew/model/verify_otp_model.dart';
+import 'package:ludonew/model/weekly_game_list_model.dart';
+import 'package:ludonew/model/weekly_schedule_game_model.dart';
+import 'package:ludonew/model/weekly_win_model.dart';
 import 'package:ludonew/ui/dashboard/account/my_profile.dart/edit_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http_parser/src/media_type.dart";
@@ -218,7 +224,7 @@ class ApiService {
   }
 // End dashboard Banner  api ===================================================================================>
 
-// Start dashboard Banner api ===============================================================================>
+// Start edit profile api ===============================================================================>
 
   Future<EditProfileModel> editProfile(
       String name, String dob, String gender, File? profileImage) async {
@@ -279,5 +285,163 @@ class ApiService {
       throw Exception('Error: $e');
     }
   }
-// End dashboard Banner  api ===================================================================================>
+// End edit profile  api ===================================================================================>
+
+// Start ads api ===============================================================================>
+  Future<AdsModel> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.adsUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return AdsModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End ads api ===================================================================================>
+
+// Start daily game list url api ===============================================================================>
+  Future<DailyGameListModel> dailyGameList(String tournamentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.dailyGameListUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode({"daily_tournament_id": tournamentId}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return DailyGameListModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End daily game list url api ===================================================================================>
+
+// Start game list url api ===============================================================================>
+  Future<WeeklyScheduleGameModel> weeklySchedule(
+      String tournamentId, String tournmentRound, String entryFee) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.weeklyScheduleUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode({
+        "weekly_tournament_id": tournamentId,
+        "tournament_round": tournmentRound,
+        "entry_fee": entryFee
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WeeklyScheduleGameModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End game list url api ===================================================================================>
+
+// Start weekly game list url api ===============================================================================>
+  Future<WeeklyGameListModel> weeklyGameList(String tournamentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.weeklyGameListUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode({"weekly_tournament_id": tournamentId}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WeeklyGameListModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End weekly game list url api ===================================================================================>
+
+// Start daily win api ===============================================================================>
+  Future<DailyWinModel> dailyWin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.dailyWinUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return DailyWinModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End daily win api ===================================================================================>
+
+// Start daily win api ===============================================================================>
+  Future<WeeklyWinModel> weeklyWin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.weeklyWinUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WeeklyWinModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End daily win api ===================================================================================>
 }

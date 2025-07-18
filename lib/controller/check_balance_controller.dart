@@ -4,7 +4,7 @@ import 'package:ludonew/api_service/api_service.dart';
 import 'package:ludonew/model/check_balance_model.dart';
 import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
 import 'package:ludonew/online_ludo/online_daily/online_daily.dart';
-import 'package:ludonew/online_ludo/online_weekly/online_weekly.dart';
+import 'package:ludonew/online_ludo/online_weekly/weekly_round/weekly_round.dart';
 import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/widgets/CustomSnackbar.dart';
 
@@ -24,7 +24,8 @@ class CheckBalanceController extends GetxController {
       String type,
       String checkType,
       String userId,
-      String name) async {
+      String name,
+      int round) async {
     isLoading.value = true;
     _error = null;
 
@@ -49,18 +50,10 @@ class CheckBalanceController extends GetxController {
             userId: userId,
             name: name,
             tournamentId: tournamentId,
+            round: round,
           ));
         } else if (type == "weekly") {
-          // Get.to(OnlineWeekly(
-          //   tournmentId: tournamentId,
-          //   noOfPlayer: noOfPlayer,
-          //   tournmentTime: tournmentTime,
-          // ));
-          Get.to(OnlineDaily(
-            userId: userId,
-            name: name,
-            tournamentId: tournamentId,
-          ));
+          // Get.to(WeeklyRound());
         }
       } else {
         CustomSanckbar.showSnackbar(context, _member?.message ?? "", false);

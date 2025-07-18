@@ -139,7 +139,10 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                         ],
                       ),
-                  
+                  Image.asset(
+                        "assets/images/award.png",
+                        height: 30,
+                      ),
                       Column(
                         children: [
                           Text("ENTRY",
@@ -158,7 +161,7 @@ class _FourPlayer extends State<FourPlayer> {
                                   'offline',
                                   'offline',
                                   widget.userId,
-                                  widget.name);
+                                  widget.name,0);
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

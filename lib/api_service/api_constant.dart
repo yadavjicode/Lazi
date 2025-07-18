@@ -8,4 +8,10 @@ class ApiConstants {
   static const String transactionHistoryUrl = "get-transaction-history";
   static const String dashboardBannerUrl = "dashboard";
   static const String editProfileUrl = "update-profile";
+  static const String adsUrl = "ads";
+  static const String dailyGameListUrl = "weekly-online-game/daily-game-list";
+  static const String weeklyScheduleUrl = "weekly-online-game/schedule-game";
+  static const String weeklyGameListUrl = "weekly-online-game/weekly-game-list";
+  static const String dailyWinUrl = "get-weekly-winner";
+  static const String weeklyWinUrl = "get-daily-winner";
 }

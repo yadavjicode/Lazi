@@ -1,6 +1,6 @@
 class AddWalletModel {
   String? message;
-  bool? status;
+  String? status;
 
   AddWalletModel({this.message, this.status});
 

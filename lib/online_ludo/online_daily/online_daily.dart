@@ -8,12 +8,15 @@ class OnlineDaily extends StatefulWidget {
   final String userId;
   final String name;
   final String tournamentId;
+  final int round;
 
-  OnlineDaily(
-      {super.key,
-      required this.userId,
-      required this.name,
-      required this.tournamentId});
+  OnlineDaily({
+    super.key,
+    required this.userId,
+    required this.name,
+    required this.tournamentId,
+    required this.round,
+  });
 
   @override
   State<OnlineDaily> createState() => _OnlineDailyState();
@@ -27,23 +30,34 @@ class _OnlineDailyState extends State<OnlineDaily> {
   @override
   void initState() {
     super.initState();
-    print(
-        "user Id ${widget.userId} name ${widget.name} tournament id ${widget.tournamentId}");
+
+    final String gameUrl =
+        "https://lazioludo.com/game/build/login/${widget.userId}/${widget.name}"
+        "?tournament_types=daily&daily_tournament_id=${widget.tournamentId}"
+        "&weekly_tournament_id=null&tournament_round=${widget.round}";
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
         onPageStarted: (url) {
           isLoading.value = true;
         },
-        onPageFinished: (url) {
+        onPageFinished: (url) async {
           isLoading.value = false;
+
+          // Disable zoom via JS injection
+          await _controller.runJavaScript('''
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+          ''');
         },
         onWebResourceError: (error) {
           isLoading.value = false;
         },
       ))
-      ..loadRequest(Uri.parse(
-          "https://lazioludo.com/game/build/login/${widget.userId}/${widget.name}?tournament_types=daily&daily_tournament_id=${widget.tournamentId}&weekly_tournament_id=null&tournament_round=1"));
+      ..loadRequest(Uri.parse(gameUrl));
   }
 
   @override

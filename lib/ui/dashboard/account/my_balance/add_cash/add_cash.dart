@@ -55,15 +55,11 @@ class _AddCashPageState extends State<AddCashPage> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(content: Text("SUCCESS: ${response.paymentId}")),
-    // );
-    addWalletController.addWallet(
-        context,
-        amount.text.toString().trim(),
-        "${response.paymentId ?? ""}",
-        "Success",
-        "${response.signature ?? ""}");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("SUCCESS: ${response.paymentId}")),
+    );
+    addWalletController.addWallet(context, amount.text.toString().trim(),
+        "${response.paymentId ?? ""}", "Success", "${response.orderId ?? ""}");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -218,6 +214,12 @@ class _AddCashPageState extends State<AddCashPage> {
                           ? () {
                               if (!addWalletController.isLoading.value) {
                                 openCheckout();
+                                // addWalletController.addWallet(
+                                //     context,
+                                //     amount.text.toString().trim(),
+                                //     "rehgrthryjhy",
+                                //     "SUCCESS",
+                                //     "43635");
                               }
                             }
                           : null, // disables button

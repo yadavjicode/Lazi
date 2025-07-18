@@ -108,10 +108,15 @@ class _HomeState extends State<Home> {
                         width: screenWidth * 0.35,
                       ),
                       Spacer(),
-                      Icon(
-                        Icons.notifications_none,
-                        color: AppColors.secondaryColor,
-                        size: 35,
+                      GestureDetector(
+                        onTap: () {
+                      
+                        },
+                        child: Icon(
+                          Icons.notifications_none,
+                          color: AppColors.secondaryColor,
+                          size: 35,
+                        ),
                       ),
                       SizedBox(
                         width: 10,
@@ -172,6 +177,18 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.all(15.0),
                           child: Column(
                             children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  'assets/images/dash.gif',
+                                  width: double.infinity,
+                                  gaplessPlayback: true,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.02,
+                              ),
                               Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),

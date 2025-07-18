@@ -98,7 +98,7 @@ class _twoPlayer extends State<twoPlayer> {
                   ),
                 ),
                 SizedBox(height: 10),
-                  CountdownScreen(),
+                CountdownScreen(),
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
@@ -141,7 +141,10 @@ class _twoPlayer extends State<twoPlayer> {
                           ),
                         ],
                       ),
-               
+                      Image.asset(
+                        "assets/images/award.png",
+                        height: 30,
+                      ),
 
                       Column(
                         children: [
@@ -161,7 +164,8 @@ class _twoPlayer extends State<twoPlayer> {
                                   'offline',
                                   'offline',
                                   widget.userId,
-                                  widget.name);
+                                  widget.name,
+                                  0);
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -183,7 +187,6 @@ class _twoPlayer extends State<twoPlayer> {
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: 5,
                 )

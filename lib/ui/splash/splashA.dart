@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/ui/splash/splashB.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashA extends StatefulWidget {
   @override
@@ -25,11 +28,23 @@ class _SplashScreenState extends State<SplashA> {
 
     Timer(Duration(seconds: 3), () {
       // Navigate after animation
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => SplashAnimationScreen()),
-      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (_) => SplashAnimationScreen()),
+      // );
+      _loadTokenAndNavigate();
     });
+  }
+
+  Future<void> _loadTokenAndNavigate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token != null && token.isNotEmpty) {
+      print('Token::::::::::${token}');
+      Get.offAndToNamed(Routes.dasboard);
+    } else {
+      Get.offAndToNamed(Routes.splashAnimationScreen);
+    }
   }
 
   @override

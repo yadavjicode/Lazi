@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
+import 'package:ludonew/controller/daily_game_list_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
+import 'package:ludonew/online_ludo/online_daily/daily_round/daily_round.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 import 'package:ludonew/widgets/start_timer.dart';
@@ -24,6 +26,8 @@ class _DailyPlayer extends State<DailyPlayer> {
   List<bool> isExpandedList = [];
   final CheckBalanceController checkBalanceController =
       Get.put(CheckBalanceController());
+  final DailyGameListController dailyGameListController =
+      Get.put(DailyGameListController());
 
   @override
   Widget build(BuildContext ctx) {
@@ -96,8 +100,21 @@ class _DailyPlayer extends State<DailyPlayer> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  CountdownScreen(),
-
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CountdownScreen(),
+                        Text(
+                          "Entry Status : ${item.entryStatus}",
+                          style: FontConstant.styleRegular(
+                              fontSize: 12, color: AppColors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   // values
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -141,7 +158,10 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                           ],
                         ),
-
+                        Image.asset(
+                          "assets/images/award.png",
+                          height: 30,
+                        ),
                         Column(
                           children: [
                             Text("ENTRY",
@@ -152,15 +172,25 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                checkBalanceController.checkBalance(
-                                    context,
-                                    item.id.toString(),
-                                    item.noOfPlayers.toString(),
-                                    item.timerInSecond.toString(),
-                                    'daily',
-                                    'daily',
-                                    widget.userId,
-                                    widget.name);
+                                Get.to(DailyRound(
+                                  tournamentId: item.id.toString(),
+                                  noOfPlayer: item.noOfPlayers.toString(),
+                                  tournmentTime: item.timerInSecond.toString(),
+                                  type: 'daily',
+                                  checkType: 'daily',
+                                  userId: widget.userId,
+                                  name: widget.name,
+                                ));
+
+                                // checkBalanceController.checkBalance(
+                                //     context,
+                                //     item.id.toString(),
+                                //     item.noOfPlayers.toString(),
+                                //     item.timerInSecond.toString(),
+                                //     'daily',
+                                //     'daily',
+                                //     widget.userId,
+                                //     widget.name);
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

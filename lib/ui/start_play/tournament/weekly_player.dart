@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
+import 'package:ludonew/controller/weekly_schedule_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
@@ -27,6 +28,8 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
   List<bool> isExpandedList = [];
   final CheckBalanceController checkBalanceController =
       Get.put(CheckBalanceController());
+  final WeeklyScheduleController weeklyScheduleController =
+      Get.put(WeeklyScheduleController());
 
   @override
   Widget build(BuildContext ctx) {
@@ -103,7 +106,21 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                   ),
 
                   SizedBox(height: 10),
-                  CountdownScreen(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CountdownScreen(),
+                        Text(
+                          "Entry Status : ${item.entryStatus}",
+                          style: FontConstant.styleRegular(
+                              fontSize: 12, color: AppColors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   // values
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -147,7 +164,10 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                             ),
                           ],
                         ),
-
+                        Image.asset(
+                          "assets/images/award.png",
+                          height: 30,
+                        ),
                         Column(
                           children: [
                             Text("ENTRY",
@@ -158,7 +178,7 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                checkBalanceController.checkBalance(
+                                weeklyScheduleController.weeklySchedule(
                                     context,
                                     item.id.toString(),
                                     item.noOfPlayers.toString(),
@@ -166,7 +186,19 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                                     'weekly',
                                     'weekly',
                                     widget.userId,
-                                    widget.name);
+                                    widget.name,
+                                    item.entryPrice);
+
+                                // checkBalanceController.checkBalance(
+                                //     context,
+                                //     item.id.toString(),
+                                //     item.noOfPlayers.toString(),
+                                //     item.timerInSecond.toString(),
+                                //     'weekly',
+                                //     'weekly',
+                                //     widget.userId,
+                                //     widget.name,0
+                                // );
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(

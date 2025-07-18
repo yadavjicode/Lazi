@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
+import 'package:ludonew/controller/daily_game_list_controller.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/controller/subscription_controller.dart';
 import 'package:ludonew/routes/routes.dart';
@@ -13,6 +14,8 @@ import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/icons_path.dart';
 import 'package:ludonew/util/constant/images_path.dart';
 import 'package:ludonew/widgets/font.dart';
+
+import '../../controller/weekly_schedule_controller.dart';
 
 class StartPlay extends StatefulWidget {
   const StartPlay({super.key});
@@ -30,6 +33,10 @@ class _StartPlayState extends State<StartPlay> {
   final ProfileController profileController = Get.put(ProfileController());
   final CheckBalanceController checkBalanceController =
       Get.put(CheckBalanceController());
+  final DailyGameListController dailyGameListController =
+      Get.put(DailyGameListController());
+  final WeeklyScheduleController weeklyScheduleController =
+      Get.put(WeeklyScheduleController());
 
   @override
   void initState() {
@@ -79,13 +86,18 @@ class _StartPlayState extends State<StartPlay> {
                           ),
                         ),
                         Spacer(),
-                        Container(
-                            padding: EdgeInsets.all(7),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(IconsPath.youtube)),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.ads);
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: SvgPicture.asset(IconsPath.youtube)),
+                        ),
                         SizedBox(
                           width: 10,
                         ),
@@ -197,7 +209,9 @@ class _StartPlayState extends State<StartPlay> {
           )),
           if (subscriptionController.isLoading.value ||
               checkBalanceController.isLoading.value ||
-              profileController.isLoading.value)
+              profileController.isLoading.value ||
+              dailyGameListController.isLoading.value ||
+              weeklyScheduleController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,

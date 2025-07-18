@@ -151,41 +151,51 @@ class _MyProfileState extends State<MyProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text("Total Games",
-                                      style: FontConstant.styleRegular(
-                                          fontSize: 15,
-                                          color: AppColors.darkgrey)),
-                                  Text("Played",
-                                      style: FontConstant.styleRegular(
-                                          fontSize: 15,
-                                          color: AppColors.darkgrey)),
-                                  Text(
-                                    "1",
-                                    style: FontConstant.styleSemiBold(
-                                        fontSize: 17, color: AppColors.black),
-                                  )
-                                ],
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.dailyWin);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text("Daily",
+                                        style: FontConstant.styleRegular(
+                                            fontSize: 15,
+                                            color: AppColors.darkgrey)),
+                                    Text("Win",
+                                        style: FontConstant.styleRegular(
+                                            fontSize: 15,
+                                            color: AppColors.darkgrey)),
+                                    Text(
+                                      "1",
+                                      style: FontConstant.styleSemiBold(
+                                          fontSize: 17, color: AppColors.black),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text("Total Games",
-                                      style: FontConstant.styleRegular(
-                                          fontSize: 15,
-                                          color: AppColors.darkgrey)),
-                                  Text("Win",
-                                      style: FontConstant.styleRegular(
-                                          fontSize: 15,
-                                          color: AppColors.darkgrey)),
-                                  Text(
-                                    "1",
-                                    style: FontConstant.styleSemiBold(
-                                        fontSize: 17, color: AppColors.black),
-                                  )
-                                ],
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.weeklyWin);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text("Weekly",
+                                        style: FontConstant.styleRegular(
+                                            fontSize: 15,
+                                            color: AppColors.darkgrey)),
+                                    Text("Win",
+                                        style: FontConstant.styleRegular(
+                                            fontSize: 15,
+                                            color: AppColors.darkgrey)),
+                                    Text(
+                                      "1",
+                                      style: FontConstant.styleSemiBold(
+                                          fontSize: 17, color: AppColors.black),
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           ],

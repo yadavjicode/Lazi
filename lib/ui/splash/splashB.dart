@@ -67,23 +67,24 @@ class _SplashAnimationScreenState extends State<SplashAnimationScreen>
       _textController.forward().then((_) {
         _bottomFadeController.forward().then((_) {
           Future.delayed(Duration(seconds: 1), () {
-            _loadTokenAndNavigate();
+            Get.offAndToNamed(Routes.mobile);
+            // _loadTokenAndNavigate();
           });
         });
       });
     });
   }
 
-  Future<void> _loadTokenAndNavigate() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    if (token != null && token.isNotEmpty) {
-      print('Token::::::::::${token}');
-      Get.offAndToNamed(Routes.dasboard);
-    } else {
-      Get.offAndToNamed(Routes.mobile);
-    }
-  }
+  // Future<void> _loadTokenAndNavigate() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token');
+  //   if (token != null && token.isNotEmpty) {
+  //     print('Token::::::::::${token}');
+  //     Get.offAndToNamed(Routes.dasboard);
+  //   } else {
+  //     Get.offAndToNamed(Routes.mobile);
+  //   }
+  // }
 
   @override
   void dispose() {

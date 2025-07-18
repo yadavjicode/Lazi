@@ -146,6 +146,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "csslib",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/csslib-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "eventify",
       "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/eventify-1.0.1",
       "packageUri": "lib/",
@@ -354,6 +360,12 @@
       "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/get-4.7.2",
       "packageUri": "lib/",
       "languageVersion": "2.15"
+    },
+    {
+      "name": "html",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/html-0.15.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "http",
@@ -800,6 +812,36 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "video_player",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/video_player-2.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "video_player_android",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/video_player_android-2.8.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "video_player_avfoundation",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/video_player_avfoundation-2.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "video_player_platform_interface",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/video_player_platform_interface-6.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "video_player_web",
+      "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/video_player_web-2.3.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "vm_service",
       "rootUri": "file:///Users/anuj/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
       "packageUri": "lib/",
@@ -860,7 +902,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-07-09T05:23:15.052979Z",
+  "generated": "2025-07-11T13:11:42.102465Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/anuj/Documents/flutter",

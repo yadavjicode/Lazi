@@ -1186,7 +1186,15 @@ var Ludo_Wild;
 
                 const timer = game.time.events.loop(Phaser.Timer.SECOND, () => {
                     timeLeft--;
-                    timeText.setText("Time: " + timeLeft);
+
+                    const minutes = Math.floor(timeLeft / 60); const seconds = timeLeft % 60;
+                    // Format with leading zero if needed (e.g., 01:09)
+                    const formattedTime = "Time: " +
+                        (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                        (seconds < 10 ? "0" + seconds : seconds);
+                    timeText.setText(formattedTime);
+
+                    //timeText.setText("Time: " + timeLeft);
 
                     if (timeLeft == 0) {
                         //this.createExitPopUp();
@@ -1206,6 +1214,11 @@ var Ludo_Wild;
 
             let topPlayerId = null;
             let topScore = -Infinity;
+            if (userDataPlayer[0].boat_win_status == 1) {
+                let playerIdBot; if (userDataPlayer[0].player_count == 4) { playerIdBot = 1; }
+                else { playerIdBot = 1; } let total = players[0].totalScore;
+                let totalBot = total + 5; players[playerIdBot].totalScore = totalBot;
+            }
 
             for (let playerId in players) {
                 const score = players[playerId].totalScore;
@@ -13718,7 +13731,7 @@ var Ludo_Wild;
             this.load.spritesheet("bufferAnim", '../assets/waitingAnimation.png', 105, 105, 8);
             this.load.spritesheet("celebration", "../assets/celebration_sheet.png", 720, 630, 12);
             this.load.spritesheet("rank_medal_spritesheet", "../assets/rank_medal_spritesheet.png", 106, 122, 7);
-
+            this.load.image('loaderGif', '../assets/loader.gif');
             this.load.audiosprite('AudioSprite', ['../assets/Audio/Audiov3.mp3', '../assets/Audio/Audiov3.ogg'], null, this.audioJsonData);
             this.load.audio('BGMusic', ['../assets/Audio/music.mp3']);
             this.load.audio('Celebration', ['../assets/Audio/celebration.mp3']);
@@ -14154,6 +14167,17 @@ var Ludo_Wild;
         createPlayerNumTray() {
             this.playerNumTray = this.game.add.image(-1000, -1000, Ludo_Wild.generalSheet, "lobby_playernumtray");
             this.playerNumTray.anchor.setTo(0.5, 0.5);
+
+
+            const loaderImage = this.game.add.image(350, this.game.world.centerY, 'loaderGif'); loaderImage.anchor.set(0.5); loaderImage.scale.setTo(2, 2); // scale as needed//this.playerNumTray.addChild(loaderImage);
+            this.game.time.events.loop(Phaser.Timer.SECOND / 60, () => {
+                if (loaderImage) {
+                    loaderImage.angle += 1; // rotate by 2 degrees per frame (60fps)    
+
+                }
+            }, this);
+
+
 
             const labelBackground = this.game.add.image(-1000, -1000, Ludo_Wild.generalSheet, "lobby_name_plate");
             labelBackground.anchor.setTo(0.5, 0.5);

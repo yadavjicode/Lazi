@@ -25,13 +25,13 @@ function playLoader() {
     (this.loadProcess = function (e) {
       this._moveFurther(e),
         e >= a.maxLoad &&
-          window.setTimeout(this._unload.bind(this), a.nextDelay);
+        window.setTimeout(this._unload.bind(this), a.nextDelay);
     }),
     (this.modify = function (e, t) {
       (a.maxLoad = e), (a.nextDelay = t);
     }),
     (this.enableMain = function () {
-      (document.getElementById("mainLoader").style.display = "block"),
+      (document.getElementById("mainLoader").style.display = "none"),
         this._resizeHandle();
     }),
     (this.disableMain = function () {
@@ -78,8 +78,8 @@ function playLoader() {
         t = "rect(0px, " + o + "px, 100px, 0px)";
       (e.style.clip = t),
         1 == d &&
-          o < 42 &&
-          window.setTimeout(this._appendPreload.bind(this), 1e3);
+        o < 42 &&
+        window.setTimeout(this._appendPreload.bind(this), 1e3);
     }),
     (this._defaultValues = function () {
       (m = {

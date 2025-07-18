@@ -1,14 +1,18 @@
 import 'package:get/get.dart';
 import 'package:ludonew/routes/conssiste.dart';
 import 'package:ludonew/ui/dashboard/account/about/about.dart';
+import 'package:ludonew/ui/dashboard/account/ads/ads.dart';
 import 'package:ludonew/ui/dashboard/account/cancellation_policy/cancellation_policy.dart';
 import 'package:ludonew/ui/dashboard/account/faqs/faqs.dart';
 import 'package:ludonew/ui/dashboard/account/help/help.dart';
 import 'package:ludonew/ui/dashboard/account/my_balance/transaction_history/transaction_history.dart';
+import 'package:ludonew/ui/dashboard/account/my_profile.dart/daily_win/daily_win.dart';
 import 'package:ludonew/ui/dashboard/account/my_profile.dart/edit_profile.dart';
+import 'package:ludonew/ui/dashboard/account/my_profile.dart/weekly_win/weekly_win.dart';
 import 'package:ludonew/ui/dashboard/account/privacy_policy/privacy_policy.dart';
 import 'package:ludonew/ui/dashboard/account/refund_policy/refund_policy.dart';
 import 'package:ludonew/ui/dashboard/account/terms_and_condition/terms_and_conditions.dart';
+import 'package:ludonew/ui/splash/splashB.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/ui/start_play/start_play.dart';
 import 'package:ludonew/ui/auth/language/language.dart';
@@ -41,6 +45,10 @@ class Routes {
   static const String cancelPolicy = "/cancelPolicy";
   static const String editProfile = "/editProfile";
   static const String help = "/help";
+  static const String splashAnimationScreen = "/splashAnimationScreen";
+  static const String ads = "/ads";
+  static const String weeklyWin = "/weeklyWin";
+  static const String dailyWin = "/dailyWin";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -52,6 +60,12 @@ class Routes {
     GetPage(
       name: splashA,
       page: () => SplashA(),
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: splashAnimationScreen,
+      page: () => SplashAnimationScreen(),
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),
     ),
@@ -171,6 +185,27 @@ class Routes {
     GetPage(
       name: help,
       page: () => Help(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: ads,
+      page: () => Ads(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: dailyWin,
+      page: () => DailyWin(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: weeklyWin,
+      page: () => WeeklyWin(),
       transition: Transition.fadeIn,
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),

@@ -23,7 +23,7 @@ class AddWalletController extends GetxController {
       _member = await apiService.addWallet(
           amount, transactionId, paymentStatus, orderId);
 
-      if ((_member?.status ?? false)) {
+      if (((_member?.status ?? "") == "success")) {
         CustomSanckbar.showSnackbar(context, _member?.message ?? "", true);
         profileController.profile(context);
         Get.back();

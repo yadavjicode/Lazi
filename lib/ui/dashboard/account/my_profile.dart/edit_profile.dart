@@ -144,30 +144,49 @@ class _EditProfile extends State<EditProfile> {
 
                             GestureDetector(
                               onTap: _showImageSourceDialog,
-                              child: CircleAvatar(
-                                radius: 55,
-                                backgroundColor: Colors.grey[300],
-                                backgroundImage: _imageFile != null
-                                    ? FileImage(_imageFile!)
-                                        as ImageProvider<Object>
-                                    : (profileController.member?.profileImage !=
-                                                null &&
-                                            profileController.member!
-                                                .profileImage!.isNotEmpty)
-                                        ? NetworkImage(
-                                                "https://lazioludo.com/${profileController.member?.profileImage ?? ""}")
-                                            as ImageProvider<Object>
-                                        : null,
-                                child: (_imageFile == null &&
-                                        (profileController
-                                                    .member?.profileImage ==
-                                                null ||
-                                            profileController
-                                                .member!.profileImage!.isEmpty))
-                                    ? const Icon(Icons.person,
-                                        size: 50, color: Colors.grey)
-                                    : null,
-                              ),
+                              child: Stack(children: [
+                                CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor: Colors.grey[300],
+                                  backgroundImage: _imageFile != null
+                                      ? FileImage(_imageFile!)
+                                          as ImageProvider<Object>
+                                      : (profileController
+                                                      .member?.profileImage !=
+                                                  null &&
+                                              profileController.member!
+                                                  .profileImage!.isNotEmpty)
+                                          ? NetworkImage(
+                                                  "https://lazioludo.com/${profileController.member?.profileImage ?? ""}")
+                                              as ImageProvider<Object>
+                                          : null,
+                                  child: (_imageFile == null &&
+                                          (profileController
+                                                      .member?.profileImage ==
+                                                  null ||
+                                              profileController.member!
+                                                  .profileImage!.isEmpty))
+                                      ? const Icon(Icons.person,
+                                          size: 50, color: Colors.grey)
+                                      : null,
+                                ),
+                                Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: GestureDetector(
+                                      onTap: _showImageSourceDialog,
+                                      child: Container(
+                                          padding: EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColors.secondaryColor),
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: AppColors.white,
+                                            size: 20,
+                                          )),
+                                    )),
+                              ]),
                             ),
 
                             const SizedBox(height: 20),
