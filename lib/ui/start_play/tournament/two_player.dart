@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/offline_ludo/offline_main%20_screen.dart';
+import 'package:ludonew/util/comman_code/comman_code.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 import 'package:ludonew/widgets/start_timer.dart';
@@ -26,6 +28,17 @@ class twoPlayer extends StatefulWidget {
 
 class _twoPlayer extends State<twoPlayer> {
   bool isExpanded = false;
+
+  String formatIfNumeric(String input) {
+    final numValue = num.tryParse(input);
+    if (numValue != null) {
+      // It's a valid number, add rupee sign
+      return '₹ ${NumberFormat('#,##0').format(numValue)}';
+    } else {
+      // Not a number, return as is
+      return input;
+    }
+  }
 
   List<bool> isExpandedList = [];
   final CheckBalanceController checkBalanceController =
@@ -128,10 +141,15 @@ class _twoPlayer extends State<twoPlayer> {
                               ),
                               child: Row(
                                 children: [
+                                  if (CommanCode.checkIfNumeric(item.winPrice))
+                                    Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 15,
+                                    ),
                                   Text(
-                                    '₹ ${item.winPrice}',
+                                    " ${item.winPrice}",
                                     style: FontConstant.styleMedium(
-                                      fontSize: 16,
+                                      fontSize: 12,
                                       color: AppColors.black,
                                     ),
                                   ),
@@ -157,15 +175,18 @@ class _twoPlayer extends State<twoPlayer> {
                           GestureDetector(
                             onTap: () {
                               checkBalanceController.checkBalance(
-                                  context,
-                                  item.id.toString(),
-                                  item.noOfPlayers.toString(),
-                                  item.timerShow.toString(),
-                                  'offline',
-                                  'offline',
-                                  widget.userId,
-                                  widget.name,
-                                  0);
+                                context,
+                                item.id.toString(),
+                                "2",
+                                item.timerShow.toString(),
+                                'offline',
+                                'offline',
+                                widget.userId,
+                                widget.name,
+                                0,
+                                "${item.winPrice}",
+                                "${item.entryFee}"
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -175,10 +196,18 @@ class _twoPlayer extends State<twoPlayer> {
                                 borderRadius: BorderRadius.circular(18),
                                 color: AppColors.green,
                               ),
-                              child: Text(
-                                '₹ ${item.entryFee}',
-                                style: FontConstant.styleMedium(
-                                    fontSize: 16, color: AppColors.white),
+                              child: Row(
+                                children: [
+                                   Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 15,
+                                    ),
+                                  Text(
+                                    ' ${item.entryFee}',
+                                    style: FontConstant.styleMedium(
+                                        fontSize: 16, color: AppColors.white),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

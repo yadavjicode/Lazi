@@ -75,10 +75,19 @@ class _MyBalnaceState extends State<MyBalance> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          "₹ ${profileController.member?.wallet ?? ""}",
-                          style: FontConstant.styleBold(
-                              fontSize: 25, color: AppColors.black),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 25,
+                                    ),
+                            Text(
+                              " ${profileController.member?.wallet ?? ""}",
+                              style: FontConstant.styleBold(
+                                  fontSize: 25, color: AppColors.black),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: 10,

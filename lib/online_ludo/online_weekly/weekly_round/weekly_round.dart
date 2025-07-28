@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/controller/weekly_game_list_controller.dart';
 import 'package:ludonew/online_ludo/online_weekly/online_weekly.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -14,6 +15,8 @@ class WeeklyRound extends StatefulWidget {
   final String checkType;
   final String userId;
   final String name;
+  final String amount;
+  final String entryPrice;
   const WeeklyRound(
       {super.key,
       required this.tournamentId,
@@ -22,7 +25,9 @@ class WeeklyRound extends StatefulWidget {
       required this.type,
       required this.checkType,
       required this.userId,
-      required this.name});
+      required this.name,
+      required this.amount,
+      required this.entryPrice});
   @override
   State<WeeklyRound> createState() => _WeeklyRound();
 }
@@ -195,6 +200,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                               "",
                           dayRange:
                               "${getDayName(weeklyGameListController.member?.dataList?.locksStatus?.startDate ?? "")} - ${getDayName(weeklyGameListController.member?.dataList?.locksStatus?.endDate ?? "")}",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -243,6 +250,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -291,6 +300,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -339,6 +350,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -387,6 +400,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -435,6 +450,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -483,6 +500,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                                   .member?.dataList?.locksStatus?.endDate ??
                               "",
                           dayRange: "",
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
                         ),
                       ],
                     ),
@@ -514,6 +533,8 @@ class ContestTile extends StatefulWidget {
   final String startDate;
   final String endDate;
   final String dayRange;
+  final String amount;
+  final String entryPrice;
 
   const ContestTile(
       {super.key,
@@ -535,7 +556,9 @@ class ContestTile extends StatefulWidget {
       required this.name,
       required this.startDate,
       required this.endDate,
-      required this.dayRange});
+      required this.dayRange,
+      required this.amount,
+      required this.entryPrice});
 
   @override
   State<ContestTile> createState() => _ContestTileState();
@@ -560,12 +583,23 @@ class _ContestTileState extends State<ContestTile> {
       onTap: () {
         if (widget.isPlay) {
           if (isCurrentDateInRange(widget.startDate, widget.endDate)) {
-            Get.to(OnlineWeekly(
-              userId: widget.userId,
-              name: widget.name,
-              tournamentId: widget.tournamentId,
-              round: widget.round,
-            ));
+            // Get.to(OnlineWeekly(
+            //   userId: widget.userId,
+            //   name: widget.name,
+            //   tournamentId: widget.tournamentId,
+            //   round: widget.round,
+            // ));
+            showConfirmPaymentBottomSheet(
+                context,
+                widget.tournamentId,
+                widget.noOfPlayer,
+                widget.tournamentId,
+                "weekly",
+                widget.userId,
+                widget.name,
+                widget.round,
+                widget.amount,
+                widget.entryPrice);
           } else {
             Get.snackbar("Game Status", "Not Play Game");
           }

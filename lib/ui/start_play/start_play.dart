@@ -113,8 +113,12 @@ class _StartPlayState extends State<StartPlay> {
                                 borderRadius: BorderRadius.circular(18)),
                             child: Row(
                               children: [
+                                Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 20,
+                                    ),
                                 Text(
-                                  "₹ ${profileController.member?.wallet ?? 0}",
+                                  " ${profileController.member?.wallet ?? 0}",
                                   style: FontConstant.styleSemiBold(
                                       fontSize: 15,
                                       color: AppColors.secondaryColor),

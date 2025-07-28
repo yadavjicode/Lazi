@@ -86,12 +86,12 @@ class _WeeklyWinState extends State<WeeklyWin> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Tournament Id: ${item.tournamentId}",
+                                    "Tournament Id: ${item.tournamentId ?? ""}",
                                     style: FontConstant.styleMedium(
                                         fontSize: 13, color: AppColors.white),
                                   ),
                                   Text(
-                                      "Round : ${item.tournamentRound}/${item.totalTournamentRound}",
+                                      "Round : ${item.tournamentRound ?? ""}/${item.totalTournamentRound ?? ""}",
                                       style: FontConstant.styleMedium(
                                           fontSize: 13,
                                           color: AppColors.white)),
@@ -133,7 +133,13 @@ class _WeeklyWinState extends State<WeeklyWin> {
                                                 : null,
                                           ),
                                           Text(
-                                            "${item.player1?.name}",
+                                            "${item.player1?.name ?? ""}",
+                                            style: FontConstant.styleRegular(
+                                                fontSize: 13,
+                                                color: AppColors.black),
+                                          ),
+                                          Text(
+                                            "Winner Price :${item.winPrice ?? ""}",
                                             style: FontConstant.styleRegular(
                                                 fontSize: 13,
                                                 color: AppColors.black),
@@ -177,7 +183,13 @@ class _WeeklyWinState extends State<WeeklyWin> {
                                                       : null,
                                             ),
                                             Text(
-                                              "${item.player2?.name}",
+                                              "${item.player2?.name ?? ""}",
+                                              style: FontConstant.styleRegular(
+                                                  fontSize: 13,
+                                                  color: AppColors.black),
+                                            ),
+                                            Text(
+                                              "Winner Price :${item.winPrice2 ?? ""}",
                                               style: FontConstant.styleRegular(
                                                   fontSize: 13,
                                                   color: AppColors.black),
@@ -221,7 +233,13 @@ class _WeeklyWinState extends State<WeeklyWin> {
                                                       : null,
                                             ),
                                             Text(
-                                              "${item.player3?.name}",
+                                              "${item.player3?.name ?? ""}",
+                                              style: FontConstant.styleRegular(
+                                                  fontSize: 13,
+                                                  color: AppColors.black),
+                                            ),
+                                            Text(
+                                              "Winner Price :${item.winPrice3 ?? ""}",
                                               style: FontConstant.styleRegular(
                                                   fontSize: 13,
                                                   color: AppColors.black),
@@ -265,7 +283,13 @@ class _WeeklyWinState extends State<WeeklyWin> {
                                                       : null,
                                             ),
                                             Text(
-                                              "${item.player4?.name}",
+                                              "${item.player4?.name ?? ""}",
+                                              style: FontConstant.styleRegular(
+                                                  fontSize: 13,
+                                                  color: AppColors.black),
+                                            ),
+                                            Text(
+                                              "Winner Price :${item.winPrice4 ?? ""}",
                                               style: FontConstant.styleRegular(
                                                   fontSize: 13,
                                                   color: AppColors.black),

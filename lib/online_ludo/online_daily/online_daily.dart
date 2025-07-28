@@ -60,6 +60,13 @@ class _OnlineDailyState extends State<OnlineDaily> {
       ..loadRequest(Uri.parse(gameUrl));
   }
 
+@override
+  void dispose() {
+    print("daily  online game end");
+    profileController.profile(context);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

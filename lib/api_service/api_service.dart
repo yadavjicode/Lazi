@@ -8,6 +8,9 @@ import 'package:ludonew/model/daily_game_list_model.dart';
 import 'package:ludonew/model/daily_win_model.dart';
 import 'package:ludonew/model/dashboard_banner_model.dart';
 import 'package:ludonew/model/edit_profile_model.dart';
+import 'package:ludonew/model/get_kyc_model.dart';
+import 'package:ludonew/model/kyc_post_model.dart';
+import 'package:ludonew/model/plateform_fee_model.dart';
 import 'package:ludonew/model/profile_modal.dart';
 import 'package:ludonew/model/send_otp_model.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +20,9 @@ import 'package:ludonew/model/verify_otp_model.dart';
 import 'package:ludonew/model/weekly_game_list_model.dart';
 import 'package:ludonew/model/weekly_schedule_game_model.dart';
 import 'package:ludonew/model/weekly_win_model.dart';
-import 'package:ludonew/ui/dashboard/account/my_profile.dart/edit_profile.dart';
+import 'package:ludonew/model/winner_count_model.dart';
+import 'package:ludonew/model/withdraw_history_model.dart';
+import 'package:ludonew/model/withdraw_request_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http_parser/src/media_type.dart";
 
@@ -166,12 +171,12 @@ class ApiService {
 // End transaction history api ===================================================================================>
 
 // Start add wallet api ===============================================================================>
-  Future<AddWalletModel> addWallet(String amount, String transactionId,
-      String paymentStatus, String orderId) async {
+  Future<AddWalletModel> addWallet(
+      String amount, String transactionId, String paymentStatus) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     print(
-        "amount. ${amount}. transactionId. ${transactionId}. paymentStatus. ${paymentStatus}.  orderId. ${orderId}");
+        "amount. ${amount}. transactionId. ${transactionId}. paymentStatus. ${paymentStatus}.");
     final response = await http.post(
       Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addWalletUrl}'),
       headers: {
@@ -182,7 +187,7 @@ class ApiService {
         'amount': amount,
         "transaction_id": transactionId,
         "payment_status": paymentStatus,
-        "order_id": orderId
+        // "order_id": orderId
       }),
     );
 
@@ -444,4 +449,161 @@ class ApiService {
     }
   }
 // End daily win api ===================================================================================>
+
+// Start winner count api ===============================================================================>
+  Future<WinnerCountModel> winnerCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.winnerCountUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WinnerCountModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End winner count api ===================================================================================>
+
+// Start plateform fee api ===============================================================================>
+  Future<PlateformFeeModel> plateFormFee() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.plateformFeeUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return PlateformFeeModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End plateform fee api ===================================================================================>
+
+// Start get Kyc api ===============================================================================>
+  Future<GetKYCModel> getKYC() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.kycGetUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return GetKYCModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End get Kyc api ===================================================================================>
+
+// Start post Kyc api ===============================================================================>
+  Future<KYCPostModel> postKYC(String bankName, String accountNO,
+      String ifscCode, String branchName, String holderName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.kycPostUrl}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "bank_name": bankName,
+          "bank_account_no": accountNO,
+          "bank_ifc_code": ifscCode,
+          "bank_branch": branchName,
+          "bank_holder_name": holderName
+        }));
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return KYCPostModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End post Kyc api ===================================================================================>
+
+// Start withdraw Request api ===============================================================================>
+  Future<WithdrawRequestModel> withdrawRequest(String amount) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.withdrawRequestUrl}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"amount": amount}));
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WithdrawRequestModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End withdraw Request api  ===================================================================================>
+
+// Start withdraw history api ===============================================================================>
+  Future<WithdrawHistoryModel> withdrawHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.withdrawHistoryUrl}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return WithdrawHistoryModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End withdraw history api ===================================================================================>
 }

@@ -61,6 +61,13 @@ class _OnlineWeeklyState extends State<OnlineWeekly> {
   }
 
   @override
+  void dispose() {
+    print("weekly  online game end");
+    profileController.profile(context);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,

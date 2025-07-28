@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ludonew/controller/get_kyc_controller.dart';
 import 'package:ludonew/controller/profile_controller.dart';
+import 'package:ludonew/controller/withdraw_request_controller.dart';
+import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/util/constant/images_path.dart';
 import 'package:ludonew/widgets/font.dart';
@@ -16,10 +19,12 @@ class _Withdraw extends State<Withdraw> {
   final ProfileController profileController = Get.put(ProfileController());
   final TextEditingController amountController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final WithdrawRequestController withdrawRequestController =
+      Get.put(WithdrawRequestController());
+  final GetKycController getKycController = Get.put(GetKycController());
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       profileController.profile(context);
@@ -38,6 +43,16 @@ class _Withdraw extends State<Withdraw> {
           style: FontConstant.styleSemiBold(
               fontSize: 23, color: AppColors.primaryColor),
         ),
+        actions: [
+          GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.withdrawHistory);
+              },
+              child: Icon(Icons.history_sharp)),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Obx(() {
         return Stack(children: [
@@ -70,15 +85,25 @@ class _Withdraw extends State<Withdraw> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Available for Withdrawal",
-                                        style: FontConstant.styleSemiBold(
-                                            fontSize: 15,
-                                            color: AppColors.black)),
-                                    Text(
-                                        "₹ ${profileController.member?.wallet ?? ""}",
-                                        style: FontConstant.styleSemiBold(
-                                            fontSize: 15,
-                                            color: AppColors.black)),
+                                    Expanded(
+                                      child: Text("Available for Withdrawal",
+                                          style: FontConstant.styleSemiBold(
+                                              fontSize: 15,
+                                              color: AppColors.black)),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/coin.png",
+                                          height: 20,
+                                        ),
+                                        Text(
+                                            " ${profileController.member?.wallet ?? ""}",
+                                            style: FontConstant.styleSemiBold(
+                                                fontSize: 15,
+                                                color: AppColors.black)),
+                                      ],
+                                    ),
                                   ])),
                           SizedBox(
                             height: 20,
@@ -104,6 +129,7 @@ class _Withdraw extends State<Withdraw> {
                                 TextFormField(
                                   textAlign: TextAlign.center,
                                   keyboardType: TextInputType.number,
+                                  controller: amountController,
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -123,9 +149,17 @@ class _Withdraw extends State<Withdraw> {
                                     if (amount < 10) {
                                       return 'Minimum ₹10 required';
                                     }
+                                    final walletAmount = double.tryParse(
+                                        "${profileController.member?.wallet ?? "0"}");
+                                    if (walletAmount != null) {
+                                      if (amount > walletAmount) {
+                                        return 'Insufficient Balance';
+                                      }
+                                    }
                                     if (amount > 20000) {
                                       return 'Maximum ₹20,000 allowed';
                                     }
+
                                     return null; // ✅ valid
                                   },
                                 ),
@@ -150,10 +184,13 @@ class _Withdraw extends State<Withdraw> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            double amount = double.parse(amountController.text);
-                            print("Proceed with withdrawal ₹$amount");
-                            // Call your API here
+                            print(
+                                "Proceed with withdrawal ${amountController.text}");
+
+                            withdrawRequestController.withdrawRequest(
+                                context, amountController.text.toString());
                           }
+                          // Get.toNamed(Routes.kycForm);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
@@ -177,7 +214,9 @@ class _Withdraw extends State<Withdraw> {
               ),
             ),
           ),
-          if (profileController.isLoading.value)
+          if (profileController.isLoading.value ||
+              withdrawRequestController.isLoading.value ||
+              getKycController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,

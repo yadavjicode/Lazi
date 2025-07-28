@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/controller/weekly_schedule_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
+import 'package:ludonew/util/comman_code/comman_code.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 import 'package:ludonew/widgets/start_timer.dart';
@@ -30,6 +32,17 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
       Get.put(CheckBalanceController());
   final WeeklyScheduleController weeklyScheduleController =
       Get.put(WeeklyScheduleController());
+
+  String formatIfNumeric(String input) {
+    final numValue = num.tryParse(input);
+    if (numValue != null) {
+      // It's a valid number, add rupee sign
+      return '₹${NumberFormat('#,##0').format(numValue)}';
+    } else {
+      // Not a number, return as is
+      return input;
+    }
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -151,8 +164,14 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                                 ),
                                 child: Row(
                                   children: [
+                                    if (CommanCode.checkIfNumeric(
+                                        item.iWinPrice))
+                                      Image.asset(
+                                        "assets/images/coin.png",
+                                        height: 15,
+                                      ),
                                     Text(
-                                      '${item.iWinPrice}',
+                                      " ${item.iWinPrice}",
                                       style: FontConstant.styleMedium(
                                         fontSize: 12,
                                         color: AppColors.black,
@@ -178,16 +197,23 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                weeklyScheduleController.weeklySchedule(
-                                    context,
-                                    item.id.toString(),
-                                    item.noOfPlayers.toString(),
-                                    item.timerInSecond.toString(),
-                                    'weekly',
-                                    'weekly',
-                                    widget.userId,
-                                    widget.name,
-                                    item.entryPrice);
+                                if ((item.entryStatus ?? "") == "OPEN") {
+                                  weeklyScheduleController.weeklySchedule(
+                                      context,
+                                      item.id.toString(),
+                                      item.noOfPlayers.toString(),
+                                      item.timerInSecond.toString(),
+                                      'weekly',
+                                      'weekly',
+                                      widget.userId,
+                                      widget.name,
+                                      item.entryPrice,
+                                      "${item.iWinPrice}",   "${item.entryPrice}",
+                                      );
+                                } else {
+                                  Get.snackbar("Entry Status",
+                                      "${(item.entryStatus ?? "")}");
+                                }
 
                                 // checkBalanceController.checkBalance(
                                 //     context,
@@ -208,10 +234,18 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                                   borderRadius: BorderRadius.circular(18),
                                   color: AppColors.green,
                                 ),
-                                child: Text(
-                                  '₹ ${item.entryPrice}',
-                                  style: FontConstant.styleMedium(
-                                      fontSize: 16, color: AppColors.white),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      " ${item.entryPrice}",
+                                      style: FontConstant.styleMedium(
+                                          fontSize: 16, color: AppColors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -262,9 +296,21 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                           fontSize: 17, color: AppColors.black)),
                 ),
                 SizedBox(height: 10),
-                Text("Entry: ₹ ${weekly.entryPrice}",
-                    style: FontConstant.styleSemiBold(
-                        fontSize: 17, color: Colors.yellow)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Entry ",
+                        style: FontConstant.styleSemiBold(
+                            fontSize: 17, color: Colors.yellow)),
+                    Image.asset(
+                      "assets/images/coin.png",
+                      height: 15,
+                    ),
+                    Text(" ${weekly.entryPrice}",
+                        style: FontConstant.styleSemiBold(
+                            fontSize: 17, color: Colors.yellow)),
+                  ],
+                ),
                 SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
@@ -275,21 +321,18 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                   child: Column(
                     children: [
                       rowItem("Rank", "Price", "Round", isHeader: true),
+                      rowItem("–", "${weekly.firstRoundPrice}", "First Round"),
                       rowItem(
-                          "–", "₹ ${weekly.firstRoundPrice}", "First Round"),
+                          "–", "${weekly.secondRoundPrice}", "Second Round"),
+                      rowItem("–", "${weekly.thirdRoundPrice}", "Third Round"),
                       rowItem(
-                          "–", "₹ ${weekly.secondRoundPrice}", "Second Round"),
-                      rowItem(
-                          "–", "₹ ${weekly.thirdRoundPrice}", "Third Round"),
-                      rowItem(
-                          "–", "₹ ${weekly.fourthRoundPrice}", "Fourth Round"),
-                      rowItem(
-                          "–", "₹ ${weekly.fifthRoundPrice}", "Fifth Round"),
-                      rowItem("–", "₹ ${weekly.semiFinalPrice}", "Semi Final"),
-                      rowItem("IV", "₹ ${weekly.iVWinPrice}", "Final"),
-                      rowItem("III", "₹ ${weekly.iIIWinPrice}", "Final"),
-                      rowItem("II", "₹ ${weekly.iIWinPrice}", "Final"),
-                      rowItem("I", "₹ ${weekly.iWinPrice}", "Final"),
+                          "–", "${weekly.fourthRoundPrice}", "Fourth Round"),
+                      rowItem("–", "${weekly.fifthRoundPrice}", "Fifth Round"),
+                      rowItem("–", "${weekly.semiFinalPrice}", "Semi Final"),
+                      rowItem("IV", "${weekly.iVWinPrice}", "Final"),
+                      rowItem("III", "${weekly.iIIWinPrice}", "Final"),
+                      rowItem("II", "${weekly.iIWinPrice}", "Final"),
+                      rowItem("I", "${weekly.iWinPrice}", "Final"),
                     ],
                   ),
                 ),
@@ -323,12 +366,27 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                           fontSize: 13, color: AppColors.white)),
             ),
             Expanded(
-              child: Text(price,
-                  style: isHeader
-                      ? FontConstant.styleSemiBold(
-                          fontSize: 13, color: AppColors.white)
-                      : FontConstant.styleMedium(
-                          fontSize: 13, color: AppColors.white)),
+              child: Row(
+                children: [
+                  if (CommanCode.checkIfNumeric(price))
+                    Image.asset(
+                      "assets/images/coin.png",
+                      height: 15,
+                    ),
+                  if (CommanCode.checkIfNumeric(price))
+                    SizedBox(
+                      width: 3,
+                    ),
+                  Expanded(
+                    child: Text(price,
+                        style: isHeader
+                            ? FontConstant.styleSemiBold(
+                                fontSize: 13, color: AppColors.white)
+                            : FontConstant.styleMedium(
+                                fontSize: 13, color: AppColors.white)),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Text(round,

@@ -1,12 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/api_service/api_service.dart';
 import 'package:ludonew/model/send_otp_model.dart';
 import 'package:ludonew/widgets/CustomSnackbar.dart';
-
-import '../routes/routes.dart';
 
 class SendOtpController extends GetxController {
   final ApiService apiService = ApiService();

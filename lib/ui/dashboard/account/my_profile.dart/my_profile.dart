@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ludonew/controller/profile_controller.dart';
+import 'package:ludonew/controller/winner_count_controller.dart';
 import 'package:ludonew/routes/routes.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
@@ -15,6 +16,8 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
   final ProfileController profileController = Get.put(ProfileController());
+  final WinnerCountController winnerCountController =
+      Get.put(WinnerCountController());
 
   @override
   void initState() {
@@ -22,6 +25,7 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       profileController.profile(context);
+      winnerCountController.winnerCount(context);
     });
   }
 
@@ -48,7 +52,8 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
         body: Obx(() {
-          if (profileController.isLoading.value) {
+          if (profileController.isLoading.value ||
+              winnerCountController.isLoading.value) {
             return Center(
                 child: CircularProgressIndicator(
               color: AppColors.primaryColor,
@@ -166,7 +171,7 @@ class _MyProfileState extends State<MyProfile> {
                                             fontSize: 15,
                                             color: AppColors.darkgrey)),
                                     Text(
-                                      "1",
+                                      "${winnerCountController.member?.data?.dailyCount ?? 0}",
                                       style: FontConstant.styleSemiBold(
                                           fontSize: 17, color: AppColors.black),
                                     )
@@ -190,7 +195,7 @@ class _MyProfileState extends State<MyProfile> {
                                             fontSize: 15,
                                             color: AppColors.darkgrey)),
                                     Text(
-                                      "1",
+                                      "${winnerCountController.member?.data?.weeklyCount ?? 0}",
                                       style: FontConstant.styleSemiBold(
                                           fontSize: 17, color: AppColors.black),
                                     )

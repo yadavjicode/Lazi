@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
+import 'package:ludonew/util/comman_code/comman_code.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 import 'package:ludonew/widgets/start_timer.dart';
@@ -28,6 +30,17 @@ class _FourPlayer extends State<FourPlayer> {
   List<bool> isExpandedList = [];
   final CheckBalanceController checkBalanceController =
       Get.put(CheckBalanceController());
+
+  String formatIfNumeric(String input) {
+    final numValue = num.tryParse(input);
+    if (numValue != null) {
+      // It's a valid number, add rupee sign
+      return '₹ ${NumberFormat('#,##0').format(numValue)}';
+    } else {
+      // Not a number, return as is
+      return input;
+    }
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -93,8 +106,8 @@ class _FourPlayer extends State<FourPlayer> {
                     ),
                   ),
                 ),
-            SizedBox(height: 10),
-                  CountdownScreen(),
+                SizedBox(height: 10),
+                CountdownScreen(),
 
                 // values
                 Padding(
@@ -126,10 +139,15 @@ class _FourPlayer extends State<FourPlayer> {
                               ),
                               child: Row(
                                 children: [
+                                  if (CommanCode.checkIfNumeric(item.winPrice))
+                                    Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 15,
+                                    ),
                                   Text(
-                                    '₹ ${item.winPrice}',
+                                    " ${item.winPrice}",
                                     style: FontConstant.styleMedium(
-                                      fontSize: 16,
+                                      fontSize: 12,
                                       color: AppColors.black,
                                     ),
                                   ),
@@ -139,7 +157,7 @@ class _FourPlayer extends State<FourPlayer> {
                           ),
                         ],
                       ),
-                  Image.asset(
+                      Image.asset(
                         "assets/images/award.png",
                         height: 30,
                       ),
@@ -156,12 +174,15 @@ class _FourPlayer extends State<FourPlayer> {
                               checkBalanceController.checkBalance(
                                   context,
                                   item.id.toString(),
-                                  item.noOfPlayers.toString(),
+                                  "4",
                                   item.timerShow.toString(),
                                   'offline',
                                   'offline',
                                   widget.userId,
-                                  widget.name,0);
+                                  widget.name,
+                                  0,
+                                  "${item.winPrice}",
+                                  "${item.entryFee}");
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -171,10 +192,18 @@ class _FourPlayer extends State<FourPlayer> {
                                 borderRadius: BorderRadius.circular(18),
                                 color: AppColors.green,
                               ),
-                              child: Text(
-                                '₹ ${item.entryFee}',
-                                style: FontConstant.styleMedium(
-                                    fontSize: 16, color: AppColors.white),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/coin.png",
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    ' ${item.entryFee}',
+                                    style: FontConstant.styleMedium(
+                                        fontSize: 16, color: AppColors.white),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

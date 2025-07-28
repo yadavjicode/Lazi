@@ -45,16 +45,19 @@ class _AccountState extends State<Account> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey.shade300)),
-                          child: Icon(
-                            Icons.person,
-                            color: AppColors.secondaryColor,
-                            size: 40,
-                          ),
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: NetworkImage(
+                                  "https://lazioludo.com/${profileController.member?.profileImage ?? ""}")
+                              as ImageProvider<Object>,
+                          child: ((profileController.member?.profileImage ==
+                                      null ||
+                                  profileController
+                                      .member!.profileImage!.isEmpty))
+                              ? const Icon(Icons.person,
+                                  size: 50, color: Colors.grey)
+                              : null,
                         ),
                         const SizedBox(
                           width: 5,

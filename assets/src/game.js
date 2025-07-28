@@ -1152,7 +1152,7 @@ var Ludo_Wild;
                 const y = this.pocketOffset["y_p" + 1];
                 const timeLefts = getCookie('tournamentTimeInSec');
                 // Step 1: Create the text first (needed to measure width/height)
-                const timeText = game.add.text(0, 0, "Time: " + timeLefts, {
+                const timeText = game.add.text(0, 0, " " + timeLefts, {
                     font: "32px Arial",
                     fill: "#ffffff",
                     stroke: "#ffffff",
@@ -1180,7 +1180,7 @@ var Ludo_Wild;
 
                 // Offset text inside background to simulate padding
                 timeText.x = (timeText.width / 2) + padding;
-                timeText.y = (timeText.height / 2) - 300;
+                timeText.y = (timeText.height / 2) - 350;
 
                 let timeLeft = getCookie('tournamentTimeInSec');
 
@@ -1189,10 +1189,26 @@ var Ludo_Wild;
 
                     const minutes = Math.floor(timeLeft / 60); const seconds = timeLeft % 60;
                     // Format with leading zero if needed (e.g., 01:09)
-                    const formattedTime = "Time: " +
+                    const formattedTime = " " +
                         (minutes < 10 ? "0" + minutes : minutes) + ":" +
                         (seconds < 10 ? "0" + seconds : seconds);
                     timeText.setText(formattedTime);
+
+                    const imageX = 310;
+                    const imageY = 50;
+                    let timeImage;
+
+                    if (!timeImage) {
+
+                        timeImage = game.add.image(imageX, imageY, 'trophyPng');
+                        timeImage.anchor.setTo(0.5);
+                        timeImage.scale.setTo(0.4, 0.4);
+                    } else {
+
+                        timeImage.x = imageX;
+                        timeImage.y = imageY;
+                    }
+
 
                     //timeText.setText("Time: " + timeLeft);
 
@@ -6893,8 +6909,14 @@ var Ludo_Wild;
 
                 //const playerScore = this.getPlayerScore(playerIndex); // however you calculate score
 
-
-                this.gameObjects["playerData"][id].dice = 0;
+                if (this.gameObjects["playerData"][id].dice == 6) {
+                    this.gameObjects["playerData"][id].dice = 0;
+                    this.gameObjects["playerData"][id].diceActive = true;
+                } else {
+                    this.gameObjects["playerData"][id].dice = 0;
+                    //this.gameObjects["playerData"][id].diceActive = true;
+                }
+                //this.gameObjects["playerData"][id].dice = 0;
                 //this.gameObjects["playerData"][id].diceActive = true;
             } else {
                 this.gameObjects["playerData"][id].dice = 0;
@@ -13732,6 +13754,7 @@ var Ludo_Wild;
             this.load.spritesheet("celebration", "../assets/celebration_sheet.png", 720, 630, 12);
             this.load.spritesheet("rank_medal_spritesheet", "../assets/rank_medal_spritesheet.png", 106, 122, 7);
             this.load.image('loaderGif', '../assets/loader.gif');
+            this.load.image('trophyPng', '../assets/Trophy.png');
             this.load.audiosprite('AudioSprite', ['../assets/Audio/Audiov3.mp3', '../assets/Audio/Audiov3.ogg'], null, this.audioJsonData);
             this.load.audio('BGMusic', ['../assets/Audio/music.mp3']);
             this.load.audio('Celebration', ['../assets/Audio/celebration.mp3']);

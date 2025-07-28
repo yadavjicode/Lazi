@@ -1,5 +1,5 @@
 class CommanCode {
-static   String formatDateTime(String input) {
+  static String formatDateTime(String input) {
     try {
       DateTime dateTime = DateTime.parse(input)
           .toLocal(); // Converts from UTC to local time if needed
@@ -11,5 +11,17 @@ static   String formatDateTime(String input) {
       return "Invalid date";
     }
   }
- static   String _twoDigits(int n) => n.toString().padLeft(2, '0');
+
+  static String _twoDigits(int n) => n.toString().padLeft(2, '0');
+
+  static bool checkIfNumeric(String input) {
+    final numValue = num.tryParse(input);
+    if (numValue != null) {
+      // It's a valid number, add rupee sign
+      return true;
+    } else {
+      // Not a number, return as is
+      return false;
+    }
+  }
 }

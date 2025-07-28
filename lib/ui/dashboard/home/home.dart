@@ -108,16 +108,15 @@ class _HomeState extends State<Home> {
                         width: screenWidth * 0.35,
                       ),
                       Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                      
-                        },
-                        child: Icon(
-                          Icons.notifications_none,
-                          color: AppColors.secondaryColor,
-                          size: 35,
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //   },
+                      //   child: Icon(
+                      //     Icons.notifications_none,
+                      //     color: AppColors.secondaryColor,
+                      //     size: 35,
+                      //   ),
+                      // ),
                       SizedBox(
                         width: 10,
                       ),
@@ -133,10 +132,18 @@ class _HomeState extends State<Home> {
                                 borderRadius: BorderRadius.circular(18)),
                             child: Row(
                               children: [
-                                Text(
-                                  "₹ ${profileController.member?.wallet ?? 0}",
-                                  style: FontConstant.styleSemiBold(
-                                      fontSize: 16, color: AppColors.white),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      " ${profileController.member?.wallet ?? 0}",
+                                      style: FontConstant.styleSemiBold(
+                                          fontSize: 16, color: AppColors.white),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   width: 5,

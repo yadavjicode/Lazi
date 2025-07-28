@@ -126,10 +126,10 @@ class _TransactionHistory extends State<TransactionHistory> {
                             child: Row(
                               children: [
                                 Icon(
-                                  (item.status ?? "") == "CREDIT"
+                                  (item.status ?? "") == "Credit"
                                       ? Icons.arrow_circle_down_sharp
                                       : Icons.arrow_circle_up_sharp,
-                                  color: (item.status ?? "") == "CREDIT"
+                                  color: (item.status ?? "") == "Credit"
                                       ? AppColors.green
                                       : AppColors.primaryColor,
                                 ),
@@ -139,10 +139,18 @@ class _TransactionHistory extends State<TransactionHistory> {
                                 // prize pill
                                 Column(
                                   children: [
-                                    Text("₹ ${item.amount}",
-                                        style: FontConstant.styleMedium(
-                                            fontSize: 15,
-                                            color: AppColors.black)),
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 20,
+                                    ),
+                                        Text(" ${item.amount}",
+                                            style: FontConstant.styleMedium(
+                                                fontSize: 15,
+                                                color: AppColors.black)),
+                                      ],
+                                    ),
                                     SizedBox(
                                       height: 3,
                                     ),
@@ -162,13 +170,13 @@ class _TransactionHistory extends State<TransactionHistory> {
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                             color:
-                                                (item.status ?? "") == "CREDIT"
+                                                (item.status ?? "") == "Credit"
                                                     ? AppColors.green
                                                     : AppColors.primaryColor,
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(18),
-                                          color: (item.status ?? "") == "CREDIT"
+                                          color: (item.status ?? "") == "Credit"
                                               ? AppColors.green
                                               : AppColors.primaryColor,
                                         ),

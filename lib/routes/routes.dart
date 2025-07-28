@@ -12,6 +12,8 @@ import 'package:ludonew/ui/dashboard/account/my_profile.dart/weekly_win/weekly_w
 import 'package:ludonew/ui/dashboard/account/privacy_policy/privacy_policy.dart';
 import 'package:ludonew/ui/dashboard/account/refund_policy/refund_policy.dart';
 import 'package:ludonew/ui/dashboard/account/terms_and_condition/terms_and_conditions.dart';
+import 'package:ludonew/ui/dashboard/account/withdraw/kyc/kyc_form.dart';
+import 'package:ludonew/ui/dashboard/account/withdraw/withdraw_history/withdraw_history.dart';
 import 'package:ludonew/ui/splash/splashB.dart';
 import 'package:ludonew/ui/start_play/loading_screen.dart';
 import 'package:ludonew/ui/start_play/start_play.dart';
@@ -49,6 +51,8 @@ class Routes {
   static const String ads = "/ads";
   static const String weeklyWin = "/weeklyWin";
   static const String dailyWin = "/dailyWin";
+  static const String kycForm = "/kycForm";
+  static const String withdrawHistory = "/withdrawHistory";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -206,6 +210,20 @@ class Routes {
     GetPage(
       name: weeklyWin,
       page: () => WeeklyWin(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: kycForm,
+      page: () => KYCForm(),
+      transition: Transition.fadeIn,
+      transitionDuration:
+          const Duration(milliseconds: ApiConstants.screenTransitionTime),
+    ),
+    GetPage(
+      name: withdrawHistory,
+      page: () => WithdrawHistory(),
       transition: Transition.fadeIn,
       transitionDuration:
           const Duration(milliseconds: ApiConstants.screenTransitionTime),

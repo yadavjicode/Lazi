@@ -55,11 +55,11 @@ class _AddCashPageState extends State<AddCashPage> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("SUCCESS: ${response.paymentId}")),
-    );
     addWalletController.addWallet(context, amount.text.toString().trim(),
-        "${response.paymentId ?? ""}", "Success", "${response.orderId ?? ""}");
+        "${response.paymentId ?? ""}", "SUCCESS");
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(content: Text("SUCCESS: ${response.paymentId}")),
+    // );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

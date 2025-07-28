@@ -48,14 +48,17 @@ class _AdsState extends State<Ads> {
           );
         } else {
           return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-            child: Row(
-              children: urlList.map((item) {
-                return VideoPlayerItem(
-                  videoUrl: "https://lazioludo.com${item.video ?? ""}",
-                );
-              }).toList(),
+            child: Center(
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: urlList.map((item) {
+                  return VideoPlayerItem(
+                    videoUrl: "https://lazioludo.com${item.video ?? ""}",
+                  );
+                }).toList(),
+              ),
             ),
           );
         }

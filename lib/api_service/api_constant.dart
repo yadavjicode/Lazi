@@ -14,4 +14,10 @@ class ApiConstants {
   static const String weeklyGameListUrl = "weekly-online-game/weekly-game-list";
   static const String dailyWinUrl = "get-weekly-winner";
   static const String weeklyWinUrl = "get-daily-winner";
+  static const String winnerCountUrl = "profile-dashboard";
+  static const String plateformFeeUrl = "get-plateform-fee";
+  static const String kycGetUrl = "user-kyc-list";
+  static const String kycPostUrl = "user-kyc";
+  static const String withdrawRequestUrl = "user-withrawal-request";
+  static const String withdrawHistoryUrl = "user-withrawal-request-list";
 }

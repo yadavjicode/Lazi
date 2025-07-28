@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/controller/daily_game_list_controller.dart';
 import 'package:ludonew/model/subscription_model.dart';
 import 'package:ludonew/online_ludo/online_daily/daily_round/daily_round.dart';
+import 'package:ludonew/util/comman_code/comman_code.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/font.dart';
 import 'package:ludonew/widgets/start_timer.dart';
@@ -28,6 +30,17 @@ class _DailyPlayer extends State<DailyPlayer> {
       Get.put(CheckBalanceController());
   final DailyGameListController dailyGameListController =
       Get.put(DailyGameListController());
+
+  String formatIfNumeric(String input) {
+    final numValue = num.tryParse(input);
+    if (numValue != null) {
+      // It's a valid number, add rupee sign
+      return '₹${NumberFormat('#,##0').format(numValue)}';
+    } else {
+      // Not a number, return as is
+      return input;
+    }
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -145,8 +158,14 @@ class _DailyPlayer extends State<DailyPlayer> {
                                 ),
                                 child: Row(
                                   children: [
+                                    if (CommanCode.checkIfNumeric(
+                                        item.finalPrice))
+                                      Image.asset(
+                                        "assets/images/coin.png",
+                                        height: 15,
+                                      ),
                                     Text(
-                                      '${item.iWinPrice}',
+                                      " ${item.finalPrice}",
                                       style: FontConstant.styleMedium(
                                         fontSize: 12,
                                         color: AppColors.black,
@@ -172,15 +191,23 @@ class _DailyPlayer extends State<DailyPlayer> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(DailyRound(
-                                  tournamentId: item.id.toString(),
-                                  noOfPlayer: item.noOfPlayers.toString(),
-                                  tournmentTime: item.timerInSecond.toString(),
-                                  type: 'daily',
-                                  checkType: 'daily',
-                                  userId: widget.userId,
-                                  name: widget.name,
-                                ));
+                                if ((item.entryStatus ?? "") == "OPEN") {
+                                  Get.to(DailyRound(
+                                    tournamentId: item.id.toString(),
+                                    noOfPlayer: item.noOfPlayers.toString(),
+                                    tournmentTime:
+                                        item.timerInSecond.toString(),
+                                    type: 'daily',
+                                    checkType: 'daily',
+                                    userId: widget.userId,
+                                    name: widget.name,
+                                    amount: item.finalPrice,
+                                    entryPrice: item.entryPrice,
+                                  ));
+                                } else {
+                                  Get.snackbar("Entry Status",
+                                      "${(item.entryStatus ?? "")}");
+                                }
 
                                 // checkBalanceController.checkBalance(
                                 //     context,
@@ -200,10 +227,18 @@ class _DailyPlayer extends State<DailyPlayer> {
                                   borderRadius: BorderRadius.circular(18),
                                   color: AppColors.green,
                                 ),
-                                child: Text(
-                                  '₹ ${item.entryPrice}',
-                                  style: FontConstant.styleMedium(
-                                      fontSize: 16, color: AppColors.white),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/coin.png",
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      ' ${item.entryPrice}',
+                                      style: FontConstant.styleMedium(
+                                          fontSize: 12, color: AppColors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -254,9 +289,21 @@ class _DailyPlayer extends State<DailyPlayer> {
                           fontSize: 17, color: AppColors.black)),
                 ),
                 SizedBox(height: 10),
-                Text("Entry: ₹ ${daily.entryPrice}",
-                    style: FontConstant.styleSemiBold(
-                        fontSize: 17, color: Colors.yellow)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Entry ",
+                        style: FontConstant.styleSemiBold(
+                            fontSize: 17, color: Colors.yellow)),
+                    Image.asset(
+                      "assets/images/coin.png",
+                      height: 15,
+                    ),
+                    Text(" ${daily.entryPrice}",
+                        style: FontConstant.styleSemiBold(
+                            fontSize: 17, color: Colors.yellow)),
+                  ],
+                ),
                 SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
@@ -267,14 +314,13 @@ class _DailyPlayer extends State<DailyPlayer> {
                   child: Column(
                     children: [
                       rowItem("Rank", "Price", "Round", isHeader: true),
-                      rowItem("–", "₹ ${daily.firstRoundPrice}", "First Round"),
-                      rowItem(
-                          "–", "₹ ${daily.secondRoundPrice}", "Second Round"),
-                      rowItem("–", "₹ ${daily.thirdRoundPrice}", "Third Round"),
-                      rowItem("IV", "₹ ${daily.iVWinPrice}", "Final"),
-                      rowItem("III", "₹ ${daily.iIIWinPrice}", "Final"),
-                      rowItem("II", "₹ ${daily.iIWinPrice}", "Final"),
-                      rowItem("I", "₹ ${daily.iWinPrice}", "Final"),
+                      rowItem("–", "${daily.firstRoundPrice}", "First Round"),
+                      rowItem("–", "${daily.secondRoundPrice}", "Second Round"),
+                      rowItem("–", "${daily.thirdRoundPrice}", "Third Round"),
+                      rowItem("IV", "${daily.iVWinPrice}", "Final"),
+                      rowItem("III", "${daily.iIIWinPrice}", "Final"),
+                      rowItem("II", "${daily.iIWinPrice}", "Final"),
+                      rowItem("I", "${daily.iWinPrice}", "Final"),
                     ],
                   ),
                 ),
@@ -308,12 +354,27 @@ class _DailyPlayer extends State<DailyPlayer> {
                           fontSize: 13, color: AppColors.white)),
             ),
             Expanded(
-              child: Text(price,
-                  style: isHeader
-                      ? FontConstant.styleSemiBold(
-                          fontSize: 13, color: AppColors.white)
-                      : FontConstant.styleMedium(
-                          fontSize: 13, color: AppColors.white)),
+              child: Row(
+                children: [
+                  if (CommanCode.checkIfNumeric(price))
+                    Image.asset(
+                      "assets/images/coin.png",
+                      height: 15,
+                    ),
+                  if (CommanCode.checkIfNumeric(price))
+                    SizedBox(
+                      width: 3,
+                    ),
+                  Expanded(
+                    child: Text(price,
+                        style: isHeader
+                            ? FontConstant.styleSemiBold(
+                                fontSize: 13, color: AppColors.white)
+                            : FontConstant.styleMedium(
+                                fontSize: 13, color: AppColors.white)),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Text(round,

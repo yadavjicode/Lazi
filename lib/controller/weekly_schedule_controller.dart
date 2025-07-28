@@ -23,7 +23,8 @@ class WeeklyScheduleController extends GetxController {
       String checkType,
       String userId,
       String name,
-      String entryFee) async {
+      String entryFee,
+      String amount,String entryPrice) async {
     isLoading.value = true;
     _error = null;
 
@@ -38,7 +39,7 @@ class WeeklyScheduleController extends GetxController {
             type: type,
             checkType: checkType,
             userId: userId,
-            name: name));
+            name: name,amount: amount,entryPrice: entryPrice,));
       } else {
         Get.toNamed(Routes.myBalance);
       }

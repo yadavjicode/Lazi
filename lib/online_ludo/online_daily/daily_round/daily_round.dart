@@ -14,6 +14,8 @@ class DailyRound extends StatefulWidget {
   final String checkType;
   final String userId;
   final String name;
+  final String amount;
+   final String entryPrice;
   const DailyRound(
       {super.key,
       required this.tournamentId,
@@ -22,7 +24,9 @@ class DailyRound extends StatefulWidget {
       required this.type,
       required this.checkType,
       required this.userId,
-      required this.name});
+      required this.name,
+      required this.amount,
+      required this.entryPrice});
   @override
   State<DailyRound> createState() => _DailyRoundState();
 }
@@ -122,7 +126,7 @@ class _DailyRoundState extends State<DailyRound> {
                                     1),
                             title: "ROUND 1",
                             price:
-                                "₹ ${dailyGameListController.member?.dataList?.data?.firstRoundPrice ?? ""}",
+                                "${dailyGameListController.member?.dataList?.data?.firstRoundPrice ?? ""}",
                             stateText: checkRound(
                                 1,
                                 dailyGameListController.member?.dataList
@@ -150,7 +154,9 @@ class _DailyRoundState extends State<DailyRound> {
                             type: widget.type,
                             checkType: widget.checkType,
                             userId: widget.userId,
-                            name: widget.name),
+                            name: widget.name,
+                            amount: widget.amount,
+                            entryPrice: widget.entryPrice,),
                         ContestTile(
                             levelIcon: imageIcon(
                                 2,
@@ -159,7 +165,7 @@ class _DailyRoundState extends State<DailyRound> {
                                     1),
                             title: "ROUND 2",
                             price:
-                                "₹ ${dailyGameListController.member?.dataList?.data?.secondRoundPrice ?? ""}",
+                                "${dailyGameListController.member?.dataList?.data?.secondRoundPrice ?? ""}",
                             stateText: checkRound(
                                 2,
                                 dailyGameListController.member?.dataList
@@ -187,7 +193,9 @@ class _DailyRoundState extends State<DailyRound> {
                             type: widget.type,
                             checkType: widget.checkType,
                             userId: widget.userId,
-                            name: widget.name),
+                            name: widget.name,
+                            amount: widget.amount,
+                            entryPrice: widget.entryPrice),
                         ContestTile(
                             levelIcon: imageIcon(
                                 3,
@@ -196,7 +204,7 @@ class _DailyRoundState extends State<DailyRound> {
                                     1),
                             title: "ROUND 3",
                             price:
-                                "₹ ${dailyGameListController.member?.dataList?.data?.thirdRoundPrice ?? ""}",
+                                "${dailyGameListController.member?.dataList?.data?.thirdRoundPrice ?? ""}",
                             stateText: checkRound(
                                 3,
                                 dailyGameListController.member?.dataList
@@ -224,44 +232,49 @@ class _DailyRoundState extends State<DailyRound> {
                             type: widget.type,
                             checkType: widget.checkType,
                             userId: widget.userId,
-                            name: widget.name),
+                            name: widget.name,
+                            amount: widget.amount,
+                            entryPrice: widget.entryPrice),
                         ContestTile(
-                            levelIcon: imageIcon(
-                                4,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    0),
-                            title: "FINAL",
-                            price:
-                                "₹ ${dailyGameListController.member?.dataList?.data?.finalPrice ?? ""}",
-                            stateText: checkRound(
-                                4,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            stateColor: isPlays(
-                                    4,
-                                    dailyGameListController.member?.dataList
-                                            ?.lockStatus?.tournamentRound ??
-                                        1)
-                                ? Colors.green
-                                : Colors.orangeAccent,
-                            round: dailyGameListController.member?.dataList
-                                    ?.lockStatus?.tournamentRound ??
-                                1,
-                            isPlay: isPlays(
-                                4,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            isRoundFirst: false,
-                            tournamentId: widget.tournamentId,
-                            noOfPlayer: widget.noOfPlayer,
-                            tournmentTime: widget.tournmentTime,
-                            type: widget.type,
-                            checkType: widget.checkType,
-                            userId: widget.userId,
-                            name: widget.name),
+                          levelIcon: imageIcon(
+                              4,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  0),
+                          title: "FINAL",
+                          price:
+                              "${dailyGameListController.member?.dataList?.data?.finalPrice ?? ""}",
+                          stateText: checkRound(
+                              4,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          stateColor: isPlays(
+                                  4,
+                                  dailyGameListController.member?.dataList
+                                          ?.lockStatus?.tournamentRound ??
+                                      1)
+                              ? Colors.green
+                              : Colors.orangeAccent,
+                          round: dailyGameListController.member?.dataList
+                                  ?.lockStatus?.tournamentRound ??
+                              1,
+                          isPlay: isPlays(
+                              4,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          isRoundFirst: false,
+                          tournamentId: widget.tournamentId,
+                          noOfPlayer: widget.noOfPlayer,
+                          tournmentTime: widget.tournmentTime,
+                          type: widget.type,
+                          checkType: widget.checkType,
+                          userId: widget.userId,
+                          name: widget.name,
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice
+                        ),
                       ],
                     ),
                   ),
@@ -294,6 +307,8 @@ class ContestTile extends StatelessWidget {
   final String checkType;
   final String userId;
   final String name;
+  final String amount;
+  final String entryPrice;
 
   const ContestTile(
       {super.key,
@@ -311,7 +326,9 @@ class ContestTile extends StatelessWidget {
       required this.type,
       required this.checkType,
       required this.userId,
-      required this.name});
+      required this.name,
+      required this.amount,
+      required this.entryPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +347,9 @@ class ContestTile extends StatelessWidget {
                 checkType,
                 userId,
                 name,
-                round);
+                round,
+                amount,
+                entryPrice);
           } else {
             Get.to(OnlineDaily(
               userId: userId,
@@ -395,7 +414,7 @@ class ContestTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Price: $price",
+                  "Price: ₹ $price",
                   style: FontConstant.styleRegular(
                       fontSize: 12, color: AppColors.white),
                 ),
