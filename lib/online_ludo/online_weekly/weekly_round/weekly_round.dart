@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
+import 'package:ludonew/controller/create_game_controller.dart';
 import 'package:ludonew/controller/weekly_game_list_controller.dart';
 import 'package:ludonew/online_ludo/online_weekly/online_weekly.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -17,6 +18,7 @@ class WeeklyRound extends StatefulWidget {
   final String name;
   final String amount;
   final String entryPrice;
+  final String profileImage;
   const WeeklyRound(
       {super.key,
       required this.tournamentId,
@@ -27,7 +29,8 @@ class WeeklyRound extends StatefulWidget {
       required this.userId,
       required this.name,
       required this.amount,
-      required this.entryPrice});
+      required this.entryPrice,
+      required this.profileImage});
   @override
   State<WeeklyRound> createState() => _WeeklyRound();
 }
@@ -35,6 +38,8 @@ class WeeklyRound extends StatefulWidget {
 class _WeeklyRound extends State<WeeklyRound> {
   final WeeklyGameListController weeklyGameListController =
       Get.put(WeeklyGameListController());
+  final CreateGameController createGameController =
+      Get.put(CreateGameController());
 
   @override
   void initState() {
@@ -202,6 +207,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                               "${getDayName(weeklyGameListController.member?.dataList?.locksStatus?.startDate ?? "")} - ${getDayName(weeklyGameListController.member?.dataList?.locksStatus?.endDate ?? "")}",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "1",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -252,6 +259,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "2",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -302,6 +311,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "3",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -352,6 +363,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "4",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -402,6 +415,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "5",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -452,6 +467,8 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "6",
+                          profileImage: widget.profileImage,
                         ),
                         ContestTile(
                           levelIcon: imageIcon(
@@ -502,11 +519,19 @@ class _WeeklyRound extends State<WeeklyRound> {
                           dayRange: "",
                           amount: widget.amount,
                           entryPrice: widget.entryPrice,
+                          roundString: "7",
+                          profileImage: widget.profileImage,
                         ),
                       ],
                     ),
                   ),
                 ),
+          if (createGameController.isLoading.value)
+            Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              ),
+            )
         ]);
       }),
     );
@@ -529,12 +554,14 @@ class ContestTile extends StatefulWidget {
   final String checkType;
   final String userId;
   final String name;
+  final String profileImage;
   final String day;
   final String startDate;
   final String endDate;
   final String dayRange;
   final String amount;
   final String entryPrice;
+  final String roundString;
 
   const ContestTile(
       {super.key,
@@ -554,11 +581,13 @@ class ContestTile extends StatefulWidget {
       required this.userId,
       required this.day,
       required this.name,
+      required this.profileImage,
       required this.startDate,
       required this.endDate,
       required this.dayRange,
       required this.amount,
-      required this.entryPrice});
+      required this.entryPrice,
+      required this.roundString});
 
   @override
   State<ContestTile> createState() => _ContestTileState();
@@ -577,6 +606,9 @@ class _ContestTileState extends State<ContestTile> {
         now.isBefore(endDate.add(const Duration(days: 1)));
   }
 
+  final CreateGameController createGameController =
+      Get.put(CreateGameController());
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -589,17 +621,23 @@ class _ContestTileState extends State<ContestTile> {
             //   tournamentId: widget.tournamentId,
             //   round: widget.round,
             // ));
-            showConfirmPaymentBottomSheet(
-                context,
-                widget.tournamentId,
-                widget.noOfPlayer,
-                widget.tournamentId,
-                "weekly",
-                widget.userId,
-                widget.name,
-                widget.round,
-                widget.amount,
-                widget.entryPrice);
+            createGameController
+                .createGame(context, "", widget.tournamentId, "weekly",
+                    widget.roundString)
+                .then((_) {
+              showConfirmPaymentBottomSheet(
+                  context,
+                  widget.tournamentId,
+                  widget.noOfPlayer,
+                  widget.tournamentId,
+                  "weekly",
+                  widget.userId,
+                  widget.name,
+                  widget.profileImage,
+                  widget.round,
+                  widget.amount,
+                  widget.entryPrice);
+            });
           } else {
             Get.snackbar("Game Status", "Not Play Game");
           }

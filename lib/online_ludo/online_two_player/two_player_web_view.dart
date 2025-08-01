@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -8,13 +9,18 @@ class TwoPlayerWebView extends StatefulWidget {
   final String userId;
   final String name;
   final String tournamentId;
+  final String offlineGameId;
+  final String offlineTournamentId;
+  final String profileImage;
 
-  TwoPlayerWebView({
-    super.key,
-    required this.userId,
-    required this.name,
-    required this.tournamentId,
-  });
+  TwoPlayerWebView(
+      {super.key,
+      required this.userId,
+      required this.name,
+      required this.tournamentId,
+      required this.offlineGameId,
+      required this.offlineTournamentId,
+      required this.profileImage});
 
   @override
   State<TwoPlayerWebView> createState() => _TwoPlayerWebView();
@@ -28,13 +34,22 @@ class _TwoPlayerWebView extends State<TwoPlayerWebView> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color(0xff033578), // or any color you want
+        statusBarIconBrightness:
+            Brightness.light, // use Brightness.dark if background is light
+      ),
+    );
     // final String gameUrl =
     //     "https://lazioludo.com/game/build/login/${widget.userId}/${widget.name}"
     //     "?tournament_types=daily&daily_tournament_id=${widget.tournamentId}"
     //     "&weekly_tournament_id=null&tournament_round=${widget.round}";
 
     final String gameUrl =
-        "https://lazioludo.com/offlinegame/build/login/1/${widget.name}?tournament_types=offline&player_id=${widget.userId}&player_count=2&tournamentId=${widget.tournamentId}&color1";
+        "https://lazioludo.com/offlinegame/build/login/${widget.userId}/${widget.name}?tournament_types=daily&player_id=${widget.userId}&player_count=2&daily_tournament_id=${widget.tournamentId}&tournament_round=1&color1&offline_game_id=${widget.offlineGameId}&offline_tournament_id=${widget.offlineTournamentId}&profile_image=https://lazioludo.com/${widget.profileImage}";
+
+    print("web url ${gameUrl}");
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -63,25 +78,39 @@ class _TwoPlayerWebView extends State<TwoPlayerWebView> {
   @override
   void dispose() {
     print("Two Player game end");
-    profileController.profile(context);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // or your app's default
+        statusBarIconBrightness: Brightness.dark, // match your app theme
+      ),
+    );
+    // profileController.profile(context);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          Obx(() => isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryColor,
-                  ),
-                )
-              : SizedBox()),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        await profileController.profile(context); // Safe async call
+        return true; // allow back navigation
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              Obx(() => isLoading.value
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                  : SizedBox()),
+            ],
+          ),
+        ),
       ),
     );
   }

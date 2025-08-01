@@ -15,8 +15,13 @@ class DailyPlayer extends StatefulWidget {
   final List<Daily> daily;
   final String userId;
   final String name;
+  final String profileImage;
   const DailyPlayer(
-      {Key? key, required this.daily, required this.userId, required this.name})
+      {Key? key,
+      required this.daily,
+      required this.userId,
+      required this.name,
+      required this.profileImage})
       : super(key: key);
 
   @override
@@ -203,6 +208,7 @@ class _DailyPlayer extends State<DailyPlayer> {
                                     name: widget.name,
                                     amount: item.finalPrice,
                                     entryPrice: item.entryPrice,
+                                    profileImage: widget.profileImage,
                                   ));
                                 } else {
                                   Get.snackbar("Entry Status",

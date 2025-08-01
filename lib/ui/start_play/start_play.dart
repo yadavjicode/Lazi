@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
 import 'package:ludonew/controller/daily_game_list_controller.dart';
+import 'package:ludonew/controller/offline_start_controller.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/controller/subscription_controller.dart';
 import 'package:ludonew/routes/routes.dart';
@@ -37,6 +38,10 @@ class _StartPlayState extends State<StartPlay> {
       Get.put(DailyGameListController());
   final WeeklyScheduleController weeklyScheduleController =
       Get.put(WeeklyScheduleController());
+  final OfflineStartTwoController offlineStartTwoController =
+      Get.put(OfflineStartTwoController());
+  final OfflineStartFourController offlineStartFourController =
+      Get.put(OfflineStartFourController());
 
   @override
   void initState() {
@@ -114,9 +119,9 @@ class _StartPlayState extends State<StartPlay> {
                             child: Row(
                               children: [
                                 Image.asset(
-                                      "assets/images/coin.png",
-                                      height: 20,
-                                    ),
+                                  "assets/images/coin.png",
+                                  height: 20,
+                                ),
                                 Text(
                                   " ${profileController.member?.wallet ?? 0}",
                                   style: FontConstant.styleSemiBold(
@@ -215,7 +220,9 @@ class _StartPlayState extends State<StartPlay> {
               checkBalanceController.isLoading.value ||
               profileController.isLoading.value ||
               dailyGameListController.isLoading.value ||
-              weeklyScheduleController.isLoading.value)
+              weeklyScheduleController.isLoading.value ||
+              offlineStartTwoController.isLoading.value ||
+              offlineStartFourController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,
@@ -233,6 +240,7 @@ class _StartPlayState extends State<StartPlay> {
         userId: "${profileController.member?.id ?? ""}",
         name:
             "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+        profileImage: "${profileController.member?.profileImage ??""}",
       );
     } else if (key == "4 Player") {
       return FourPlayer(
@@ -240,6 +248,7 @@ class _StartPlayState extends State<StartPlay> {
         userId: "${profileController.member?.id ?? ""}",
         name:
             "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+             profileImage: "${profileController.member?.profileImage ??""}"
       );
     } else if (key == "Weekly") {
       return WeeklyPlayer(
@@ -247,13 +256,15 @@ class _StartPlayState extends State<StartPlay> {
         userId: "${profileController.member?.id ?? ""}",
         name:
             "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+             profileImage: "${profileController.member?.profileImage ??""}"
       );
     } else if (key == "Daily") {
       return DailyPlayer(
         daily: subscriptionController.member?.data?.daily ?? [],
         userId: "${profileController.member?.id ?? ""}",
-        name:
-            "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+        name: "${profileController.member?.name ?? "Player${profileController.member?.id ?? ""}"}",
+        profileImage: "${profileController.member?.profileImage ?? ""}",
+        
       );
     } else {
       return Text("NO data avilable!");

@@ -13,11 +13,13 @@ class FourPlayer extends StatefulWidget {
   final List<Players2> players2;
   final String userId;
   final String name;
+  final String profileImage;
   const FourPlayer(
       {Key? key,
       required this.players2,
       required this.userId,
-      required this.name})
+      required this.name,
+      required this.profileImage})
       : super(key: key);
 
   @override
@@ -180,6 +182,7 @@ class _FourPlayer extends State<FourPlayer> {
                                   'offline',
                                   widget.userId,
                                   widget.name,
+                                  widget.profileImage,
                                   0,
                                   "${item.winPrice}",
                                   "${item.entryFee}");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/check_balance_controller.dart';
+import 'package:ludonew/controller/create_game_controller.dart';
 import 'package:ludonew/controller/daily_game_list_controller.dart';
 import 'package:ludonew/online_ludo/online_daily/online_daily.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -14,8 +15,9 @@ class DailyRound extends StatefulWidget {
   final String checkType;
   final String userId;
   final String name;
+  final String profileImage;
   final String amount;
-   final String entryPrice;
+  final String entryPrice;
   const DailyRound(
       {super.key,
       required this.tournamentId,
@@ -25,6 +27,7 @@ class DailyRound extends StatefulWidget {
       required this.checkType,
       required this.userId,
       required this.name,
+      required this.profileImage,
       required this.amount,
       required this.entryPrice});
   @override
@@ -36,6 +39,8 @@ class _DailyRoundState extends State<DailyRound> {
       Get.put(DailyGameListController());
   final CheckBalanceController checkBalanceController =
       Get.put(CheckBalanceController());
+  final CreateGameController createGameController =
+      Get.put(CreateGameController());
 
   @override
   void initState() {
@@ -119,122 +124,131 @@ class _DailyRoundState extends State<DailyRound> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ContestTile(
-                            levelIcon: imageIcon(
-                                1,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            title: "ROUND 1",
-                            price:
-                                "${dailyGameListController.member?.dataList?.data?.firstRoundPrice ?? ""}",
-                            stateText: checkRound(
-                                1,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            stateColor: isPlays(
-                                    1,
-                                    dailyGameListController.member?.dataList
-                                            ?.lockStatus?.tournamentRound ??
-                                        1)
-                                ? Colors.green
-                                : Colors.orangeAccent,
-                            isPlay: isPlays(
-                                1,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            round: dailyGameListController.member?.dataList
-                                    ?.lockStatus?.tournamentRound ??
-                                1,
-                            isRoundFirst: true,
-                            tournamentId: widget.tournamentId,
-                            noOfPlayer: widget.noOfPlayer,
-                            tournmentTime: widget.tournmentTime,
-                            type: widget.type,
-                            checkType: widget.checkType,
-                            userId: widget.userId,
-                            name: widget.name,
-                            amount: widget.amount,
-                            entryPrice: widget.entryPrice,),
+                          levelIcon: imageIcon(
+                              1,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          title: "ROUND 1",
+                          price:
+                              "${dailyGameListController.member?.dataList?.data?.firstRoundPrice ?? ""}",
+                          stateText: checkRound(
+                              1,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          stateColor: isPlays(
+                                  1,
+                                  dailyGameListController.member?.dataList
+                                          ?.lockStatus?.tournamentRound ??
+                                      1)
+                              ? Colors.green
+                              : Colors.orangeAccent,
+                          isPlay: isPlays(
+                              1,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          round: dailyGameListController.member?.dataList
+                                  ?.lockStatus?.tournamentRound ??
+                              1,
+                          isRoundFirst: true,
+                          tournamentId: widget.tournamentId,
+                          noOfPlayer: widget.noOfPlayer,
+                          tournmentTime: widget.tournmentTime,
+                          type: widget.type,
+                          checkType: widget.checkType,
+                          userId: widget.userId,
+                          name: widget.name,
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
+                          roundString: "1",
+                          ProfileImage: widget.profileImage,
+                        ),
                         ContestTile(
-                            levelIcon: imageIcon(
-                                2,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            title: "ROUND 2",
-                            price:
-                                "${dailyGameListController.member?.dataList?.data?.secondRoundPrice ?? ""}",
-                            stateText: checkRound(
-                                2,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            stateColor: isPlays(
-                                    2,
-                                    dailyGameListController.member?.dataList
-                                            ?.lockStatus?.tournamentRound ??
-                                        1)
-                                ? Colors.green
-                                : Colors.orangeAccent,
-                            isPlay: isPlays(
-                                2,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            round: dailyGameListController.member?.dataList
-                                    ?.lockStatus?.tournamentRound ??
-                                1,
-                            isRoundFirst: false,
-                            tournamentId: widget.tournamentId,
-                            noOfPlayer: widget.noOfPlayer,
-                            tournmentTime: widget.tournmentTime,
-                            type: widget.type,
-                            checkType: widget.checkType,
-                            userId: widget.userId,
-                            name: widget.name,
-                            amount: widget.amount,
-                            entryPrice: widget.entryPrice),
+                          levelIcon: imageIcon(
+                              2,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          title: "ROUND 2",
+                          price:
+                              "${dailyGameListController.member?.dataList?.data?.secondRoundPrice ?? ""}",
+                          stateText: checkRound(
+                              2,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          stateColor: isPlays(
+                                  2,
+                                  dailyGameListController.member?.dataList
+                                          ?.lockStatus?.tournamentRound ??
+                                      1)
+                              ? Colors.green
+                              : Colors.orangeAccent,
+                          isPlay: isPlays(
+                              2,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          round: dailyGameListController.member?.dataList
+                                  ?.lockStatus?.tournamentRound ??
+                              1,
+                          isRoundFirst: false,
+                          tournamentId: widget.tournamentId,
+                          noOfPlayer: widget.noOfPlayer,
+                          tournmentTime: widget.tournmentTime,
+                          type: widget.type,
+                          checkType: widget.checkType,
+                          userId: widget.userId,
+                          name: widget.name,
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
+                          roundString: "2",
+                          ProfileImage: widget.profileImage,
+                        ),
                         ContestTile(
-                            levelIcon: imageIcon(
-                                3,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            title: "ROUND 3",
-                            price:
-                                "${dailyGameListController.member?.dataList?.data?.thirdRoundPrice ?? ""}",
-                            stateText: checkRound(
-                                3,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            stateColor: isPlays(
-                                    3,
-                                    dailyGameListController.member?.dataList
-                                            ?.lockStatus?.tournamentRound ??
-                                        1)
-                                ? Colors.green
-                                : Colors.orangeAccent,
-                            isPlay: isPlays(
-                                3,
-                                dailyGameListController.member?.dataList
-                                        ?.lockStatus?.tournamentRound ??
-                                    1),
-                            round: dailyGameListController.member?.dataList
-                                    ?.lockStatus?.tournamentRound ??
-                                1,
-                            isRoundFirst: false,
-                            tournamentId: widget.tournamentId,
-                            noOfPlayer: widget.noOfPlayer,
-                            tournmentTime: widget.tournmentTime,
-                            type: widget.type,
-                            checkType: widget.checkType,
-                            userId: widget.userId,
-                            name: widget.name,
-                            amount: widget.amount,
-                            entryPrice: widget.entryPrice),
+                          levelIcon: imageIcon(
+                              3,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          title: "ROUND 3",
+                          price:
+                              "${dailyGameListController.member?.dataList?.data?.thirdRoundPrice ?? ""}",
+                          stateText: checkRound(
+                              3,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          stateColor: isPlays(
+                                  3,
+                                  dailyGameListController.member?.dataList
+                                          ?.lockStatus?.tournamentRound ??
+                                      1)
+                              ? Colors.green
+                              : Colors.orangeAccent,
+                          isPlay: isPlays(
+                              3,
+                              dailyGameListController.member?.dataList
+                                      ?.lockStatus?.tournamentRound ??
+                                  1),
+                          round: dailyGameListController.member?.dataList
+                                  ?.lockStatus?.tournamentRound ??
+                              1,
+                          isRoundFirst: false,
+                          tournamentId: widget.tournamentId,
+                          noOfPlayer: widget.noOfPlayer,
+                          tournmentTime: widget.tournmentTime,
+                          type: widget.type,
+                          checkType: widget.checkType,
+                          userId: widget.userId,
+                          name: widget.name,
+                          amount: widget.amount,
+                          entryPrice: widget.entryPrice,
+                          roundString: "3",
+                          ProfileImage: widget.profileImage,
+                        ),
                         ContestTile(
                           levelIcon: imageIcon(
                               4,
@@ -273,13 +287,16 @@ class _DailyRoundState extends State<DailyRound> {
                           userId: widget.userId,
                           name: widget.name,
                           amount: widget.amount,
-                          entryPrice: widget.entryPrice
+                          entryPrice: widget.entryPrice,
+                          roundString: "4",
+                          ProfileImage: widget.profileImage,
                         ),
                       ],
                     ),
                   ),
                 ),
-          if (checkBalanceController.isLoading.value)
+          if (checkBalanceController.isLoading.value ||
+              createGameController.isLoading.value)
             Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,
@@ -309,6 +326,8 @@ class ContestTile extends StatelessWidget {
   final String name;
   final String amount;
   final String entryPrice;
+  final String roundString;
+  final String ProfileImage;
 
   const ContestTile(
       {super.key,
@@ -328,35 +347,49 @@ class ContestTile extends StatelessWidget {
       required this.userId,
       required this.name,
       required this.amount,
-      required this.entryPrice});
+      required this.entryPrice,
+      required this.roundString,
+      required this.ProfileImage});
 
   @override
   Widget build(BuildContext context) {
     final CheckBalanceController checkBalanceController =
         Get.put(CheckBalanceController());
+    final CreateGameController createGameController =
+        Get.put(CreateGameController());
     return GestureDetector(
       onTap: () {
         if (isPlay) {
           if (isRoundFirst) {
-            checkBalanceController.checkBalance(
-                context,
-                tournamentId,
-                noOfPlayer,
-                tournmentTime,
-                type,
-                checkType,
-                userId,
-                name,
-                round,
-                amount,
-                entryPrice);
+            createGameController
+                .createGame(context, tournamentId, "", "daily", roundString)
+                .then((_) {
+              checkBalanceController.checkBalance(
+                  context,
+                  tournamentId,
+                  noOfPlayer,
+                  tournmentTime,
+                  type,
+                  checkType,
+                  userId,
+                  name,
+                  ProfileImage,
+                  round,
+                  amount,
+                  entryPrice);
+            });
           } else {
-            Get.to(OnlineDaily(
-              userId: userId,
-              name: name,
-              tournamentId: tournamentId,
-              round: round,
-            ));
+            createGameController
+                .createGame(context, tournamentId, "", "daily", roundString)
+                .then((_) {
+              Get.to(OnlineDaily(
+                userId: userId,
+                name: name,
+                tournamentId: tournamentId,
+                round: round,
+                profileImage: ProfileImage,
+              ));
+            });
           }
         } else {
           Get.snackbar("Game Status", stateText);

@@ -14,11 +14,13 @@ class WeeklyPlayer extends StatefulWidget {
   final List<Weekly> weekly;
   final String userId;
   final String name;
+  final String profileImage;
   const WeeklyPlayer(
       {Key? key,
       required this.weekly,
       required this.userId,
-      required this.name})
+      required this.name,
+      required this.profileImage})
       : super(key: key);
 
   @override
@@ -199,17 +201,19 @@ class _WeeklyPlayer extends State<WeeklyPlayer> {
                               onTap: () {
                                 if ((item.entryStatus ?? "") == "OPEN") {
                                   weeklyScheduleController.weeklySchedule(
-                                      context,
-                                      item.id.toString(),
-                                      item.noOfPlayers.toString(),
-                                      item.timerInSecond.toString(),
-                                      'weekly',
-                                      'weekly',
-                                      widget.userId,
-                                      widget.name,
-                                      item.entryPrice,
-                                      "${item.iWinPrice}",   "${item.entryPrice}",
-                                      );
+                                    context,
+                                    item.id.toString(),
+                                    item.noOfPlayers.toString(),
+                                    item.timerInSecond.toString(),
+                                    'weekly',
+                                    'weekly',
+                                    widget.userId,
+                                    widget.name,
+                                    widget.profileImage,
+                                    item.entryPrice,
+                                    "${item.iWinPrice}",
+                                    "${item.entryPrice}",
+                                  );
                                 } else {
                                   Get.snackbar("Entry Status",
                                       "${(item.entryStatus ?? "")}");

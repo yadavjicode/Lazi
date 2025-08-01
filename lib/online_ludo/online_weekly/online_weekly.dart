@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -9,14 +10,15 @@ class OnlineWeekly extends StatefulWidget {
   final String name;
   final String tournamentId;
   final int round;
+  final String profileImage;
 
-  OnlineWeekly({
-    super.key,
-    required this.userId,
-    required this.name,
-    required this.tournamentId,
-    required this.round,
-  });
+  OnlineWeekly(
+      {super.key,
+      required this.userId,
+      required this.name,
+      required this.tournamentId,
+      required this.round,
+      required this.profileImage});
 
   @override
   State<OnlineWeekly> createState() => _OnlineWeeklyState();
@@ -30,12 +32,18 @@ class _OnlineWeeklyState extends State<OnlineWeekly> {
   @override
   void initState() {
     super.initState();
-
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color(0xff033578), // or any color you want
+        statusBarIconBrightness:
+            Brightness.light, // use Brightness.dark if background is light
+      ),
+    );
     final String gameUrl =
         "https://lazioludo.com/game/build/login/${widget.userId}/${widget.name}"
-        "?tournament_types=weekly&daily_tournament_id=null&weekly_tournament_id=${widget.tournamentId}"
+        "?tournament_types=weekly&daily_tournament_id=null&weekly_tournament_id=${widget.tournamentId}&profile_image=https://lazioludo.com/${widget.profileImage}"
         "&tournament_round=${widget.round}";
-
+    print("web url ${gameUrl}");
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
@@ -63,25 +71,39 @@ class _OnlineWeeklyState extends State<OnlineWeekly> {
   @override
   void dispose() {
     print("weekly  online game end");
-    profileController.profile(context);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // or your app's default
+        statusBarIconBrightness: Brightness.dark, // match your app theme
+      ),
+    );
+    // profileController.profile(context);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          Obx(() => isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryColor,
-                  ),
-                )
-              : SizedBox()),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        await profileController.profile(context); // Safe async call
+        return true; // allow back navigation
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              Obx(() => isLoading.value
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                  : SizedBox()),
+            ],
+          ),
+        ),
       ),
     );
   }

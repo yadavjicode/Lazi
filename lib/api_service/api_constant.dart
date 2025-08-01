@@ -20,4 +20,6 @@ class ApiConstants {
   static const String kycPostUrl = "user-kyc";
   static const String withdrawRequestUrl = "user-withrawal-request";
   static const String withdrawHistoryUrl = "user-withrawal-request-list";
+  static const String offlineStartUrl = "offline-game/start";
+  static const String createGameUrl = "online-game/create-game";
 }

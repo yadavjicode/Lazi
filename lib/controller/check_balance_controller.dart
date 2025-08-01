@@ -17,6 +17,8 @@ import 'package:ludonew/util/constant/contant_color.dart';
 import 'package:ludonew/widgets/CustomSnackbar.dart';
 import 'package:ludonew/widgets/font.dart';
 
+import 'offline_start_controller.dart';
+
 class CheckBalanceController extends GetxController {
   final ApiService apiService = ApiService();
   var isLoading = false.obs;
@@ -34,6 +36,7 @@ class CheckBalanceController extends GetxController {
       String checkType,
       String userId,
       String name,
+      String profileImage,
       int round,
       String poolPrice,
       String entryPrice) async {
@@ -59,8 +62,18 @@ class CheckBalanceController extends GetxController {
         //     round: round,
         //   ));
         // } else if (type == "weekly") {}
-        showConfirmPaymentBottomSheet(context, tournamentId, noOfPlayer,
-            tournmentTime, type, userId, name, round, poolPrice, entryPrice);
+        showConfirmPaymentBottomSheet(
+            context,
+            tournamentId,
+            noOfPlayer,
+            tournmentTime,
+            type,
+            userId,
+            name,
+            profileImage,
+            round,
+            poolPrice,
+            entryPrice);
       } else {
         // CustomSanckbar.showSnackbar(context, _member?.message ?? "", false);
         showInsufficientBalanceSheet(context);
@@ -163,6 +176,7 @@ void showConfirmPaymentBottomSheet(
     String type,
     String userId,
     String name,
+    String profileImage,
     int round,
     String poolPrice,
     String entryPrice) {
@@ -179,6 +193,7 @@ void showConfirmPaymentBottomSheet(
       type: type,
       userId: userId,
       name: name,
+      profileImage: profileImage,
       round: round,
       poolPrice: poolPrice,
       entryPrice: entryPrice,
@@ -193,6 +208,7 @@ class ConfirmPaymentBottomSheet extends StatefulWidget {
   final String type;
   final String userId;
   final String name;
+  final String profileImage;
   final int round;
   final String poolPrice;
   final String entryPrice;
@@ -204,6 +220,7 @@ class ConfirmPaymentBottomSheet extends StatefulWidget {
     required this.type,
     required this.userId,
     required this.name,
+    required this.profileImage,
     required this.round,
     required this.poolPrice,
     required this.entryPrice,
@@ -377,6 +394,7 @@ class _ConfirmPaymentBottomSheetState extends State<ConfirmPaymentBottomSheet> {
                         name: widget.name,
                         round: widget.round,
                         amount: widget.poolPrice,
+                        profileImage: widget.profileImage,
                       ),
                     );
                   },
@@ -444,6 +462,7 @@ class CountdownBottomSheet extends StatefulWidget {
   final String type;
   final String userId;
   final String name;
+  final String profileImage;
   final int round;
   final String amount;
   CountdownBottomSheet(
@@ -454,6 +473,7 @@ class CountdownBottomSheet extends StatefulWidget {
       required this.type,
       required this.userId,
       required this.name,
+      required this.profileImage,
       required this.round,
       required this.amount});
 
@@ -465,6 +485,10 @@ class _CountdownBottomSheetState extends State<CountdownBottomSheet> {
   late int secondsLeft;
   int dotCount = 0;
   Timer? timer;
+  final OfflineStartTwoController offlineStartTwoController =
+      Get.put(OfflineStartTwoController());
+  final OfflineStartFourController offlineStartFourController =
+      Get.put(OfflineStartFourController());
 
   @override
   void initState() {
@@ -487,18 +511,21 @@ class _CountdownBottomSheetState extends State<CountdownBottomSheet> {
           if (widget.noOfPlayer == "2") {
             print(
                 "tournament type =offline   no of player= ${widget.noOfPlayer}  userId ${widget.userId} userName ${widget.name} tournamentId ${widget.tournamentId}");
-            Get.to(TwoPlayerWebView(
-                userId: widget.userId,
-                name: widget.name,
-                tournamentId: widget.tournamentId));
+            offlineStartTwoController.offlineStartTwo(
+                context, widget.userId, "2", widget.tournamentId, widget.name, widget.profileImage);
+            // Get.to(TwoPlayerWebView(
+            //     userId: widget.userId,
+            //     name: widget.name,
+            //     tournamentId: widget.tournamentId));
           } else if (widget.noOfPlayer == "4") {
             print(
                 "tournament type =offline   no of player= ${widget.noOfPlayer}  userId ${widget.userId} userName ${widget.name} tournamentId ${widget.tournamentId}");
-
-            Get.to(FourPlayerWebView(
-                userId: widget.userId,
-                name: widget.name,
-                tournamentId: widget.tournamentId));
+            offlineStartFourController.offlineStartFour(
+                context, widget.userId, "4", widget.tournamentId, widget.name, widget.profileImage);
+            // Get.to(FourPlayerWebView(
+            //     userId: widget.userId,
+            //     name: widget.name,
+            //     tournamentId: widget.tournamentId));
           }
           // Get.to(FirstScreen(
           //   tournmentId: widget.tournamentId,
@@ -513,6 +540,7 @@ class _CountdownBottomSheetState extends State<CountdownBottomSheet> {
             name: widget.name,
             tournamentId: widget.tournamentId,
             round: widget.round,
+            profileImage: widget.profileImage,
           ));
         } else if (widget.type == "weekly") {
           print(
@@ -522,6 +550,7 @@ class _CountdownBottomSheetState extends State<CountdownBottomSheet> {
             name: widget.name,
             tournamentId: widget.tournamentId,
             round: widget.round,
+            profileImage: widget.profileImage,
           ));
         }
         // Close sheet

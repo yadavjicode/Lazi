@@ -4,12 +4,14 @@ import 'package:ludonew/api_service/api_constant.dart';
 import 'package:ludonew/model/add_wallet_model.dart';
 import 'package:ludonew/model/ads_model.dart';
 import 'package:ludonew/model/check_balance_model.dart';
+import 'package:ludonew/model/create_game_model.dart';
 import 'package:ludonew/model/daily_game_list_model.dart';
 import 'package:ludonew/model/daily_win_model.dart';
 import 'package:ludonew/model/dashboard_banner_model.dart';
 import 'package:ludonew/model/edit_profile_model.dart';
 import 'package:ludonew/model/get_kyc_model.dart';
 import 'package:ludonew/model/kyc_post_model.dart';
+import 'package:ludonew/model/offline_start_model.dart';
 import 'package:ludonew/model/plateform_fee_model.dart';
 import 'package:ludonew/model/profile_modal.dart';
 import 'package:ludonew/model/send_otp_model.dart';
@@ -606,4 +608,69 @@ class ApiService {
     }
   }
 // End withdraw history api ===================================================================================>
+
+// Start offline Start api ===============================================================================>
+  Future<OfflineStartModel> offlineStart(
+      String playerId, String playerCount, String tournamentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.offlineStartUrl}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "player_id": playerId,
+          "player_count": playerCount,
+          "tournamentId": tournamentId,
+          "color": "1"
+        }));
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return OfflineStartModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End offline Start api  ===================================================================================>
+
+// Start create game api ===============================================================================>
+  Future<CreateGameModel> createGame(
+      String dailyTournamentId,
+      String weeklyTournamentId,
+      String tournamentType,
+      String tournamentRound) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.post(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.createGameUrl}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "daily_tournament_id": dailyTournamentId,
+          "weekly_tournament_id": weeklyTournamentId,
+          "tournament_type": tournamentType,
+          "tournament_round": tournamentRound
+        }));
+
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      return CreateGameModel.fromJson(responseJson);
+    } else {
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      throw Exception('Failed: ${responseJson['message']}');
+    }
+  }
+// End create game api  ===================================================================================>
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ludonew/controller/profile_controller.dart';
 import 'package:ludonew/util/constant/contant_color.dart';
@@ -9,14 +10,15 @@ class OnlineDaily extends StatefulWidget {
   final String name;
   final String tournamentId;
   final int round;
+  final String profileImage;
 
-  OnlineDaily({
-    super.key,
-    required this.userId,
-    required this.name,
-    required this.tournamentId,
-    required this.round,
-  });
+  OnlineDaily(
+      {super.key,
+      required this.userId,
+      required this.name,
+      required this.tournamentId,
+      required this.round,
+      required this.profileImage});
 
   @override
   State<OnlineDaily> createState() => _OnlineDailyState();
@@ -30,12 +32,19 @@ class _OnlineDailyState extends State<OnlineDaily> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color(0xff033578), // or any color you want
+        statusBarIconBrightness:
+            Brightness.light, // use Brightness.dark if background is light
+      ),
+    );
 
     final String gameUrl =
         "https://lazioludo.com/game/build/login/${widget.userId}/${widget.name}"
         "?tournament_types=daily&daily_tournament_id=${widget.tournamentId}"
-        "&weekly_tournament_id=null&tournament_round=${widget.round}";
-
+        "&weekly_tournament_id=null&tournament_round=${widget.round}&profile_image=https://lazioludo.com/${widget.profileImage}";
+ print("web url ${gameUrl}");
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
@@ -60,28 +69,42 @@ class _OnlineDailyState extends State<OnlineDaily> {
       ..loadRequest(Uri.parse(gameUrl));
   }
 
-@override
+  @override
   void dispose() {
     print("daily  online game end");
-    profileController.profile(context);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // or your app's default
+        statusBarIconBrightness: Brightness.dark, // match your app theme
+      ),
+    );
+    // profileController.profile(context);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          Obx(() => isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryColor,
-                  ),
-                )
-              : SizedBox()),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        await profileController.profile(context); // Safe async call
+        return true; // allow back navigation
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              Obx(() => isLoading.value
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                  : SizedBox()),
+            ],
+          ),
+        ),
       ),
     );
   }

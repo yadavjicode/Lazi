@@ -23,8 +23,10 @@ class WeeklyScheduleController extends GetxController {
       String checkType,
       String userId,
       String name,
+      String profileImage,
       String entryFee,
-      String amount,String entryPrice) async {
+      String amount,
+      String entryPrice) async {
     isLoading.value = true;
     _error = null;
 
@@ -33,13 +35,17 @@ class WeeklyScheduleController extends GetxController {
 
       if (_member?.success ?? false) {
         Get.to(WeeklyRound(
-            tournamentId: tournamentId,
-            noOfPlayer: noOfPlayer,
-            tournmentTime: tournmentTime,
-            type: type,
-            checkType: checkType,
-            userId: userId,
-            name: name,amount: amount,entryPrice: entryPrice,));
+          tournamentId: tournamentId,
+          noOfPlayer: noOfPlayer,
+          tournmentTime: tournmentTime,
+          type: type,
+          checkType: checkType,
+          userId: userId,
+          name: name,
+          profileImage: profileImage,
+          amount: amount,
+          entryPrice: entryPrice,
+        ));
       } else {
         Get.toNamed(Routes.myBalance);
       }
